@@ -1,0 +1,22 @@
+{
+  "name": "gjtool",
+  "version": "1.0.0",
+  "description": "0.0.1",
+  "main": "gjtool.js",
+  "scripts": {
+    "test": "make gjtool"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gjTool/gjTool.git"
+  },
+  "keywords": [
+    "gjtool"
+  ],
+  "author": "GaoJin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gjTool/gjTool/issues"
+  },
+  "homepage": "https://github.com/gjTool/gjTool#readme"
+}

@@ -1,16 +1,16 @@
-GjTool.js is a JS class library that mimics the chain call of jQuery, and the API usage is similar to jQuery, gjTool like a simple version of JQ.
+GjTool.js is a javascript class library that mimics the chain call of jQuery, and the API usage is similar to jQuery, gjTool like a simple version of JQ.
 
 The global variables of external exposure are gjTool, Gj, and if you want to use the $ symbol, you can start to define: var $ = gjTool;
 
-Author: GaoJin. QQ: 305250069
+Author: GaoJin. QQ: 861366490
 
 Selector:
 
 ID selector, class selector, label selector, wildcard
 Group selector, descendant selector, attribute selector.
 
-For example: '#nav','.subNav','div ','div.test','.div.abc','input[type=button]',
-'.div .ul li, #div','.div ul .li','.div ul li:eq(0)','.div ul
+For example: '#nav'¡¢ '.subNav '¡¢'div '¡¢'div.test' ¡¢'.div.abc'  ¡¢ 'input[type=button]'¡¢
+'.div .ul li , #div'¡¢  '.div ul .li'¡¢ '.div ul li:eq(0)'¡¢ '.div ul li:first'¡¢'.div ul li:odd'¡¢ '.div ul li:not(:eq(0))'
 
  li:last'.
 
@@ -34,7 +34,7 @@ attr, removeAttr, prop, data, val, html, text.
 
 DOM operation:
 
-find¡¢ eq ¡¢index ¡¢parent¡¢parents¡¢siblings¡¢prev¡¢next¡¢first¡¢last¡¢after¡¢before¡¢append¡¢prepend
+after¡¢before¡¢append¡¢prepend
 
 Animation:
 animate¡¢stop
@@ -42,24 +42,16 @@ animate¡¢stop
 
 Event£º
 
-on¡¢off¡¢bind¡¢unbind¡¢hover, and other common events,
+on¡¢off¡¢bind¡¢unbind¡¢hover, and other common events,¡¢
+The document is loaded:£ºgjTool(function(){})¡¢gjTool(document).ready(function(){});
 
 For example: blur focus input load resize scroll unload click dblclick ¡­¡­ and so on.
 
-
-
-Other classes:
-
-Loop traversal: each, map
-.
-The document is loaded: gjTool (function () {}), gjTool (document).ready (function () {});
-
-
+Loop traversal: each, map¡¢find¡¢ eq ¡¢index ¡¢parent¡¢parents¡¢siblings¡¢prev¡¢next¡¢first¡¢last
 
 Ajax asynchronous request: (gjTool.ajax)
 
 ajax, get, post, getJSON, getXML.
-
 
 
 Common tools, methods: (gjTool.each (arr, FN))

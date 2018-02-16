@@ -1,7 +1,7 @@
 {
   "name": "gjtool",
   "version": "1.0.0",
-  "description": "0.0.1",
+  "description": "gjTool.js is a javascript class library",
   "main": "gjtool.js",
   "scripts": {
     "test": "make gjtool"
@@ -11,7 +11,10 @@
     "url": "git+https://github.com/gjTool/gjTool.git"
   },
   "keywords": [
-    "gjtool"
+    "gjtool",
+    "javascript",
+    "plugin",
+    "library"
   ],
   "author": "GaoJin",
   "license": "ISC",

@@ -156,25 +156,24 @@
 				str = elem.currentStyle[styleName];
 				if(styleName == 'opacity' && elem.currentStyle['filter']) {
 					str = elem.currentStyle['filter'];
-					if(str.indexOf(':') != -1){
+					if(str.indexOf(':') != -1) {
 						var index = str.indexOf(':');
-					}else if(str.indexOf('=') != -1) {
+					} else if(str.indexOf('=') != -1) {
 						var index = str.indexOf('=');
 					}
-					
-					str = str.substring(index + 1, str.length - 1) / 100
+					str = str.substring(index + 1, str.length - 1) / 100;
+					str = isNaN(str) ? 1 : str;
 				}
 				if(styleName == 'scrollTop' || styleName == 'scrollLeftl') {
 					str = elem[styleName]
 				}
 			}
-			if((str == "auto" || str.toString().indexOf('%') != -1) && styleName == 'width'){
+			if(str && (str == "auto" || str.toString().indexOf('%') != -1) && styleName == 'width') {
 				str = elem.offsetWidth;
 			}
-			if((str == "auto" || str.toString().indexOf('%') != -1) && styleName == "height"){
+			if(str && (str == "auto" || str.toString().indexOf('%') != -1) && styleName == "height") {
 				str = elem.offsetHeight
 			}
-			
 			return str
 		},
 		getBrowser: function() {
@@ -415,7 +414,7 @@
 			if(m[1]) { // id选择器
 				return document.getElementById(m[1])
 			} else if(m[2]) { // class选择器
-				return document.getElementsByClassName(m[2],node)
+				return document.getElementsByClassName(m[2], node)
 			} else if(m[3]) { //通配符选择器
 				return node.getElementsByTagName(m[3])
 			} else if(m[4]) { //标签选择器
@@ -836,7 +835,7 @@
 		 */
 		removeClass: function(name) {
 			return this.each(function(i, ele) {
-				if(!ele.className.length) {
+				if(!ele.className) {
 					return
 				} else if(Gpublic.regName(name).test(ele.className)) {
 					ele.className = ele.className.replace(Gpublic.regName(name), ' ').trim()
@@ -889,14 +888,14 @@
 						} else if(name == 'scrollTop' || name == 'scrollLeft') {
 							ele[i] = name[i]
 						} else {
-							if(i == 'width' && name[i].toString().indexOf('%') != -1){
+							if(i == 'width' && name[i].toString().indexOf('%') != -1) {
 								ele.style[i] = ele.offsetWidth;
-							}else if(i == 'height' && name[i].toString().indexOf('%') != -1){
+							} else if(i == 'height' && name[i].toString().indexOf('%') != -1) {
 								ele.style[i] = ele.offsetHeight;
-							}else {
+							} else {
 								ele.style[i] = name[i]
 							}
-							
+
 						}
 					}
 				})
@@ -1118,13 +1117,13 @@
 				}
 				var arr = elem.children;
 				if(selector === undefined) {
-					for(var i in arr) {
+					for(var i = 0, len = arr.length; i < len; i++) {
 						if(G.isHTMLElement(arr[i])) {
 							arr2.push(arr[i]);
 						}
 					}
 				} else if(m) {
-					for(var i in arr) {
+					for(var i = 0, len = arr.length; i < len; i++) {
 						if(G.isHTMLElement(arr[i])) {
 							if(m[1]) { // id选择器
 								if(arr[i].id == m[1]) {
@@ -1153,11 +1152,16 @@
 				return null
 			}
 			var arr = elem.parentNode.children;
-			for(var i in arr) {
-				if(arr[i] == elem) {
-					return Number(i)
+			if(arr && arr.length >= 1) {
+				for(var i = 0, len = arr.length; i < len; i++) {
+					if(arr[i] == elem) {
+						return Number(i)
+					}
 				}
+			}else if(arr){
+				return 0;
 			}
+
 			return null
 		},
 		siblings: function(selector) {
@@ -1169,34 +1173,39 @@
 			var arr2 = [];
 			if(selector === undefined) {
 				var arr = elem.parentNode.children;
-				var arr2 = [];
-				for(var i in arr) {
-					if(arr[i] != elem && G.isHTMLElement(arr[i])) {
-						arr2.push(arr[i])
+				if(arr && arr.length >= 1) {
+					for(var i = 0, len = arr.length; i < len; i++) {
+						if(arr[i] != elem && G.isHTMLElement(arr[i])) {
+							arr2.push(arr[i])
+						}
 					}
 				}
+
 			} else if(m) {
 				this.each(function(i, elem) {
 					var arr = elem.parentNode.children;
-					for(var i in arr) {
-						if(G.isHTMLElement(arr[i]) && arr[i] != elem) {
-							if(m[1]) { // id选择器
-								if(arr[i].id == m[1]) {
+					if(arr && arr.length >= 1) {
+						for(var i = 0, len = arr.length; i < len; i++) {
+							if(G.isHTMLElement(arr[i]) && arr[i] != elem) {
+								if(m[1]) { // id选择器
+									if(arr[i].id == m[1]) {
+										arr2.push(arr[i])
+									}
+								} else if(m[2]) { // class选择器
+									if(Gpublic.regName(m[2]).test(arr[i].className)) {
+										arr2.push(arr[i])
+									}
+								} else if(m[3]) { //通配符选择器
 									arr2.push(arr[i])
-								}
-							} else if(m[2]) { // class选择器
-								if(Gpublic.regName(m[2]).test(arr[i].className)) {
-									arr2.push(arr[i])
-								}
-							} else if(m[3]) { //通配符选择器
-								arr2.push(arr[i])
-							} else if(m[4]) { //标签选择器
-								if(arr[i].tagName.toLowerCase() == m[4]) {
-									arr2.push(arr[i])
+								} else if(m[4]) { //标签选择器
+									if(arr[i].tagName.toLowerCase() == m[4]) {
+										arr2.push(arr[i])
+									}
 								}
 							}
 						}
 					}
+
 				})
 			}
 			return this.toArray(arr2)
@@ -1328,7 +1337,7 @@
 		},
 		//在被选元素的内部开头插入内容
 		prepend: function(selector, move) {
-			return this.each(function(i, elem) {		
+			return this.each(function(i, elem) {
 				if(G.isString(selector)) {
 					arr = Gpublic.parseHtml(selector);
 					var firstChild = elem.children[0];
@@ -1416,35 +1425,35 @@
 					var b = iCur[attr];
 					var c = end - iCur[attr];
 					var p = G.easing[easing](t, b, c, d);
-					
+
 					if(attr == 'opacity') {
 						elem.style.opacity = p / 100;
 						var op = elem.style.filter;
-						if(op && op.indexOf(':') != -1){
+						if(op && op.indexOf(':') != -1) {
 							elem.style.filter = 'alpha(opacity:' + p + ')';
-						}else if(op && op.indexOf('=') != -1) {
+						} else if(op && op.indexOf('=') != -1) {
 							elem.style.filter = 'alpha(opacity=' + p + ')';
 						}
-						
+
 					} else if(attr == 'scrollTop' || attr == 'scrollLeft') {
 						elem[attr] = p;
 					} else {
-						if(json[attr] && json[attr].toString().indexOf('%') !=-1){
-							elem.style[attr] = p+ "%";
-						}else {
-							if(json[attr] && json[attr].toString().indexOf('px') !=-1){
-								if(ie && ie<9 ){
+						if(json[attr] && json[attr].toString().indexOf('%') != -1) {
+							elem.style[attr] = p + "%";
+						} else {
+							if(json[attr] && json[attr].toString().indexOf('px') != -1) {
+								if(ie && ie < 9) {
 									elem.style[attr] = p
-								}else {
-									elem.style[attr] = p+ "px";
+								} else {
+									elem.style[attr] = p + "px";
 								}
-							}else {
-								if(!G.isNumber(json[attr])){
+							} else {
+								if(!G.isNumber(json[attr])) {
 									continue;
 								}
-								elem.style[attr] = p+ "px";
+								elem.style[attr] = p + "px";
 							}
-							
+
 						}
 					}
 				}
@@ -1458,7 +1467,7 @@
 				}
 			});
 		},
-		fadeIn: function(ele, speed, easying, fn){
+		fadeIn: function(ele, speed, easying, fn) {
 			if(G.isFunction(easying)) {
 				fn = easying;
 				easying = "easeInOut";
@@ -1469,16 +1478,16 @@
 				speed = 400;
 				easying = "easeInOut"
 			}
-			if(Gpublic.getStyle(ele, 'opacity') == 1 && ele.style.display == 'block'){
+			if(Gpublic.getStyle(ele, 'opacity') == 1 && ele.style.display == 'block') {
 				return;
 			}
 			var option = {
 				opacity: ele.opacity ? Number(ele.opacity) : 1,
-				display: (G.isUndefined(ele.display) && ele.display != 'none') ? ele.display : 'block'
+				display: (ele.display && ele.display != 'none') ? ele.display : 'block'
 			};
 			var option2 = {
-				opacity: Gpublic.getStyle(ele, 'opacity') >= 1 ? 0: Gpublic.getStyle(ele, 'opacity'),
-				display: (G.isUndefined(ele.display) && ele.display != 'none') ? ele.display : 'block'
+				opacity: Gpublic.getStyle(ele, 'opacity') >= 1 ? 0 : Gpublic.getStyle(ele, 'opacity'),
+				display: (ele.display && ele.display != 'none') ? ele.display : 'block'
 			}
 			ele.isShow = true;
 			ele.isHide = false;
@@ -1488,7 +1497,7 @@
 				fn && fn();
 			});
 		},
-		fadeOut: function(ele, speed, easying, fn){
+		fadeOut: function(ele, speed, easying, fn) {
 			if(G.isFunction(easying)) {
 				fn = easying;
 				easying = "easeInOut";
@@ -1502,16 +1511,16 @@
 			if(ele.style.display != 'none') {
 				ele.display = ele.style.display;
 			}
-			if(!ele.opacity){
+			if(!ele.opacity) {
 				ele.opacity = Gpublic.getStyle(ele, 'opacity');
 			}
 			var option = {
 				opacity: 0,
-				display: (G.isUndefined(ele.display) && ele.display != 'none') ? ele.display : 'block'
+				display: (ele.display && ele.display != 'none') ? ele.display : 'block'
 			};
 			var option2 = {
 				opacity: Gpublic.getStyle(ele, 'opacity'),
-				display: (G.isUndefined(ele.display) && ele.display != 'none') ? ele.display : 'block'
+				display: (ele.display && ele.display != 'none') ? ele.display : 'block'
 			}
 			ele.isShow = false;
 			ele.isHide = true;
@@ -1521,7 +1530,7 @@
 				fn && fn();
 			});
 		},
-		fadeTo: function(ele, speed, opacity, easying, fn){
+		fadeTo: function(ele, speed, opacity, easying, fn) {
 			if(G.isFunction(easying)) {
 				fn = easying;
 				easying = "easeInOut";
@@ -1533,67 +1542,70 @@
 			var option = {
 				opacity: opacity
 			};
-		
+
 			var option2 = {
 				opacity: Gpublic.getStyle(ele, 'opacity'),
-				display: (G.isUndefined(ele.display) && ele.display != 'none') ? ele.display : 'block'
+				display: (ele.display && ele.display != 'none') ? ele.display : 'block'
 			}
 			G(ele).css(option2).animate(option, speed, easying, function() {
-				if(opacity == 0){
+				if(opacity == 0) {
 					ele.style.display = 'none';
 				}
 				fn && fn();
 			});
 		}
 	})
+
 	function oldStyles(ele) {
 		return {
-				width: Gpublic.getStyle(ele,'width'),
-				height: Gpublic.getStyle(ele,'height'),
-				paddingTop: Gpublic.getStyle(ele,'paddingTop'),
-				paddingBottom: Gpublic.getStyle(ele,'paddingBottom'),
-				paddingLeft: Gpublic.getStyle(ele,'paddingLeft'),
-				paddingRight: Gpublic.getStyle(ele,'paddingRight'),
-				marginTop: Gpublic.getStyle(ele,'marginTop'),
-				marginBottom: Gpublic.getStyle(ele,'marginBottom'),
-				marginLeft: Gpublic.getStyle(ele,'marginLeft'),
-				marginRight: Gpublic.getStyle(ele,'marginRight'),
-				opacity: ele.opacity ? ele.opacity : Gpublic.getStyle(ele,'opacity')
-			}
+			width: Gpublic.getStyle(ele, 'width'),
+			height: Gpublic.getStyle(ele, 'height'),
+			paddingTop: Gpublic.getStyle(ele, 'paddingTop'),
+			paddingBottom: Gpublic.getStyle(ele, 'paddingBottom'),
+			paddingLeft: Gpublic.getStyle(ele, 'paddingLeft'),
+			paddingRight: Gpublic.getStyle(ele, 'paddingRight'),
+			marginTop: Gpublic.getStyle(ele, 'marginTop'),
+			marginBottom: Gpublic.getStyle(ele, 'marginBottom'),
+			marginLeft: Gpublic.getStyle(ele, 'marginLeft'),
+			marginRight: Gpublic.getStyle(ele, 'marginRight'),
+			opacity: ele.opacity ? ele.opacity : Gpublic.getStyle(ele, 'opacity')
+		}
 	}
+
 	function startStyles(ele) {
 		return {
-				width: Gpublic.getStyle(ele,'width'),
-				height: Gpublic.getStyle(ele,'height'),
-				paddingTop: Gpublic.getStyle(ele,'paddingTop'),
-				paddingBottom: Gpublic.getStyle(ele,'paddingBottom'),
-				paddingLeft: Gpublic.getStyle(ele,'paddingLeft'),
-				paddingRight: Gpublic.getStyle(ele,'paddingRight'),
-				marginTop: Gpublic.getStyle(ele,'marginTop'),
-				marginBottom: Gpublic.getStyle(ele,'marginBottom'),
-				marginLeft: Gpublic.getStyle(ele,'marginLeft'),
-				marginRight: Gpublic.getStyle(ele,'marginRight'),
-				opacity: Gpublic.getStyle(ele,'opacity'),
-				display: (G.isUndefined(ele.display) && ele.display != 'none') ? ele.display : 'block',
-				overflow: "hidden"
-			}
+			width: Gpublic.getStyle(ele, 'width'),
+			height: Gpublic.getStyle(ele, 'height'),
+			paddingTop: Gpublic.getStyle(ele, 'paddingTop'),
+			paddingBottom: Gpublic.getStyle(ele, 'paddingBottom'),
+			paddingLeft: Gpublic.getStyle(ele, 'paddingLeft'),
+			paddingRight: Gpublic.getStyle(ele, 'paddingRight'),
+			marginTop: Gpublic.getStyle(ele, 'marginTop'),
+			marginBottom: Gpublic.getStyle(ele, 'marginBottom'),
+			marginLeft: Gpublic.getStyle(ele, 'marginLeft'),
+			marginRight: Gpublic.getStyle(ele, 'marginRight'),
+			opacity: Gpublic.getStyle(ele, 'opacity'),
+			display: (ele.display && ele.display != 'none') ? ele.display : 'block',
+			overflow: "hidden"
+		}
 	}
-	function startStyles2(ele){
+
+	function startStyles2(ele) {
 		return {
-				width: 0,
-				height: 0,
-				paddingTop: 0,
-				paddingBottom:0,
-				paddingLeft:0,
-				paddingRight: 0,
-				marginTop: 0,
-				marginBottom: 0,
-				marginLeft:0,
-				marginRight: 0,
-				opacity: 0,
-				display: (G.isUndefined(ele.display) && ele.display != 'none') ? ele.display : 'block',
-				overflow: "hidden"
-			}
+			width: 0,
+			height: 0,
+			paddingTop: 0,
+			paddingBottom: 0,
+			paddingLeft: 0,
+			paddingRight: 0,
+			marginTop: 0,
+			marginBottom: 0,
+			marginLeft: 0,
+			marginRight: 0,
+			opacity: 0,
+			display: (ele.display && ele.display != 'none') ? ele.display : 'block',
+			overflow: "hidden"
+		}
 	}
 	//动画系列
 	G.fn.extend({
@@ -1607,25 +1619,25 @@
 				fn = speed;
 				easying = "easeInOut"
 			}
-			speed = speed ? speed: 0;
+			speed = speed ? speed : 0;
 			return this.each(function(i, ele) {
-				if(!ele.oldStyles){
-					ele.oldStyles  = oldStyles(ele)
+				if(!ele.oldStyles) {
+					ele.oldStyles = oldStyles(ele)
 				}
 				var start = startStyles(ele);
-				if(ele.style.display == 'none'){
-					start= startStyles2(ele);
+				if(ele.style.display == 'none') {
+					start = startStyles2(ele);
 				}
 				ele.isShow = true;
 				ele.isHide = false;
-				if(speed == 0){
+				if(speed == 0) {
 					ele.isShow = false;
-					ele.style.display = (G.isUndefined(ele.display) && ele.display != 'none') ? ele.display : 'block';
+					ele.style.display = (ele.display && ele.display != 'none') ? ele.display : 'block';
 					fn && fn();
 					return;
 				}
 				G(ele).css(start).animate(ele.oldStyles, speed, easying, function() {
-					ele.style.display = (G.isUndefined(ele.display) && ele.display != 'none') ? ele.display : 'block';
+					ele.style.display = (ele.display && ele.display != 'none') ? ele.display : 'block';
 					ele.isShow = false;
 					fn && fn();
 				});
@@ -1643,8 +1655,8 @@
 			}
 			speed = speed ? speed : 0;
 			return this.each(function(i, ele) {
-				if(!ele.oldStyles){
-					ele.oldStyles  = oldStyles(ele)
+				if(!ele.oldStyles) {
+					ele.oldStyles = oldStyles(ele)
 				}
 				if(ele.style.display != 'none') {
 					ele.display = ele.style.display;
@@ -1653,7 +1665,7 @@
 				var newStyles = startStyles2(ele);
 				ele.isHide = true;
 				ele.isShow = false;
-				if(speed == 0){
+				if(speed == 0) {
 					ele.isHide = false;
 					ele.style.display = 'none';
 					fn && fn();
@@ -1668,17 +1680,17 @@
 		},
 		toggle: function(speed, easing, fn) {
 			return this.each(function(i, ele) {
-				if(!ele.isHide && !ele.isShow){
-					if(ele.style.display == 'none'){
+				if(!ele.isHide && !ele.isShow) {
+					if(ele.style.display == 'none') {
 						Gj(ele).stop().show(speed, easing, fn)
-					}else {
+					} else {
 						Gj(ele).stop().hide(speed, easing, fn)
 					}
 					return;
 				}
-				if(ele.isHide){
+				if(ele.isHide) {
 					Gj(ele).stop().show(speed, easing, fn)
-				}else if(!ele.isHide){
+				} else if(!ele.isHide) {
 					Gj(ele).stop().hide(speed, easing, fn)
 				}
 			})
@@ -1702,17 +1714,17 @@
 		},
 		fadeToggle: function(speed, easying, fn) {
 			return this.each(function(i, ele) {
-				if(!ele.isHide && !ele.isShow){
-					if(ele.style.display == 'none'){
+				if(!ele.isHide && !ele.isShow) {
+					if(ele.style.display == 'none') {
 						Gj(ele).stop().fadeIn(speed, easying, fn);
-					}else {
+					} else {
 						Gj(ele).stop().fadeOut(speed, easying, fn);
 					}
 					return;
 				}
-				if(ele.isHide){
+				if(ele.isHide) {
 					Gj(ele).stop().fadeIn(speed, easying, fn);
-				}else if(!ele.isHide){
+				} else if(!ele.isHide) {
 					Gj(ele).stop().fadeOut(speed, easying, fn);
 				}
 			})
@@ -1736,7 +1748,7 @@
 					cancelAnimationFrame(elem.animationTimer);
 					G.animate(elem, json, time, easing)
 				})
-				elem.callbacTimer = setTimeout(function(){
+				elem.callbacTimer = setTimeout(function() {
 					fn && fn()
 				}, time);
 			}
@@ -1950,7 +1962,7 @@
 				}
 
 			} else {
-				return (obj instanceof HTMLElement)
+				return(obj instanceof HTMLElement)
 			}
 		},
 		isJSON: function(string) {

@@ -1908,8 +1908,6 @@
 	});
 	//扩展插件、静态方法
 	G.extend({
-		//获取浏览器的地址栏
-		url: g.location.href,
 		//获取浏览器的版本
 		browser: Gpublic.getBrowser(),
 		//h获取当前时间戳
@@ -2054,7 +2052,7 @@
 		},
 		//写cookie
 		setCookie: function(name, value, hour) {
-			if(G.url.indexOf('http://') == -1) {
+			if(location.href.indexOf('http://') == -1) {
 				console.error('setCookie error: no domain http:// is included');
 				return
 			}
@@ -2071,7 +2069,7 @@
 		},
 		//读cookie
 		getCookie: function(name) {
-			if(G.url.indexOf('http://') == -1) {
+			if(location.href.indexOf('http://') == -1) {
 				console.error('getCookie error: no domain http:// is included');
 				return
 			}

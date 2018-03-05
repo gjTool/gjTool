@@ -847,7 +847,7 @@
 		 *	@param string 字符串class名
 		 */
 		hasClass: function(name) {
-			return this[0].className.indexOf(name) != -1 ? true : false
+			return Gpublic.regName(name).test(this[0].className);
 		},
 		/**
 		 *	toggleClass 移除添加class

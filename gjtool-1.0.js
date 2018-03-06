@@ -3,8 +3,7 @@
  * @author GaoJin
  * @update 2018/02/15 10:53
  */
-;
-(function(g) {
+;(function(g) {
 	"use strict";
 	//定义gjTool类
 	function G(selector) {
@@ -152,7 +151,7 @@
 					return elem[styleName]
 				}
 				str = g.getComputedStyle(elem, false)[styleName];
-			} else {
+			} else if(elem && elem.currentStyle) {
 				str = elem.currentStyle[styleName];
 				if(styleName == 'opacity' && elem.currentStyle['filter']) {
 					str = elem.currentStyle['filter'];
@@ -2389,4 +2388,4 @@
 		}
 	})
 
-})(this);
+})(window);

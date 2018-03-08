@@ -1,13 +1,6 @@
 {
-  "quotmark": true,
-  "boss": true,
-  "eqnull": true,
-  "expr": true,
-  "funcscope": true,
-  "loopfunc": true,
-  "smarttabs": true,
-  "node": true,
-  "browser": true,
-  "undef": true,
-  "unused": true
+  "strict": true, 
+"bitwise": true,
+"asi": true
+
 }

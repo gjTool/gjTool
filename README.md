@@ -1,4 +1,5 @@
 ﻿# gjTool
+
 gjTool.js is a javascript class library that mimics the chain call of jQuery, and the API usage is similar to jQuery, gjTool like a simple version of JQ.
 
 The global variables of external exposure are gjTool, Gj, and if you want to use the $ symbol, you can start to define: var $ = gjTool;

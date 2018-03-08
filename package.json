@@ -2,11 +2,18 @@
   "name": "gjtool",
   "version": "1.0.6",
   "description": "gjTool.js is a javascript class library",
-  "main": "gjtool-1.0.min.js",
-  "scripts": {
-    "test": jshint gjtool-1.0.js",
-    "build": "npm run test"
+"devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-wrap": "^0.11.0",
+    "gulp-uglify": "^1.5.3",
+    "jshint": "^2.9.2",
+    "gulp-rename": "^1.2.2"
   },
+  "scripts": {
+    "test": "jshint dist/gjtool.js",
+    "build": "gulp mini && npm run test"
+  },
+  "main": "dist/gjtool.min.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gjTool/gjTool.git"

@@ -1,10 +1,11 @@
 {
   "name": "gjtool",
-  "version": "1.0.2",
+  "version": "1.0.6",
   "description": "gjTool.js is a javascript class library",
-  "main": "gjtool.js",
+  "main": "gjtool-1.0.min.js",
   "scripts": {
-    "test": "make gjtool"
+    "test": jshint gjtool-1.0.js",
+    "build": "npm run test"
   },
   "repository": {
     "type": "git",

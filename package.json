@@ -9,7 +9,6 @@
     "gulp-rename": "^1.2.2"
   },
   "scripts": {
-    "test": "jshint dist/gjtool.js",
     "build": "gulp mini"
   },
   "main": "dist/gjtool.min.js",

@@ -1,1 +1,2 @@
-﻿language: javascript
+﻿language: java
+jdk: oraclejdk8

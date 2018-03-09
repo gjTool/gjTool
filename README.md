@@ -42,6 +42,8 @@ The global variables of external exposure are gjTool, Gj.
 
 ### API
 ```
+[API document address](https://gjtool.github.io/gjToolAPI/)
+
 
 Selector:
 

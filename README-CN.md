@@ -42,6 +42,8 @@ import gjTool from "gjtool.js";  //var gjTool = require("gjtool.js");
 
 ### API接口方法
 ```
+[API文档地址](https://gjtool.github.io/gjToolAPI/)
+
 
 选择器：
  

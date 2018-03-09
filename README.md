@@ -6,7 +6,7 @@
 
 gjTool.js is a javascript class library that mimics the chain call of jQuery, and the API usage is similar to jQuery, gjTool like a simple version of JQ.
 
-Author: GaoJin. QQ: 861366490
+Author: Gao Jin. QQ: 861366490
 
 ### How To Install
 ```
@@ -19,10 +19,9 @@ npm install gjtool
 ```
 
 import gjTool from "gjtool.js";
+```
 var gjTool = require("gjtool.js");
 ```
-
-
 <script type="text/javascript" src="gjtool.js"></script>
 
 ```

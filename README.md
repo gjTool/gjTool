@@ -19,8 +19,6 @@ npm install gjtool
 ```
 
 import gjTool from "gjtool.js";
-```
-
 var gjTool = require("gjtool.js");
 ```
 
@@ -36,9 +34,7 @@ The global variables of external exposure are gjTool, Gj.
 
 ```
 
-### API 
-Interface
-
+### API
 ```
 
 Selector:

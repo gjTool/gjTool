@@ -37,6 +37,7 @@ import gjTool from "gjtool.js";  //var gjTool = require("gjtool.js");
 ```
 
 The global variables of external exposure are gjTool, Gj.
+gjTool("#test").hide();//Gj("#test").hide(500);
 
 ```
 
@@ -49,47 +50,52 @@ The global variables of external exposure are gjTool, Gj.
 Selector:
 
 ID selector, class selector, label selector, wildcard
-Group selector, descendant selector, attribute selector.
+Group selector, descendant selector, attribute selector、eq、first、last、even、odd、lt、le、gt、ge、not.
 
 For example: '#nav'、 '.subNav '、'div '、'div.test' 、'.div.abc'  、 'input[type=button]'、
 '.div .ul li , #div'、  '.div ul .li'、 '.div ul li:eq(0)'、 '.div ul li:first'、'.div ul li:odd'、 '.div ul li:not(:eq(0))'
 
  li:last'.
 
+Loop traversal: 
+
+each, map、find、 eq 、index 、parent、parents、siblings、prev、next、first、last
+
 Class operation:
 
-addClass, removeClass, hasClass, toggleClass,
+addClass, removeClass, hasClass, toggleClass
 
 
 
 CSS operation:
 
-css, show, hide, toggle, width, height, offset, scrollTop, scrollLeft.
+css,  width, height, offset, scrollTop, scrollLeft.
 
 
 
 Property operation:
 
-attr, removeAttr, prop, data, val, html, text.
+attr, removeAttr, prop, data, val, html, text，empty.
 
 
 
 DOM operation:
 
-after、before、append、prepend
+after、before、append、prepend、remove
 
 Animation:
-animate、stop
+
+animate、stop、show、hide、fadeIn、fadeOut、fadeTo、fadeToggle
 
 
 Event：
 
-on、off、bind、unbind、hover, and other common events,、
+on、off、hover, and other common events,
 The document is loaded:：gjTool(function(){})、gjTool(document).ready(function(){});
 
 For example: blur focus input load resize scroll unload click dblclick …… and so on.
 
-Loop traversal: each, map、find、 eq 、index 、parent、parents、siblings、prev、next、first、last
+
 
 Ajax asynchronous request: (gjTool.ajax)
 

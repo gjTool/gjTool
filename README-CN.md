@@ -36,7 +36,8 @@ import gjTool from "gjtool.js";  //var gjTool = require("gjtool.js");
 ### 使用
 ```
 
-对外暴露的全局变量是gjTool、Gj
+对外暴露的全局变量是gjTool、Gj。
+gjTool("#test").hide();//Gj("#test").hide(500);
 
 ```
 
@@ -48,40 +49,52 @@ import gjTool from "gjtool.js";  //var gjTool = require("gjtool.js");
 
 选择器：
  
-ID选择器、类选择器、标签选择器、通配符、群组选择器、后代选择器、属性选择器、html字符串
+ID选择器、类选择器、标签选择器、通配符、群组选择器、后代选择器、属性选择器、html字符串、eq、first、last、even、odd、lt、le、gt、ge、not
 例如：'#nav'、 '.subNav '、'div '、'div.test' 、'.div.abc'  、 'input[type=button]'、
 '.div .ul li , #div'、  '.div ul .li'、 '.div ul li:eq(0)'、 '.div ul li:first'、'.div ul li:odd'、 '.div ul li:not(:eq(0))'
 
+遍历：
+
+each、map、find、 eq 、index 、parent、parents、siblings、prev、next、first、last
 
 class操作：
-addClass 、removeClass、hasClass、toggleClass、
+
+addClass 、removeClass、hasClass、toggleClass
 
 css操作：
-css、toggle、width、height、offset、scrollTop、scrollLeft
+
+css、width、height、offset、scrollTop、scrollLeft
 
 属性操作：
-attr、removeAttr、prop、data、val、html、text
+
+attr、removeAttr、prop、data、val、html、text、empty
 
 DOM操作：
-after、before、append、prepend
+
+after、before、append、prepend、remove
 
 动画：
+
 animate、stop、show、hide、fadeIn、fadeOut、fadeTo、fadeToggle
 
+
 事件：
-on、off、bind、unbind、hover、还有其他的普通事件、
+
+on、off、hover、还有其他的普通事件、
 文档加载完成：gjTool(function(){})、gjTool(document).ready(function(){});
 例如：blur focus input load resize scroll unload click dblclick 等
 
 
-遍历：
-each、map、find、 eq 、index 、parent、parents、siblings、prev、next、first、last
+
 
 ajax异步请求:（gjTool.ajax）
+
 ajax、get、post、getJSON、getXML
 
 常用工具、方法：（gjTool.each(arr,fn)）
+
 extend、each、map、browser、now、getTime、getdate、arrSort、objSort、setCookie、getCookie、delCookie、encrypt、decrypt、unique、cloneObj、extendObj、getVerify
 
 插件：
+
 拖拽元素： gjTool("#test").drag(); 禁止拖拽gjTool("#test").nodrag(),允许拖拽gjTool("#test").nodrag(false);

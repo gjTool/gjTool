@@ -7,6 +7,11 @@
 gjTool.js is a javascript class library that mimics the chain call of jQuery, and the API usage is similar to jQuery, gjTool like a simple version of JQ.
 
 Author: Gao Jin. QQ: 861366490
+## Language
+
+- [English](README.md)
+
+- [中文](README-CN.md)
 
 ### How To Install
 ```

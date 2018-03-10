@@ -93,7 +93,7 @@ ajax、get、post、getJSON、getXML
 
 常用工具、方法：（gjTool.each(arr,fn)）
 
-extend、each、map、browser、now、getTime、getdate、arrSort、objSort、setCookie、getCookie、delCookie、encrypt、decrypt、unique、cloneObj、extendObj、getVerify
+extend、 each、map、browser、now、getTime、getdate、arrSort、cloneArr、cloneObj、extendArr、objSort、setCookie、getCookie、delCookie、encrypt、decrypt、unique、getVerify
 
 插件：
 

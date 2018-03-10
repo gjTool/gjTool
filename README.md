@@ -104,7 +104,7 @@ ajax, get, post, getJSON, getXML.
 
 Common tools, methods: (gjTool.each (arr, FN))
 
-Such as: each、map、browser、now、getTime、getdate、arrSort、objSort、setCookie、getCookie、delCookie、encrypt、decrypt、unique、cloneObj、extendObj、getVerify
+Such as:extend、 each、map、browser、now、getTime、getdate、arrSort、cloneArr、cloneObj、extendArr、objSort、setCookie、getCookie、delCookie、encrypt、decrypt、unique、getVerify
 
 
 Plug-in unit：

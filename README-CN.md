@@ -25,7 +25,7 @@ npm install gjtool
 ### 引用方式
 ```
 
-import gjTool from "gjtool.js";  //var gjTool = require("gjtool.js");
+import gjTool from "gjtool";  //var gjTool = require("gjtool");
 ```
 
 ```

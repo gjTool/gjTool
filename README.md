@@ -25,7 +25,7 @@ npm install gjtool
 ### Introduction
 ```
 
-import gjTool from "gjtool.js";  //var gjTool = require("gjtool.js");
+import gjTool from "gjtool";  //var gjTool = require("gjtool");
 ```
 
 ```

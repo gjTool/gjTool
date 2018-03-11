@@ -5,6 +5,7 @@
 [![npm downloads](https://img.shields.io/npm/dt/gjtool.svg)](https://www.npmjs.com/package/gjtool)
 
 gjTool.js是一个js个人类库，模仿jQuery的链式调用，API用法和jQuery的差不多，相当于简版JQ。
+支持extend方法扩展，在extend上增加属性、方法。gjTool.fn.extend、gjTool.extend。
 
 作者：GaoJin  邮箱: 861366490@qq.com
 

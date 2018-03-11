@@ -1,7 +1,7 @@
 {
   "name": "gjtool",
-  "version": "1.0.13",
-  "description": "gjTool.js is a javascript class library",
+  "version": "1.0.14",
+  "description": "gjTool.js is a javascript class library（前端轻量js类库）",
   "devDependencies": {
     "gulp": "^3.9.0",
     "gulp-uglify": "^1.5.3",
@@ -22,7 +22,7 @@
     "plugin",
     "library"
   ],
-  "author": "GaoJin",
+  "author": "Gao Jin",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/gjTool/gjTool/issues"

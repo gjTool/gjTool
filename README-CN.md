@@ -6,7 +6,7 @@
 
 gjTool.js是一个js个人类库，模仿jQuery的链式调用，API用法和jQuery的差不多，相当于简版JQ。
 
-作者：GaoJin  QQ: 861366490
+作者：GaoJin  邮箱: 861366490@qq.com
 
 ## 语言
 

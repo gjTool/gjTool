@@ -58,7 +58,8 @@
 	};
 
 	//封装getElementsByClassName
-	if(!document.getElementsByClassName) {
+	
+	if(g.document && !g.document.getElementsByClassName) {
 		document.getElementsByClassName = function(className, element) {
 			var children = (element || document).getElementsByTagName('*');
 			var elements = [];
@@ -80,6 +81,7 @@
 			return this.replace(/(^\s*)|(\s*$)/g, "")
 		}
 	}
+
 	//封装indexOf 字符串查找下标 
 	if(!String.prototype.indexOf) {
 		String.prototype.indexOf = function(value) {
@@ -99,9 +101,9 @@
 		}
 	}
 	//封装动画定时器
-	if(!requestAnimationFrame) {
+	if(!g.requestAnimationFrame) {
 		var lastTime = 0;
-		requestAnimationFrame = function(callback) {
+		g.requestAnimationFrame = function(callback) {
 			var currTime = new Date().getTime();
 			var timeToCall = Math.max(0, 16.7 - (currTime - lastTime));
 			var id = setTimeout(function() {
@@ -112,8 +114,8 @@
 		}
 	}
 	//封装清除动画定时器
-	if(!cancelAnimationFrame) {
-		cancelAnimationFrame = function(id) {
+	if(!g.cancelAnimationFrame) {
+		g.cancelAnimationFrame = function(id) {
 			clearTimeout(id);
 		};
 	}

@@ -59,7 +59,7 @@
 		}
 	};
 
-	if(g !== window){
+	if(typeof window !== 'undefined'){
 		return;
 	}
 	//封装getElementsByClassName

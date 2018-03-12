@@ -12,7 +12,7 @@
 	
 	//注册全局变量
 	g.Gj = g.gjTool = G;
-	
+
 	if(typeof module !== 'undefined' && module.exports) {
 		module.exports = G
 	}
@@ -59,7 +59,7 @@
 		}
 	};
 
-	if(typeof g !== "window" || g !== window){
+	if(g !== window){
 		return;
 	}
 	//封装getElementsByClassName
@@ -2395,4 +2395,4 @@
 		}
 	})
 
-})(this);
+})(typeof window !== 'undefined' ? window : this);

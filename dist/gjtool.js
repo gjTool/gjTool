@@ -1,6 +1,6 @@
 /**
  * 个人js类库gjTool.js（方法、插件集合）
- * @author GaoJin
+ * @author Gao Jin
  * @update 2018/03/12 10:53
  */
 ;(function(g) {
@@ -9,8 +9,13 @@
 	function G(selector) {
 		return new G.fn.gjTool(selector)
 	}
+	
 	//注册全局变量
 	g.Gj = g.gjTool = G;
+	if(typeof g !== "window" || g !== window){
+		return;
+	}
+
 	if(typeof module !== 'undefined' && module.exports) {
 		module.exports = G
 	}
@@ -20,7 +25,7 @@
 		})
 	}
 	G.fn = G.prototype = {
-		version: "gjTool.js v1.0 by GaoJin && QQ:861366490",
+		version: "gjTool.js v1.0 by Gao Jin && mail:861366490@qq.com",
 		gjTool: function(selector) {
 			if(G.isFunction(selector)) {
 				this.selector = "document";
@@ -2390,4 +2395,4 @@
 		}
 	})
 
-})(typeof window !== 'undefined' ? window : this);
+})(this);

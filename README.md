@@ -4,7 +4,8 @@
 [![npm version](https://img.shields.io/npm/v/gjtool.svg)](https://www.npmjs.com/package/gjtool)
 [![npm downloads](https://img.shields.io/npm/dt/gjtool.svg)](https://www.npmjs.com/package/gjtool)
 
-gjTool.js is a javascript class library that mimics the chain call of jQuery, and the API usage is similar to jQuery, gjTool like a simple version of JQ.Support extension plug-ins. gjTool.fn.extend、gjTool.extend.
+gjTool.js is a javascript class library that mimics the chain call of jQuery, and the API usage is similar to jQuery, gjTool like a simple version of JQ.
+Support extension plug-ins. gjTool.fn.extend、gjTool.extend.
 
 Author: Gao Jin. mail: 861366490@qq.com
 

@@ -1,7 +1,7 @@
 /**
  * 个人js类库gjTool.js（方法、插件集合）
  * @author GaoJin
- * @update 2018/02/15 10:53
+ * @update 2018/03/12 10:53
  */
 ;(function(g) {
 	"use strict";
@@ -99,9 +99,9 @@
 		}
 	}
 	//封装动画定时器
-	if(!g.requestAnimationFrame) {
+	if(!requestAnimationFrame) {
 		var lastTime = 0;
-		g.requestAnimationFrame = function(callback) {
+		requestAnimationFrame = function(callback) {
 			var currTime = new Date().getTime();
 			var timeToCall = Math.max(0, 16.7 - (currTime - lastTime));
 			var id = setTimeout(function() {
@@ -112,8 +112,8 @@
 		}
 	}
 	//封装清除动画定时器
-	if(!g.cancelAnimationFrame) {
-		g.cancelAnimationFrame = function(id) {
+	if(!cancelAnimationFrame) {
+		cancelAnimationFrame = function(id) {
 			clearTimeout(id);
 		};
 	}
@@ -2388,4 +2388,4 @@
 		}
 	})
 
-})(window);
+})(typeof window !== 'undefined' ? window : this);

@@ -28,7 +28,7 @@ gjTool.js是一个js个人类库，模仿jQuery的链式调用，API用法和jQu
 
 - 现在可以使用$了，在没有引用jq、zepto的情况下。
 
-- 新增方法 clone()，用来克隆元素。appendTo（），插入元素。
+- 新增方法 clone()，用来克隆元素。appendTo()，插入元素。
 
 - $.browser属性新增，新增判断是否电脑、手机、平板。
 

@@ -23,7 +23,7 @@
 		})
 	}
 	G.fn = G.prototype = {
-		version: "gjTool.js v1.1 by Gao Jin && mail:861366490@qq.com",
+		version: "gjTool.js v1.1 by Gao Jin && Mail:861366490@qq.com",
 		//gjTool实例选择器
 		gjTool: function(selector) {
 			if(G.isFunction(selector)) {

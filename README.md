@@ -5,12 +5,12 @@
 [![npm downloads](https://img.shields.io/npm/dt/gjtool.svg)](https://www.npmjs.com/package/gjtool)
 
 
-## introduce
+## Introduce
 
 gjTool.js is a javascript class library that mimics the chain call of jQuery, and the API usage is similar to jQuery, gjTool like a simple version of JQ.
 Support extension plug-ins. gjTool.fn.extend、gjTool.extend.
 
-Author: Gao Jin. mail: 861366490@qq.com
+Author: Gao Jin. Mail: 861366490@qq.com
 
 ## Language
 
@@ -28,7 +28,7 @@ Author: Gao Jin. mail: 861366490@qq.com
 
 - Now you can use $, without reference to JQ and zepto.
 
-- The new method, clone (), is used to clone elements.appendTo（），Insert element.
+- The new method, clone(), is used to clone elements.appendTo()，Insert element.
 
 - Add the $.browser property to determine whether the computer, the cell phone, and the tablet.
 

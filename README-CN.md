@@ -4,9 +4,6 @@
 [![npm version](https://img.shields.io/npm/v/gjtool.svg)](https://www.npmjs.com/package/gjtool)
 [![npm downloads](https://img.shields.io/npm/dt/gjtool.svg)](https://www.npmjs.com/package/gjtool)
 
-
-## 介绍
-
 gjTool.js是一个js个人类库，模仿jQuery的链式调用，API用法和jQuery的差不多，相当于简版JQ。
 支持extend方法扩展，在extend上增加属性、方法。gjTool.fn.extend、gjTool.extend。
 
@@ -26,11 +23,11 @@ gjTool.js是一个js个人类库，模仿jQuery的链式调用，API用法和jQu
 
 - 代码整理优化，更简洁。
 
-- 现在可以使用$了，在没有引用jq、zepto的情况下。
+- 在没有引用jq、zepto的情况下，可以使用$。废弃Gj，保留gjTool。
 
 - 新增方法 clone()，用来克隆元素。appendTo()，插入元素。
 
-- $.browser属性新增，新增判断是否电脑、手机、平板。
+- $.browser对象新增属性$.browser.pc、$.browser.phone、$.browser.tablet，新增的属性判断是否电脑、手机、平板。
 
 - 优化完善dom操作类的方法after、before、append、prepend。
 
@@ -55,9 +52,9 @@ import gjTool from "gjtool";  //var gjTool = require("gjtool");
 ### 使用
 ```
 
-对外暴露的全局变量是gjTool、Gj。如果没有引用jquery、zepto，也可以使用$符号。
+对外暴露的全局变量是gjTool、$。
 
-gjTool("#test").hide();//Gj("#test").hide(500);
+gjTool("#test").hide();//$("#test").hide(500);
 
 ```
 

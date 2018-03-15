@@ -12,7 +12,7 @@
 	</style>
 </head>
 <body>
-	<div id="test">
+	<div id="test" >
 		<div>
 			<p></p>
 		</div>
@@ -21,7 +21,11 @@
 	<script type="text/javascript" src="dist/gjtool.js"></script>
 	<script type="text/javascript" >
 		$('#test').clone().appendTo('#test1');
-		console.log($.browser)
+		console.log($.browser);
+		$('#test').css({
+			width: '50vw'
+		})
+		$('#test').hide(5000)
 	</script>
 </body>
 </html>

@@ -4,9 +4,6 @@
 [![npm version](https://img.shields.io/npm/v/gjtool.svg)](https://www.npmjs.com/package/gjtool)
 [![npm downloads](https://img.shields.io/npm/dt/gjtool.svg)](https://www.npmjs.com/package/gjtool)
 
-
-## Introduce
-
 gjTool.js is a javascript class library that mimics the chain call of jQuery, and the API usage is similar to jQuery, gjTool like a simple version of JQ.
 Support extension plug-ins. gjTool.fn.extend、gjTool.extend.
 
@@ -26,11 +23,11 @@ Author: Gao Jin. Mail: 861366490@qq.com
 
 - The code is arranged and optimized, and it is more concise.
 
-- Now you can use $, without reference to JQ and zepto.
+- Now you can use $, without reference to JQ and zepto.Disuse Gj and keep gjTool.
 
 - The new method, clone(), is used to clone elements.appendTo()，Insert element.
 
-- Add the $.browser property to determine whether the computer, the cell phone, and the tablet.
+- The new attributes of the $.browser object,$.browser.pc、$.browser.phone、$.browser.tablet, the new attributes to determine whether the computer, the phone, the tablet.
 
 - The method of optimizing and perfecting the DOM operation class，after、before、append、prepend
 
@@ -56,9 +53,9 @@ import gjTool from "gjtool";  //var gjTool = require("gjtool");
 ### How To Use
 ```
 
-The global variables of external exposure are gjTool, Gj.If jQuery, Zepto are not referenced, you can also use the $symbol.
+The global variables of external exposure are gjTool, $.
 
-gjTool("#test").hide();//Gj("#test").hide(500);
+gjTool("#test").hide();//$("#test").hide(500);
 
 ```
 

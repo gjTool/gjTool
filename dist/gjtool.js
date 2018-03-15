@@ -12,7 +12,7 @@
 	}
 	
 	//注册全局变量
-	g.Gj = g.gjTool = G;
+	g.gjTool = G;
 	g.$ === undefined && (g.$ = G);
 	if(typeof module !== 'undefined' && module.exports) {
 		module.exports = G
@@ -212,13 +212,10 @@
 			}
 			sys.userAgent = ua;
 			if(ua.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)) {
-				sys.pc = false;
 				var android = /(?:android)/i.test(ua);
 				if(ua.match(/(pad|iPad|Tablet|PlayBook)/i) || (android && !/(?:Mobile)/i.test(ua)) || (sys.firefox && /(?:Tablet)/i.test(ua))){
 					sys.tablet = true;
-					sys.phone = false;
 				}else {
-					sys.tablet = false;
 					sys.phone = true;
 				}
 			}else {
@@ -1086,13 +1083,19 @@
 						} else if(name == 'scrollTop' || name == 'scrollLeft') {
 							ele[i] = name[i]
 						} else {
-							if(i == 'width' && name[i].toString().indexOf('%') != -1) {
-								ele.style[i] = ele.offsetWidth;
-							} else if(i == 'height' && name[i].toString().indexOf('%') != -1) {
-								ele.style[i] = ele.offsetHeight;
-							} else {
-								ele.style[i] = name[i]
+							var str = name[i].toString();
+							if(str.indexOf('%') == -1 && str.indexOf('px') == -1 && str.indexOf('em') == -1 && str.indexOf('rem') == -1 && str.indexOf('vw') == -1 && str.indexOf('vh') == -1&& str.indexOf('vmin') == -1 && str.indexOf('vmax') == -1) {
+								ele.style[i] = name[i] + "px";
+							}else {
+								ele.style[i] = name[i];
 							}
+							// if(i == 'width' && name[i].toString().indexOf('%') != -1) {
+							// 	ele.style[i] = ele.offsetWidth;
+							// } else if(i == 'height' && name[i].toString().indexOf('%') != -1) {
+							// 	ele.style[i] = ele.offsetHeight;
+							// } else {
+							// 	ele.style[i] = name[i]
+							// }
 
 						}
 					}
@@ -1754,16 +1757,16 @@
 			return this.each(function(i, ele) {
 				if(!ele.isHide && !ele.isShow) {
 					if(ele.style.display == 'none') {
-						Gj(ele).stop().show(speed, easing, fn)
+						G(ele).stop().show(speed, easing, fn)
 					} else {
-						Gj(ele).stop().hide(speed, easing, fn)
+						G(ele).stop().hide(speed, easing, fn)
 					}
 					return;
 				}
 				if(ele.isHide) {
-					Gj(ele).stop().show(speed, easing, fn)
+					G(ele).stop().show(speed, easing, fn)
 				} else if(!ele.isHide) {
-					Gj(ele).stop().hide(speed, easing, fn)
+					G(ele).stop().hide(speed, easing, fn)
 				}
 			})
 		},
@@ -1788,16 +1791,16 @@
 			return this.each(function(i, ele) {
 				if(!ele.isHide && !ele.isShow) {
 					if(ele.style.display == 'none') {
-						Gj(ele).stop().fadeIn(speed, easying, fn);
+						G(ele).stop().fadeIn(speed, easying, fn);
 					} else {
-						Gj(ele).stop().fadeOut(speed, easying, fn);
+						G(ele).stop().fadeOut(speed, easying, fn);
 					}
 					return;
 				}
 				if(ele.isHide) {
-					Gj(ele).stop().fadeIn(speed, easying, fn);
+					G(ele).stop().fadeIn(speed, easying, fn);
 				} else if(!ele.isHide) {
-					Gj(ele).stop().fadeOut(speed, easying, fn);
+					G(ele).stop().fadeOut(speed, easying, fn);
 				}
 			})
 

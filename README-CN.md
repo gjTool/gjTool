@@ -4,6 +4,19 @@
 [![npm version](https://img.shields.io/npm/v/gjtool.svg)](https://www.npmjs.com/package/gjtool)
 [![npm downloads](https://img.shields.io/npm/dt/gjtool.svg)](https://www.npmjs.com/package/gjtool)
 
+## 更新信息
+
+- 代码整理优化，更简洁。
+
+- 现在可以使用$了，在没有引用jq、zepto的情况下。
+
+- 新增方法 clone()，用来克隆元素。appendTo（），插入元素。
+
+- 优化完善dom操作类的方法after、before、append、prepend。
+
+
+## 介绍
+
 gjTool.js是一个js个人类库，模仿jQuery的链式调用，API用法和jQuery的差不多，相当于简版JQ。
 支持extend方法扩展，在extend上增加属性、方法。gjTool.fn.extend、gjTool.extend。
 
@@ -37,7 +50,8 @@ import gjTool from "gjtool";  //var gjTool = require("gjtool");
 ### 使用
 ```
 
-对外暴露的全局变量是gjTool、Gj。
+对外暴露的全局变量是gjTool、Gj。如果没有引用jquery、zepto，也可以使用$符号。
+
 gjTool("#test").hide();//Gj("#test").hide(500);
 
 ```
@@ -72,7 +86,7 @@ attr、removeAttr、prop、data、val、html、text、empty
 
 DOM操作：
 
-after、before、append、prepend、remove
+after、before、append、prepend、remove、clone 、appendTo
 
 动画：
 

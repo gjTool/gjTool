@@ -1,7 +1,8 @@
 /**
  * 个人js类库gjTool.js（方法、插件集合）
+ * @version 1.1
  * @author Gao Jin
- * @update 2018/03/12 10:53
+ * @update 2018/03/15 17:53
  */
 ;(function(g) {
 	"use strict";
@@ -12,7 +13,7 @@
 	
 	//注册全局变量
 	g.Gj = g.gjTool = G;
-
+	g.$ === undefined && (g.$ = G);
 	if(typeof module !== 'undefined' && module.exports) {
 		module.exports = G
 	}
@@ -22,7 +23,7 @@
 		})
 	}
 	G.fn = G.prototype = {
-		version: "gjTool.js v1.0 by Gao Jin && mail:861366490@qq.com",
+		version: "gjTool.js v1.1 by Gao Jin && mail:861366490@qq.com",
 		gjTool: function(selector) {
 			if(G.isFunction(selector)) {
 				this.selector = "document";
@@ -1288,6 +1289,18 @@
 					} else {
 						parent.insertBefore(selector, next)
 					}
+				}else if(selector.length){
+					for(var i=0,len=selector.length;i<len;i++){
+						var node = selector[i];
+						if(!move) {
+							node = node.cloneNode(true);
+						}
+						if(lastChild == elem) {
+							parent.appendChild(node)
+						} else {
+							parent.insertBefore(node, next)
+						}
+					}
 				}
 			})
 		},
@@ -1321,7 +1334,28 @@
 					} else {
 						parent.insertBefore(selector, prev)
 					}
+				}else if(selector.length){
+					for(var i=0,len=selector.length;i<len;i++){
+						var node = selector[i];
+						if(!move) {
+							node = node.cloneNode(true);
+						}
+						if(firstChild == elem) {
+							parent.insertBefore(node, elem)
+						} else {
+							parent.insertBefore(node, prev)
+						}
+					}
 				}
+			})
+		},
+		//将被选元素插入selector的内部
+		appendTo: function(selector) {
+			return this.each(function(i, elem) {
+				var node = elem.cloneNode(true);
+				G(selector).each(function(i,elem2){
+					elem2.appendChild(node)
+				})
 			})
 		},
 		//在被选元素的内部结尾插入内容
@@ -1333,10 +1367,19 @@
 						elem.appendChild(arr[i].cloneNode(true));
 					}
 				} else if(G.isHTMLElement(selector)) {
+
 					if(!move) {
 						selector = selector.cloneNode(true);
 					}
 					elem.appendChild(selector)
+				}else if(selector.length){
+					for(var i=0,len=selector.length;i<len;i++){
+						var node = selector[i];
+						if(!move) {
+							node = node.cloneNode(true);
+						}
+						elem.appendChild(node)
+					}
 				}
 			})
 
@@ -1344,18 +1387,25 @@
 		//在被选元素的内部开头插入内容
 		prepend: function(selector, move) {
 			return this.each(function(i, elem) {
+				var firstChild = elem.children[0];
 				if(G.isString(selector)) {
 					arr = Gpublic.parseHtml(selector);
-					var firstChild = elem.children[0];
 					for(var i = 0, len = arr.length; i < len; i++) {
 						elem.insertBefore(arr[i].cloneNode(true), firstChild)
 					}
 				} else if(G.isHTMLElement(selector)) {
-					var firstChild = elem.children[0];
 					if(!move) {
 						selector = selector.cloneNode(true)
 					}
 					elem.insertBefore(selector, firstChild)
+				} else if(selector.length){
+					for(var i=0,len=selector.length;i<len;i++){
+						var node = selector[i];
+						if(!move) {
+							node = node.cloneNode(true);
+						}
+						elem.insertBefore(node, firstChild)
+					}
 				}
 			})
 		},
@@ -1366,6 +1416,13 @@
 					parentNode.removeChild(elem);
 				}
 			})
+		},
+		clone: function(){
+			var arr = [];
+			this.each(function(i, elem) {
+				arr.push(elem.cloneNode(true)) 
+			})
+			return this.toArray(arr);
 		}
 	});
 	//动画相关

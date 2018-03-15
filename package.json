@@ -1,6 +1,6 @@
 ﻿{
   "name": "gjtool",
-  "version": "1.0.22",
+  "version": "1.1.0",
   "description": "gjTool.js is a javascript class library（前端轻量js类库）",
   "devDependencies": {
     "gulp": "^3.9.0",
@@ -18,6 +18,8 @@
   },
   "keywords": [
     "gjtool",
+    "gjTool",
+    "js",
     "javascript",
     "plugin",
     "library"

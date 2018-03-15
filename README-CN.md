@@ -29,7 +29,8 @@ gjTool.js是一个js个人类库，模仿jQuery的链式调用，API用法和jQu
 
 - $.browser对象新增属性$.browser.pc、$.browser.phone、$.browser.tablet，新增的属性判断是否电脑、手机、平板。
 
-- 优化完善dom操作类的方法after、before、append、prepend。
+- 优化完善dom操作类的方法after、before、append、prepend。修复css方法bug。
+
 
 ### 安装
 ```

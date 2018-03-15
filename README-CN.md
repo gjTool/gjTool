@@ -4,16 +4,6 @@
 [![npm version](https://img.shields.io/npm/v/gjtool.svg)](https://www.npmjs.com/package/gjtool)
 [![npm downloads](https://img.shields.io/npm/dt/gjtool.svg)](https://www.npmjs.com/package/gjtool)
 
-## 更新信息
-
-- 代码整理优化，更简洁。
-
-- 现在可以使用$了，在没有引用jq、zepto的情况下。
-
-- 新增方法 clone()，用来克隆元素。appendTo（），插入元素。
-
-- 优化完善dom操作类的方法after、before、append、prepend。
-
 
 ## 介绍
 
@@ -28,6 +18,21 @@ gjTool.js是一个js个人类库，模仿jQuery的链式调用，API用法和jQu
 - [English](README.md)
 
 - [中文](README-CN.md)
+
+
+## 更新信息
+
+- v1.1.0
+
+- 代码整理优化，更简洁。
+
+- 现在可以使用$了，在没有引用jq、zepto的情况下。
+
+- 新增方法 clone()，用来克隆元素。appendTo（），插入元素。
+
+- $.browser属性新增，新增判断是否电脑、手机、平板。
+
+- 优化完善dom操作类的方法after、before、append、prepend。
 
 ### 安装
 ```

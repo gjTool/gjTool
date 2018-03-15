@@ -4,16 +4,6 @@
 [![npm version](https://img.shields.io/npm/v/gjtool.svg)](https://www.npmjs.com/package/gjtool)
 [![npm downloads](https://img.shields.io/npm/dt/gjtool.svg)](https://www.npmjs.com/package/gjtool)
 
-## Update information
-
-- The code is arranged and optimized, and it is more concise.
-
-- Now you can use $, without reference to JQ and zepto.
-
-- The new method, clone (), is used to clone elements.appendTo（），Insert element.
-
-- The method of optimizing and perfecting the DOM operation class，after、before、append、prepend
-
 
 ## introduce
 
@@ -28,6 +18,22 @@ Author: Gao Jin. mail: 861366490@qq.com
 - [English](README.md)
 
 - [中文](README-CN.md)
+
+
+## Update information
+
+- v1.1.0
+
+- The code is arranged and optimized, and it is more concise.
+
+- Now you can use $, without reference to JQ and zepto.
+
+- The new method, clone (), is used to clone elements.appendTo（），Insert element.
+
+- Add the $.browser property to determine whether the computer, the cell phone, and the tablet.
+
+- The method of optimizing and perfecting the DOM operation class，after、before、append、prepend
+
 
 ### How To Install
 ```

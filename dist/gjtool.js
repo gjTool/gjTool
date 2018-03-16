@@ -1,12 +1,12 @@
 /** 个人js类库gjTool.js（方法、插件集合）
- *  @version 1.1.2
+ *  @version 1.1.3
  *  @author Gao Jin
  *  @update 2018/03/16 17:53
  */
 ;(function(g) {
 	"use strict";
 	if(g.console && g.console.info){
-		console.info("gjTool.js v1.1.2. The latest version && API on GitHub:  https://github.com/gjTool/gjTool && http://gjTool.github.io/gjToolAPI")
+		console.info("gjTool.js v1.1.3. The latest version && API on GitHub:  https://github.com/gjTool/gjTool && http://gjTool.github.io/gjToolAPI")
 	}
 	//注册全局变量
 	g.gjTool = G;

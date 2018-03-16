@@ -2,7 +2,7 @@
  * 个人js类库gjTool.js（方法、插件集合）
  * @version 1.1
  * @author Gao Jin
- * @update 2018/03/15 17:53
+ * @update 2018/03/16 17:53
  */
 ;(function(g) {
 	"use strict";
@@ -10,7 +10,6 @@
 	function G(selector) {
 		return new G.fn.gjTool(selector)
 	}
-	
 	//注册全局变量
 	g.gjTool = G;
 	g.$ === undefined && (g.$ = G);
@@ -72,14 +71,20 @@
 			return temp
 		}
 	};
-
+	
+})(typeof window !== 'undefined' ? window : this);
+/**gjTool.js
+ * 公用基础方法、属性
+ * @author Gao Jin
+ * @update 2018/03/16 17:53
+ */
+ ;(function(G,g){
 	if(typeof window === 'undefined'){
 		return;
 	}
-	//封装getElementsByClassName
-	
+ 	//封装getElementsByClassName
 	if(g.document && !g.document.getElementsByClassName) {
-		document.getElementsByClassName = function(className, element) {
+		g.document.getElementsByClassName = function(className, element) {
 			var children = (element || document).getElementsByTagName('*');
 			var elements = [];
 			for(var i = 0, len = children.length; i < len; i++) {
@@ -95,22 +100,22 @@
 		}
 	}
 	//封装trim 字符串去前后空格 
-	if(!String.prototype.trim) {
-		String.prototype.trim = function() {
+	if(!g.String.prototype.trim) {
+		g.String.prototype.trim = function() {
 			return this.replace(/(^\s*)|(\s*$)/g, "")
 		}
 	}
 
 	//封装indexOf 字符串查找下标 
-	if(!String.prototype.indexOf) {
-		String.prototype.indexOf = function(value) {
+	if(!g.String.prototype.indexOf) {
+		g.String.prototype.indexOf = function(value) {
 			var arr = new RegExp(value).exec(this);
 			return arr ? arr.index : -1
 		}
 	}
 	//封装indexOf 数组查找索引 
-	if(!Array.prototype.indexOf) {
-		Array.prototype.indexOf = function(n) {
+	if(!g.Array.prototype.indexOf) {
+		g.Array.prototype.indexOf = function(n) {
 			for(var i = 0, len = this.length; i < len; i++) {
 				if(n === this[i]) {
 					return i
@@ -119,27 +124,8 @@
 			return -1
 		}
 	}
-	//封装动画定时器
-	if(!g.requestAnimationFrame) {
-		var lastTime = 0;
-		g.requestAnimationFrame = function(callback) {
-			var currTime = new Date().getTime();
-			var timeToCall = Math.max(0, 16.7 - (currTime - lastTime));
-			var id = setTimeout(function() {
-				callback(currTime + timeToCall);
-			}, timeToCall);
-			lastTime = currTime + timeToCall;
-			return id;
-		}
-	}
-	//封装清除动画定时器
-	if(!g.cancelAnimationFrame) {
-		g.cancelAnimationFrame = function(id) {
-			clearTimeout(id);
-		};
-	}
 	//内部基础公用方法、属性
-	var Gpublic = {
+	G.public = {
 		//选择器
 		regSelector: /^(?:\#([\w\-]+)|\.([\w\-]+)|(\*)|(\w+))$/,
 		//DOM其他事件
@@ -303,26 +289,26 @@
 			obj.ctrlKey = e.ctrlKey;
 			obj.altKey = e.altKey;
 			obj.shiftKey = e.shiftKey;
-			obj.button = Gpublic.getButton(e);
+			obj.button = G.public.getButton(e);
 			obj.originalEvent = e;
 			return obj
 		},
 		//判断文档加载完成后
 		DOMLoaded: function(fn) {
-			var sys = Gpublic.getBrowser();
+			var sys = G.public.getBrowser();
 			var isReady = false;
 			var timer = null;
 
 			if(document.addEventListener) {
-				Gpublic.addEvent(document, 'DOMContentLoaded', function fn2() {
+				G.public.addEvent(document, 'DOMContentLoaded', function fn2() {
 					fn();
-					Gpublic.removeEvent(document, 'DOMContentLoaded', fn2)
+					G.public.removeEvent(document, 'DOMContentLoaded', fn2)
 				})
 			} else if(document.attachEvent) {
-				Gpublic.addEvent(document, 'readystatechange', function fn2() {
+				G.public.addEvent(document, 'readystatechange', function fn2() {
 					if(document.readyState == "complete") {
 						fn();
-						Gpublic.removeEvent(document, 'readystatechange', fn2)
+						G.public.removeEvent(document, 'readystatechange', fn2)
 					}
 				})
 			} else if(sys.ie && sys.ie < 9) {
@@ -391,9 +377,9 @@
 				subselector = ele.trim();
 				//包含选择器
 				if(/\s+/.test(subselector)) {
-					arr = Gpublic.descendantSelector(node, subselector);
+					arr = G.public.descendantSelector(node, subselector);
 				} else if(/[A-Za-z0-9]+\./.test(subselector.trim()) && !/\s/.test(subselector.trim()) && !/,/.test(subselector.trim())) {
-					arr = Gpublic.classSelector(subselector);
+					arr = G.public.classSelector(subselector);
 
 				} // input[type=button]
 				else if(/\w+\[\w+\=\w+\]/g.test(subselector)) {
@@ -408,10 +394,10 @@
 					arr = G.unique(arr2)
 				} // .div:not() 
 				else if(!/\s/.test(subselector.trim()) && !/,/.test(subselector.trim()) && /:/.test(subselector.trim())) {
-					arr = Gpublic.descendantSelector(node, subselector);
+					arr = G.public.descendantSelector(node, subselector);
 				} else {
 					// 基本选择器
-					arr = Gpublic.basicSelector(node, subselector);
+					arr = G.public.basicSelector(node, subselector);
 
 				}
 				if(arr) {
@@ -434,14 +420,14 @@
 			var aChild = [];
 			var aParent = [node];
 			for(var i = 0, len = arr.length; i < len; i++) {
-				aChild = Gpublic.getByStr(aParent, arr[i]);
+				aChild = G.public.getByStr(aParent, arr[i]);
 				aParent = aChild
 			}
 			return aChild
 		},
 		//基本选择器 （#、 . 、* 、标签）
 		basicSelector: function(node, selector) {
-			var m = Gpublic.regSelector.exec(selector);
+			var m = G.public.regSelector.exec(selector);
 			if(m[1]) { // id选择器
 				return document.getElementById(m[1])
 			} else if(m[2]) { // class选择器
@@ -525,12 +511,12 @@
 				}
 			} else {
 				if(node) {
-					var ele = Gpublic.basicSelector(aParent, aStr2[1]);
+					var ele = G.public.basicSelector(aParent, aStr2[1]);
 					var children = aParent.children
 				} else {
 					var children = arr
 				}
-				var m = Gpublic.regSelector.exec(aStr2[1]);
+				var m = G.public.regSelector.exec(aStr2[1]);
 				if(m[1]) { // id选择器
 					for(var i = 0, len = children.length; i < len; i++) {
 						if(children[i].id != aStr2[1].replace("#", "")) {
@@ -539,7 +525,7 @@
 					}
 				} else if(m[2]) { // class选择器
 					for(var i = 0, len = children.length; i < len; i++) {
-						if(!Gpublic.regName(aStr2[1].replace(".", "")).test(children[i].className)) {
+						if(!G.public.regName(aStr2[1].replace(".", "")).test(children[i].className)) {
 							aChild.push(children[i])
 						}
 					}
@@ -571,7 +557,7 @@
 								var aStr = selector.substring(1, index);
 								var aStr2 = selector.substring(index, selector.length);
 								var aRes = document.getElementsByClassName(aStr, aParent[i]);
-								var arr = Gpublic.isnotSelector(aStr2, aRes, aChild, aParent[i], selector);
+								var arr = G.public.isnotSelector(aStr2, aRes, aChild, aParent[i], selector);
 								G.each(arr, function(i, ele) {
 									aChild.push(ele)
 								})
@@ -598,7 +584,7 @@
 								//  [li,eq,2]  [li,first]
 								var aStr = selector.split(/\:|\(|\)/);
 								var aRes = aParent[i].getElementsByTagName(aStr[0]);
-								var arr = Gpublic.isnotSelector(selector, aRes, aChild, aParent[i], selector);
+								var arr = G.public.isnotSelector(selector, aRes, aChild, aParent[i], selector);
 								G.each(arr, function(i, ele) {
 									aChild.push(ele)
 								})
@@ -637,7 +623,7 @@
 						continue
 					}
 
-					if(Gpublic.regName(class1).test(className) && Gpublic.regName(class2).test(className)) {
+					if(G.public.regName(class1).test(className) && G.public.regName(class2).test(className)) {
 						results.push(arr[j])
 					}
 				}
@@ -651,7 +637,7 @@
 					if(!className) {
 						continue
 					}
-					if(Gpublic.regName(class2).test(className)) {
+					if(G.public.regName(class2).test(className)) {
 						results.push(arr[j])
 					}
 				}
@@ -678,7 +664,7 @@
 						}
 
 					} else {
-						aChild = Gpublic.notSelector(aStr[0], selector, aParent, aStr[2], aRes);
+						aChild = G.public.notSelector(aStr[0], selector, aParent, aStr[2], aRes);
 					}
 					break;
 				case 'lt':
@@ -731,282 +717,19 @@
 				return arr
 			}
 			arr.push(elem.parentNode);
-			return Gpublic.getParentNode(elem.parentNode, arr)
+			return G.public.getParentNode(elem.parentNode, arr)
 		},
 		add0: function(num) {
 			return num = num < 10 ? '0' + num : num
 		}
 	};
-	
-	//遍历
-	G.extend({
-		/**
-		 *	each 遍历
-		 *	@param arr DOM数组对象
-		 *	@param fn 函数方法
-		 */
-		each: function(arr, fn) {
-			for(var i = 0, len = arr.length; i < len; i++) {
-				var result = fn.call(arr[i], i, arr[i]);
-				if(result === true) {
-					continue
-				} else if(result === false) {
-					break
-				}
-			}
-		},
-		/**
-		 *	map 遍历
-		 *	@param arr 数组对象
-		 *	@param fn 函数方法
-		 */
-		map: function(arr, fn) {
-			var arr2 = [];
-			for(var i = 0, len = arr.length; i < len; i++) {
-				arr2.push(fn.call(arr[i], i, arr[i]))
-			}
-			return arr2
-		}
-	});
-	//遍历实例
-	G.fn.extend({
-		/**
-		 *	each 遍历
-		 *	@param fn 函数方法
-		 */
-		each: function(fn) {
-			G.each(this, fn)
-			return this
-		},
-		map: function(fn) {
-			G.map(this, fn)
-			return this
-		},
-		//eq返回的是gjTool对象
-		eq: function(num) {
-			num = Number(num);
-			if(isNaN(num)) {
-				console.warn("eq parameter invalid !");
-				return this
-			}
-			return G(this[num])
-		},
-		index: function() {
-			var elem = this[0];
-			if(!G.isHTMLElement(elem)) {
-				return null
-			}
-			var arr = elem.parentNode.children;
-			if(arr && arr.length >= 1) {
-				for(var i = 0, len = arr.length; i < len; i++) {
-					if(arr[i] == elem) {
-						return Number(i)
-					}
-				}
-			}else if(arr){
-				return 0;
-			}
-
-			return null
-		},
-		//根据选择器寻找元素
-		find: function(selector) {
-			var node = this[0] || document;
-			//html字符串
-			if(/^</.test(selector)) {
-				return this.toArray(Gpublic.parseHtml(selector));
-			} // div.test 、.div.abc
-			else if(/[A-Za-z0-9]+\./.test(selector.trim()) && !/\s/.test(selector.trim()) && !/,/.test(selector.trim())) {
-				return this.toArray(Gpublic.classSelector(selector))
-			} // input[type=button]
-			else if(/\w+\[\w+\=\w+\]/g.test(selector)) {
-				var aStr = selector.split(/\[|\=|\]/g);
-				var aRes = node.getElementsByTagName(aStr[0]);
-				var result = [];
-				G.each(aRes, function(i, ele) {
-					if(ele.getAttribute(aStr[1]) == aStr[2]) {
-						result.push(ele)
-					}
-				})
-				return this.toArray(G.unique(result))
-			} // .div:not() 
-			else if(!/\s/.test(selector.trim()) && !/,/.test(selector.trim()) && /:/.test(selector.trim())) {
-				return this.toArray(Gpublic.descendantSelector(node, selector));
-			}
-			//群组选择器或包含选择器或基本选择器
-			else {
-				return this.toArray(Gpublic.groupSelector(node, selector))
-			}
-		},
-		parent: function(selector) {
-			var arr = [],
-				arr2 = [];
-			for(var i = 0, len = this.length; i < len; i++) {
-				var elem = this[i];
-				arr.push(elem.parentNode)
-			}
-			arr = G.unique(arr);
-			if(G.isString(selector)) {
-				for(var j = 0, len = arr.length; j < len; j++) {
-					if(arr[j].tagName.toLowerCase() == selector || (selector.indexOf("#") != -1 && arr[j].id == selector.replace('#', "")) || (selector.indexOf(".") != -1 && G(arr[j]).hasClass(selector.replace('.', "")))) {
-						arr2.push(arr[j])
-					}
-				}
-				return this.toArray(arr2)
-			} else {
-				return this.toArray(arr)
-			}
-		},
-		parents: function(selector) {
-			var arr = [],
-				arr2 = [];
-			for(var i = 0, len = this.length; i < len; i++) {
-				var elem = this[i];
-				arr = Gpublic.getParentNode(elem, arr)
-			}
-			arr = G.unique(arr);
-			if(G.isString(selector)) {
-				for(var j = 0, len = arr.length; j < len; j++) {
-					if(arr[j].tagName.toLowerCase() == selector || (selector.indexOf("#") != -1 && arr[j].id == selector.replace('#', "")) || (selector.indexOf(".") != -1 && G(arr[j]).hasClass(selector.replace('.', "")))) {
-						arr2.push(arr[j])
-					}
-				}
-				return this.toArray(arr2)
-			} else {
-				return this.toArray(arr)
-			}
-		},
-		children: function(selector) {
-			var elem = this[0];
-			var m = Gpublic.regSelector.exec(selector);
-			var arr2 = [];
-
-			this.each(function(i, elem) {
-				if(!G.isHTMLElement(elem)) {
-					return
-				}
-				var arr = elem.children;
-				if(selector === undefined) {
-					for(var i = 0, len = arr.length; i < len; i++) {
-						if(G.isHTMLElement(arr[i])) {
-							arr2.push(arr[i]);
-						}
-					}
-				} else if(m) {
-					for(var i = 0, len = arr.length; i < len; i++) {
-						if(G.isHTMLElement(arr[i])) {
-							if(m[1]) { // id选择器
-								if(arr[i].id == m[1]) {
-									arr2.push(arr[i])
-								}
-							} else if(m[2]) { // class选择器
-								if(Gpublic.regName(m[2]).test(arr[i].className)) {
-									arr2.push(arr[i])
-								}
-							} else if(m[3]) { //通配符选择器
-								arr2.push(arr[i])
-							} else if(m[4]) { //标签选择器
-								if(arr[i].tagName.toLowerCase() == m[4]) {
-									arr2.push(arr[i])
-								}
-							}
-						}
-					}
-				}
-			})
-			return this.toArray(arr2)
-		},
-		
-		siblings: function(selector) {
-			var elem = this[0];
-			if(!G.isHTMLElement(elem)) {
-				return this
-			}
-			var m = Gpublic.regSelector.exec(selector);
-			var arr2 = [];
-			if(selector === undefined) {
-				var arr = elem.parentNode.children;
-				if(arr && arr.length >= 1) {
-					for(var i = 0, len = arr.length; i < len; i++) {
-						if(arr[i] != elem && G.isHTMLElement(arr[i])) {
-							arr2.push(arr[i])
-						}
-					}
-				}
-
-			} else if(m) {
-				this.each(function(i, elem) {
-					var arr = elem.parentNode.children;
-					if(arr && arr.length >= 1) {
-						for(var i = 0, len = arr.length; i < len; i++) {
-							if(G.isHTMLElement(arr[i]) && arr[i] != elem) {
-								if(m[1]) { // id选择器
-									if(arr[i].id == m[1]) {
-										arr2.push(arr[i])
-									}
-								} else if(m[2]) { // class选择器
-									if(Gpublic.regName(m[2]).test(arr[i].className)) {
-										arr2.push(arr[i])
-									}
-								} else if(m[3]) { //通配符选择器
-									arr2.push(arr[i])
-								} else if(m[4]) { //标签选择器
-									if(arr[i].tagName.toLowerCase() == m[4]) {
-										arr2.push(arr[i])
-									}
-								}
-							}
-						}
-					}
-
-				})
-			}
-			return this.toArray(arr2)
-		},
-		prev: function() {
-			var elem = this[0];
-			if(!G.isHTMLElement(elem)) {
-				return this
-			}
-			if(elem == document || elem == document.body || elem == document.documentElement) {
-				return this;
-			}
-			var arr = elem.parentNode.children;
-			if(arr && arr.length >= 1) {
-				for(var i = 0, len = arr.length; i < len; i++) {
-					if(arr[i + 1] == elem) {
-						return this.toArray([arr[i]])
-					}
-				}
-			}
-			return this;
-		},
-		next: function() {
-			var elem = this[0];
-			if(!G.isHTMLElement(elem)) {
-				return this
-			}
-			if(elem == document || elem == document.body || elem == document.documentElement) {
-				return this;
-			}
-			var arr = elem.parentNode.children;
-			if(arr && arr.length >= 1) {
-				for(var i = 1, len = arr.length; i < len; i++) {
-					if(arr[i - 1] == elem) {
-						return this.toArray([arr[i]])
-					}
-				}
-			}
-			return this;
-		},
-		first: function() {
-			return this.find(this[0])
-		},
-		last: function() {
-			return this.find(this[this.length - 1])
-		}
-	})
-	//class类
+ })(gjTool,typeof window !== 'undefined' ? window : this)
+/**gjTool.js
+ * class类名操作
+ * @author Gao Jin
+ * @update 2018/03/16 17:53
+ */
+ ;(function(G,g){
 	G.fn.extend({
 		/**
 		 *	addClass 添加class
@@ -1016,7 +739,7 @@
 			return this.each(function(i, ele) {
 				if(!ele.className.length) {
 					ele.className += '' + name
-				} else if(!Gpublic.regName(name).test(ele.className)) {
+				} else if(!G.public.regName(name).test(ele.className)) {
 					ele.className += ' ' + name
 				}
 			})
@@ -1029,8 +752,8 @@
 			return this.each(function(i, ele) {
 				if(!ele.className) {
 					return
-				} else if(Gpublic.regName(name).test(ele.className)) {
-					ele.className = ele.className.replace(Gpublic.regName(name), ' ').trim()
+				} else if(G.public.regName(name).test(ele.className)) {
+					ele.className = ele.className.replace(G.public.regName(name), ' ').trim()
 				}
 			})
 		},
@@ -1039,7 +762,7 @@
 		 *	@param string 字符串class名
 		 */
 		hasClass: function(name) {
-			return Gpublic.regName(name).test(this[0].className);
+			return G.public.regName(name).test(this[0].className);
 		},
 		/**
 		 *	toggleClass 移除添加class
@@ -1055,388 +778,211 @@
 			})
 		}
 	});
-	//class类 样式操作
-	G.fn.extend({
-		/**
-		 *	css 获取设置样式
-		 *	@param name 样式名
-		 *	@param value 样式值
-		 */
-		css: function(name, value) {
-			if(G.isString(name) && G.isString(value)) {
-				return this.each(function(i, ele) {
-					if(name == 'opacity') {
-						elem.style.opacity = value;
-						elem.style.filter = 'alpha(opacity:' + value * 100 + ')'
-					} else if(name == 'scrollTop' || name == 'scrollLeft') {
-						ele[name] = value
+ })(gjTool,typeof window !== 'undefined' ? window : this)
+/**gjTool.js
+ * ajax异步请求
+ * @author Gao Jin
+ * @update 2018/03/16 17:53
+ */
+ ;(function(G,g){
+	G.extend({
+		ajax: function(obj) {
+
+			var xmlhttp, type, url, async, dataType, data, cache, ifModified;
+			if(!G.isObject(obj)) {
+				return false
+			}
+			type = obj.type == undefined ? 'get' : obj.type.toUpperCase();
+			url = obj.url == undefined ? G.url : obj.url;
+			async = obj.async == undefined ? true : obj.type;
+			dataType = obj.dataType == undefined ? 'text' : obj.dataType.toUpperCase();
+			data = obj.data == undefined ? {} : obj.data;
+
+			var formatParams = function() {
+				if(G.isObject(obj)) {
+					var str = "";
+					for(var pro in data) {
+						str += pro + "=" + data[pro] + "&"
+					}
+					data = str.substr(0, str.length - 1)
+				}
+				if(type == 'GET' || dataType == 'JSONP') {
+					if(url.lastIndexOf('?') == -1) {
+						url += '?' + data
 					} else {
-						ele.style[name] = value
+						url += '&' + data
 					}
-				})
-			} else if(!value && G.isObject(name)) {
-				return this.each(function(i, ele) {
-					for(var i in name) {
-						if(i == 'opacity') {
-							ele.style.opacity = name[i];
-							ele.style.filter = 'alpha(opacity:' + name[i] * 100 + ')'
-						} else if(name == 'scrollTop' || name == 'scrollLeft') {
-							ele[i] = name[i]
-						} else {
-							var str = name[i].toString();
-							if(str.indexOf('%') == -1 && str.indexOf('px') == -1 && str.indexOf('em') == -1 && str.indexOf('rem') == -1 && str.indexOf('vw') == -1 && str.indexOf('vh') == -1&& str.indexOf('vmin') == -1 && str.indexOf('vmax') == -1) {
-								ele.style[i] = name[i] + "px";
-							}else {
-								ele.style[i] = name[i];
-							}
-							// if(i == 'width' && name[i].toString().indexOf('%') != -1) {
-							// 	ele.style[i] = ele.offsetWidth;
-							// } else if(i == 'height' && name[i].toString().indexOf('%') != -1) {
-							// 	ele.style[i] = ele.offsetHeight;
-							// } else {
-							// 	ele.style[i] = name[i]
-							// }
-
-						}
-					}
-				})
-			} else if(G.isString(name)) {
-				return Gpublic.getStyle(this[0], name)
-			}
-		},
-		width: function(value) {
-			if(value && G.isString(value)) {
-				this.css('width', value);
-				return this
-			}
-			if(G.isWindow(this[0])) {
-				return document.documentElement.clientWidth
-			}
-			if(G.isHTMLDocument(this[0])) {
-				return document.documentElement.offsetWidth
-			}
-			return Number(parseFloat(this.css('width')).toFixed(2))
-		},
-		height: function(value) {
-			if(value && G.isString(value)) {
-				this.css('height', value);
-				return this
-			}
-			if(G.isWindow(this[0])) {
-				return document.documentElement.clientHeight
-			}
-			if(G.isHTMLDocument(this[0])) {
-
-				return document.documentElement.offsetHeight
-			}
-			return Number(parseFloat(this.css('height')).toFixed(2))
-		},
-		offset: function() {
-			var elem = this[0];
-			var o = {};
-			if(!elem) {
-				return {
-					top: 0,
-					left: 0
+				}
+				if(obj.cache === undefined || obj.cache == false) {
+					url += "?t=" + Math.random()
 				}
 			}
-			o.left = elem.offsetLeft;
-			o.top = elem.offsetTop;
-			while(elem.offsetParent) {
-				elem = elem.offsetParent;
-				o.left += elem.offsetLeft;
-				o.top += elem.offsetTop
-			}
-			return o
-		},
-		scrollTop: function(value) {
-			var elem = this[0];
-
-			if(G.isWindow(this.selector) || G.isHTMLDocument(this.selector)) {
-				if(value || value == 0) {
-					if(document.body.scrollTop) {
-						document.body.scrollTop = value
-					} else {
-						document.documentElement.scrollTop = value;
-					}
-					return this
-				}
-
-				return document.body.scrollTop || document.documentElement.scrollTop;
-			}
-
-			if(value || value == 0) {
-				elem.scrollTop = value;
-				return this
-			}
-			return elem.scrollTop
-
-		},
-		scrollLeft: function(value) {
-			var elem = this[0];
-			if(G.isWindow(this.selector) || G.isHTMLDocument(this.selector)) {
-				if(value || value == 0) {
-					if(document.body.scrollLeft) {
-						document.body.scrollLeft = value
-					} else {
-						document.documentElement.scrollLeft = value
-					}
-					return this
-				}
-				return document.body.scrollLeft || document.documentElement.scrollLeft
-			}
-			if(G(elem).css('overflow') != "visible") {
-				if(value || value == 0) {
-					elem.scrollLeft = value;
-					return this
-				}
-				return elem.scrollLeft
-			}
-		}
-	});
-	//属性操作方法
-	G.fn.extend({
-		attr: function(name, value) {
-			if(G.isString(name) && (G.isString(value) || G.isBoolean(value) || !isNaN(value))) {
-				return this.each(function(i, ele) {
-					if(value == false || toString(value).trim() == "") {
-						ele.removeAttribute(name)
-					} else {
-						ele.setAttribute(name, value)
-					}
-
-				})
-			} else if(!value && G.isObject(name)) {
-				return this.each(function(i, ele) {
-					for(var i in name) {
-						if(name[i] == false || name[i].trim() == "") {
-							ele.removeAttribute(name)
-						} else {
-							ele.setAttribute(i, name[i])
-						}
-					}
-				})
-			} else if(!value && G.isString(name)) {
-				return this[0].getAttribute(name)
-			}
-		},
-		removeAttr: function(name) {
-			if(G.isString(name)) {
-				return this.each(function(i, ele) {
-					ele.removeAttribute(name)
-				})
-			}
-			return this
-		},
-		prop: function(name, value) {
-			if(!G.isString(name)) {
-				console.error("prop parameter invalid !");
-				return this
-			}
-			if((name == "innerText" || name == "innerHTML") && !name in this[0]) {
-				name = "text"
-			}
-			if(name == "text" && !"text" in this[0]) {
-				name = "textContent"
-			}
-			if(G.isString(name) && (value === false || value === true || value === "" || G.isString(value))) {
-				return this.each(function(i, ele) {
-					ele[name] = value
-				})
+			if(g.XMLHttpRequest) {
+				xmlhttp = new XMLHttpRequest()
 			} else {
-				return this[0][name]
+				xmlhttp = new ActiveXObject("Microsoft.XMLHTTP")
+			}
+			if(dataType == 'JSONP') {
+				formatParams();
+				if(G.isFunction(obj.beforeSend)) {
+					obj.beforeSend(xmlhttp)
+				}
+				var callbackName = ('jsonp_' + Math.random()).replace(".", "");
+				var oHead = document.getElementsByTagName('head')[0];
+				data.callback = callbackName;
+				var ele = document.createElement('script');
+				ele.type = "text/javascript";
+				ele.src = url;
+				oHead.appendChild(ele);
+				ele.onerror = function() {
+					obj.error && obj.error("请求失败", xmlhttp)
+				}
+				var start = G.now();
+				g[callbackName] = function(json) {
+					xmlhttp.time = G.now() - start;
+					oHead.removeChild(ele);
+					g[callbackName] = null;
+					obj.success && obj.success(json, xmlhttp)
+				}
+				return
+			} else {
+				formatParams();
+				xmlhttp.open(type, url, async);
+				xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded; charset=utf-8");
+				if(G.isFunction(obj.beforeSend)) {
+					obj.beforeSend(xmlhttp)
+				}
+				xmlhttp.send(data);
+				var start = G.now();
+				xmlhttp.onreadystatechange = function() {
+					xmlhttp.time = G.now() - start;
+					var res = "";
+					if(xmlhttp.readyState != 4) {
+						obj.error && obj.error("请求失败", xmlhttp);
+						return
+					}
+					if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+						if(dataType == 'JSON') {
+							try {
+								res = JSON.parse(xmlhttp.responseText)
+							} catch(e) {
+								if(G.browser.ie && G.browser.ie <= 7) {
+									res = eval('(' + xmlhttp.responseText + ')')
+								} else {
+									res = "返回JSON格式不正确或者请尝试JSONP请求"
+								}
+							}
+						} else if(dataType == 'XML') {
+							res = xmlhttp.responseXML
+						} else {
+							if(url.toLowerCase().indexOf(".json") != -1) {
+								try {
+									res = JSON.parse(xmlhttp.responseText)
+								} catch(e) {
+									if(G.browser.ie && G.browser.ie <= 7) {
+										res = eval('(' + xmlhttp.responseText + ')')
+									} else {
+										res = "返回JSON格式不正确或者请尝试JSONP请求"
+									}
+								}
+							} else if(url.toLowerCase().indexOf(".xml") != -1) {
+								res = xmlhttp.responseXML
+							} else {
+								res = xmlhttp.responseText
+							}
+						}
+						obj.success && obj.success(res, xmlhttp)
+					}
+				}
 			}
 		},
-		data: function(name, value) {
-			if(G.isString(name) && name.trim() != "") {
-				name = "data-" + name
+		get: function(string, data, fn) {
+			if(G.isFunction(data)) {
+				fn = data;
+				data = {}
 			}
-			return this.attr(name, value)
-		},
-		val: function(value) {
-			return this.prop('value', value)
-		},
-		html: function(html) {
-			return this.prop('innerHTML', html)
-		},
-		text: function(text) {
-			return this.prop('innerText', "" + text)
-		},
-		empty: function() {
-			return this.html('');
-		}
-	});
-
-	//DOM操作
-	G.fn.extend({
-		
-		//在当前元素节点之后插入内容、元素
-		after: function(selector, move) {
-			return this.each(function(i, elem) {
-				var parent = elem.parentNode;
-				var children = parent.children;
-				for(var i = 0, len = children.length; i < len; i++) {
-					if(children[i] == elem) {
-						var next = children[i + 1];
-						break;
-					}
-				}
-				var lastChild = children[children.length - 1];
-				if(G.isString(selector)) {
-					var arr = Gpublic.parseHtml(selector);
-					for(var i = 0, len = arr.length; i < len; i++) {
-						if(lastChild == elem) {
-							parent.appendChild(arr[i].cloneNode(true))
-						} else {
-							parent.insertBefore(arr[i].cloneNode(true), next)
-						}
-					}
-				} else if(G.isHTMLElement(selector)) {
-					if(!move) {
-						selector = selector.cloneNode(true)
-					}
-					if(lastChild == elem) {
-						parent.appendChild(selector)
-					} else {
-						parent.insertBefore(selector, next)
-					}
-				}else if(selector.length){
-					for(var i=0,len=selector.length;i<len;i++){
-						var node = selector[i];
-						if(!move) {
-							node = node.cloneNode(true);
-						}
-						if(lastChild == elem) {
-							parent.appendChild(node)
-						} else {
-							parent.insertBefore(node, next)
-						}
-					}
+			this.ajax({
+				type: 'get',
+				data: data,
+				url: string,
+				success: function(data, e) {
+					fn && fn(data, e)
+				},
+				error: function(err, e) {
+					fn && fn(err, e)
 				}
 			})
 		},
-		//在当前元素节点之前插入内容、元素
-		before: function(selector, move) {
-			return this.each(function(i, elem) {
-				var parent = elem.parentNode;
-				var children = parent.children;
-				for(var i = 0, len = children.length; i < len; i++) {
-					if(children[i] == elem) {
-						var prev = children[i - 1];
-						break;
-					}
-				}
-				var firstChild = children[0];
-				if(G.isString(selector)) {
-					var arr = Gpublic.parseHtml(selector);
-					for(var i = 0, len = arr.length; i < len; i++) {
-						if(firstChild == elem) {
-							parent.insertBefore(arr[i].cloneNode(true), elem)
-						} else {
-							parent.insertBefore(arr[i].cloneNode(true), prev)
-						}
-					}
-				} else if(G.isHTMLElement(selector)) {
-					if(!move) {
-						selector = selector.cloneNode(true)
-					}
-					if(firstChild == elem) {
-						parent.insertBefore(selector, elem)
-					} else {
-						parent.insertBefore(selector, prev)
-					}
-				}else if(selector.length){
-					for(var i=0,len=selector.length;i<len;i++){
-						var node = selector[i];
-						if(!move) {
-							node = node.cloneNode(true);
-						}
-						if(firstChild == elem) {
-							parent.insertBefore(node, elem)
-						} else {
-							parent.insertBefore(node, prev)
-						}
-					}
+		post: function(string, data, fn) {
+			if(G.isFunction(data)) {
+				fn = data;
+				data = {}
+			}
+			this.ajax({
+				type: 'post',
+				data: data,
+				url: string,
+				success: function(data, e) {
+					fn && fn(data, e)
+				},
+				error: function(err, e) {
+					fn && fn(err, e)
 				}
 			})
 		},
-		
-		//在被选元素的内部结尾插入内容
-		append: function(selector, move) {
-			return this.each(function(i, elem) {
-				if(G.isString(selector)) {
-					var arr = Gpublic.parseHtml(selector);
-					for(var i = 0, len = arr.length; i < len; i++) {
-						elem.appendChild(arr[i].cloneNode(true));
-					}
-				} else if(G.isHTMLElement(selector)) {
-
-					if(!move) {
-						selector = selector.cloneNode(true);
-					}
-					elem.appendChild(selector)
-				}else if(selector.length){
-					for(var i=0,len=selector.length;i<len;i++){
-						var node = selector[i];
-						if(!move) {
-							node = node.cloneNode(true);
-						}
-						elem.appendChild(node)
-					}
-				}
-			})
-
-		},
-		//在被选元素的内部开头插入内容
-		prepend: function(selector, move) {
-			return this.each(function(i, elem) {
-				var firstChild = elem.children[0];
-				if(G.isString(selector)) {
-					arr = Gpublic.parseHtml(selector);
-					for(var i = 0, len = arr.length; i < len; i++) {
-						elem.insertBefore(arr[i].cloneNode(true), firstChild)
-					}
-				} else if(G.isHTMLElement(selector)) {
-					if(!move) {
-						selector = selector.cloneNode(true)
-					}
-					elem.insertBefore(selector, firstChild)
-				} else if(selector.length){
-					for(var i=0,len=selector.length;i<len;i++){
-						var node = selector[i];
-						if(!move) {
-							node = node.cloneNode(true);
-						}
-						elem.insertBefore(node, firstChild)
-					}
+		getJSON: function(string, fn) {
+			this.ajax({
+				type: 'get',
+				url: string,
+				dataType: 'json',
+				success: function(data) {
+					fn && fn(data)
+				},
+				error: function(err) {
+					fn && fn(err)
 				}
 			})
 		},
-		remove: function() {
-			return this.each(function(i, elem) {
-				if(G.isHTMLElement(elem) && elem.parentNode) {
-					var parentNode = elem.parentNode;
-					parentNode.removeChild(elem);
+		getXML: function(string, fn) {
+			this.ajax({
+				type: 'get',
+				url: string,
+				dataType: 'xml',
+				success: function(data) {
+					fn && fn(data)
+				},
+				error: function(err) {
+					fn && fn(err)
 				}
-			})
-		},
-		clone: function(){
-			var arr = [];
-			this.each(function(i, elem) {
-				arr.push(elem.cloneNode(true)) 
-			})
-			return this.toArray(arr);
-		},
-		//将被选元素插入selector的内部
-		appendTo: function(selector) {
-			return this.each(function(i, elem) {
-				var node = elem.cloneNode(true);
-				G(selector).each(function(i,elem2){
-					elem2.appendChild(node)
-				})
 			})
 		}
 	});
+ })(gjTool,typeof window !== 'undefined' ? window : this)
+/**gjTool.js
+ * 动画相关
+ * @author Gao Jin
+ * @update 2018/03/16 17:53
+ */
+ ;(function(G,g){
+ 	//封装动画定时器
+	if(!g.requestAnimationFrame) {
+		var lastTime = 0;
+		g.requestAnimationFrame = function(callback) {
+			var currTime = new Date().getTime();
+			var timeToCall = Math.max(0, 16.7 - (currTime - lastTime));
+			var id = setTimeout(function() {
+				callback(currTime + timeToCall);
+			}, timeToCall);
+			lastTime = currTime + timeToCall;
+			return id;
+		}
+	}
+	//封装清除动画定时器
+	if(!g.cancelAnimationFrame) {
+		g.cancelAnimationFrame = function(id) {
+			clearTimeout(id);
+		};
+	}
 	//动画相关
 	G.extend({
 		/*
@@ -1480,9 +1026,9 @@
 			var iCur = {};
 			for(var attr in json) {
 				if(attr == 'opacity') {
-					iCur[attr] = Math.round(Gpublic.getStyle(elem, attr) * 100);
+					iCur[attr] = Math.round(G.public.getStyle(elem, attr) * 100);
 				} else {
-					iCur[attr] = parseInt(Gpublic.getStyle(elem, attr));
+					iCur[attr] = parseInt(G.public.getStyle(elem, attr));
 				}
 			}
 			//清除定时器
@@ -1553,7 +1099,7 @@
 				speed = 400;
 				easying = "easeInOut"
 			}
-			if(Gpublic.getStyle(ele, 'opacity') == 1 && ele.style.display == 'block') {
+			if(G.public.getStyle(ele, 'opacity') == 1 && ele.style.display == 'block') {
 				return;
 			}
 			var option = {
@@ -1561,7 +1107,7 @@
 				display: (ele.display && ele.display != 'none') ? ele.display : 'block'
 			};
 			var option2 = {
-				opacity: Gpublic.getStyle(ele, 'opacity') >= 1 ? 0 : Gpublic.getStyle(ele, 'opacity'),
+				opacity: G.public.getStyle(ele, 'opacity') >= 1 ? 0 : G.public.getStyle(ele, 'opacity'),
 				display: (ele.display && ele.display != 'none') ? ele.display : 'block'
 			}
 			ele.isShow = true;
@@ -1587,14 +1133,14 @@
 				ele.display = ele.style.display;
 			}
 			if(!ele.opacity) {
-				ele.opacity = Gpublic.getStyle(ele, 'opacity');
+				ele.opacity = G.public.getStyle(ele, 'opacity');
 			}
 			var option = {
 				opacity: 0,
 				display: (ele.display && ele.display != 'none') ? ele.display : 'block'
 			};
 			var option2 = {
-				opacity: Gpublic.getStyle(ele, 'opacity'),
+				opacity: G.public.getStyle(ele, 'opacity'),
 				display: (ele.display && ele.display != 'none') ? ele.display : 'block'
 			}
 			ele.isShow = false;
@@ -1619,7 +1165,7 @@
 			};
 
 			var option2 = {
-				opacity: Gpublic.getStyle(ele, 'opacity'),
+				opacity: G.public.getStyle(ele, 'opacity'),
 				display: (ele.display && ele.display != 'none') ? ele.display : 'block'
 			}
 			G(ele).css(option2).animate(option, speed, easying, function() {
@@ -1633,33 +1179,33 @@
 
 	function oldStyles(ele) {
 		return {
-			width: Gpublic.getStyle(ele, 'width'),
-			height: Gpublic.getStyle(ele, 'height'),
-			paddingTop: Gpublic.getStyle(ele, 'paddingTop'),
-			paddingBottom: Gpublic.getStyle(ele, 'paddingBottom'),
-			paddingLeft: Gpublic.getStyle(ele, 'paddingLeft'),
-			paddingRight: Gpublic.getStyle(ele, 'paddingRight'),
-			marginTop: Gpublic.getStyle(ele, 'marginTop'),
-			marginBottom: Gpublic.getStyle(ele, 'marginBottom'),
-			marginLeft: Gpublic.getStyle(ele, 'marginLeft'),
-			marginRight: Gpublic.getStyle(ele, 'marginRight'),
-			opacity: ele.opacity ? ele.opacity : Gpublic.getStyle(ele, 'opacity')
+			width: G.public.getStyle(ele, 'width'),
+			height: G.public.getStyle(ele, 'height'),
+			paddingTop: G.public.getStyle(ele, 'paddingTop'),
+			paddingBottom: G.public.getStyle(ele, 'paddingBottom'),
+			paddingLeft: G.public.getStyle(ele, 'paddingLeft'),
+			paddingRight: G.public.getStyle(ele, 'paddingRight'),
+			marginTop: G.public.getStyle(ele, 'marginTop'),
+			marginBottom: G.public.getStyle(ele, 'marginBottom'),
+			marginLeft: G.public.getStyle(ele, 'marginLeft'),
+			marginRight: G.public.getStyle(ele, 'marginRight'),
+			opacity: ele.opacity ? ele.opacity : G.public.getStyle(ele, 'opacity')
 		}
 	}
 
 	function startStyles(ele) {
 		return {
-			width: Gpublic.getStyle(ele, 'width'),
-			height: Gpublic.getStyle(ele, 'height'),
-			paddingTop: Gpublic.getStyle(ele, 'paddingTop'),
-			paddingBottom: Gpublic.getStyle(ele, 'paddingBottom'),
-			paddingLeft: Gpublic.getStyle(ele, 'paddingLeft'),
-			paddingRight: Gpublic.getStyle(ele, 'paddingRight'),
-			marginTop: Gpublic.getStyle(ele, 'marginTop'),
-			marginBottom: Gpublic.getStyle(ele, 'marginBottom'),
-			marginLeft: Gpublic.getStyle(ele, 'marginLeft'),
-			marginRight: Gpublic.getStyle(ele, 'marginRight'),
-			opacity: Gpublic.getStyle(ele, 'opacity'),
+			width: G.public.getStyle(ele, 'width'),
+			height: G.public.getStyle(ele, 'height'),
+			paddingTop: G.public.getStyle(ele, 'paddingTop'),
+			paddingBottom: G.public.getStyle(ele, 'paddingBottom'),
+			paddingLeft: G.public.getStyle(ele, 'paddingLeft'),
+			paddingRight: G.public.getStyle(ele, 'paddingRight'),
+			marginTop: G.public.getStyle(ele, 'marginTop'),
+			marginBottom: G.public.getStyle(ele, 'marginBottom'),
+			marginLeft: G.public.getStyle(ele, 'marginLeft'),
+			marginRight: G.public.getStyle(ele, 'marginRight'),
+			opacity: G.public.getStyle(ele, 'opacity'),
 			display: (ele.display && ele.display != 'none') ? ele.display : 'block',
 			overflow: "hidden"
 		}
@@ -1858,7 +1404,799 @@
 			return this;
 		}
 	});
-	//函数队列（异步函数同步执行）
+ })(gjTool,typeof window !== 'undefined' ? window : this)
+/**gjTool.js
+ * 属性操作方法
+ * @author Gao Jin
+ * @update 2018/03/16 17:53
+ */
+;(function(G,g){
+	G.fn.extend({
+		attr: function(name, value) {
+			if(G.isString(name) && (G.isString(value) || G.isBoolean(value) || !isNaN(value))) {
+				return this.each(function(i, ele) {
+					if(value == false || toString(value).trim() == "") {
+						ele.removeAttribute(name)
+					} else {
+						ele.setAttribute(name, value)
+					}
+
+				})
+			} else if(!value && G.isObject(name)) {
+				return this.each(function(i, ele) {
+					for(var i in name) {
+						if(name[i] == false || name[i].trim() == "") {
+							ele.removeAttribute(name)
+						} else {
+							ele.setAttribute(i, name[i])
+						}
+					}
+				})
+			} else if(!value && G.isString(name)) {
+				return this[0].getAttribute(name)
+			}
+		},
+		removeAttr: function(name) {
+			if(G.isString(name)) {
+				return this.each(function(i, ele) {
+					ele.removeAttribute(name)
+				})
+			}
+			return this
+		},
+		prop: function(name, value) {
+			if(!G.isString(name)) {
+				console.error("prop parameter invalid !");
+				return this
+			}
+			if((name == "innerText" || name == "innerHTML") && !name in this[0]) {
+				name = "text"
+			}
+			if(name == "text" && !"text" in this[0]) {
+				name = "textContent"
+			}
+			if(G.isString(name) && (value === false || value === true || value === "" || G.isString(value))) {
+				return this.each(function(i, ele) {
+					ele[name] = value
+				})
+			} else {
+				return this[0][name]
+			}
+		},
+		data: function(name, value) {
+			if(G.isString(name) && name.trim() != "") {
+				name = "data-" + name
+			}
+			return this.attr(name, value)
+		},
+		val: function(value) {
+			return this.prop('value', value)
+		},
+		html: function(html) {
+			return this.prop('innerHTML', html)
+		},
+		text: function(text) {
+			return this.prop('innerText', "" + text)
+		},
+		empty: function() {
+			return this.html('');
+		}
+	});
+
+})(gjTool,typeof window !== 'undefined' ? window : this)
+/**gjTool.js
+ * css类 样式操作
+ * @author Gao Jin
+ * @update 2018/03/16 17:53
+ */
+;(function(G,g){
+	G.fn.extend({
+		/**
+		 *	css 获取设置样式
+		 *	@param name 样式名
+		 *	@param value 样式值
+		 */
+		css: function(name, value) {
+			if(G.isString(name) && G.isString(value)) {
+				return this.each(function(i, ele) {
+					if(name == 'opacity') {
+						elem.style.opacity = value;
+						elem.style.filter = 'alpha(opacity:' + value * 100 + ')'
+					} else if(name == 'scrollTop' || name == 'scrollLeft') {
+						ele[name] = value
+					} else {
+						ele.style[name] = value
+					}
+				})
+			} else if(!value && G.isObject(name)) {
+				return this.each(function(i, ele) {
+					for(var i in name) {
+						if(i == 'opacity') {
+							ele.style.opacity = name[i];
+							ele.style.filter = 'alpha(opacity:' + name[i] * 100 + ')'
+						} else if(name == 'scrollTop' || name == 'scrollLeft') {
+							ele[i] = name[i]
+						} else {
+							var str = name[i].toString();
+							if(str.indexOf('%') == -1 && str.indexOf('px') == -1 && str.indexOf('em') == -1 && str.indexOf('rem') == -1 && str.indexOf('vw') == -1 && str.indexOf('vh') == -1&& str.indexOf('vmin') == -1 && str.indexOf('vmax') == -1) {
+								ele.style[i] = name[i] + "px";
+							}else {
+								ele.style[i] = name[i];
+							}
+							// if(i == 'width' && name[i].toString().indexOf('%') != -1) {
+							// 	ele.style[i] = ele.offsetWidth;
+							// } else if(i == 'height' && name[i].toString().indexOf('%') != -1) {
+							// 	ele.style[i] = ele.offsetHeight;
+							// } else {
+							// 	ele.style[i] = name[i]
+							// }
+
+						}
+					}
+				})
+			} else if(G.isString(name)) {
+				return G.public.getStyle(this[0], name)
+			}
+		},
+		width: function(value) {
+			if(value && G.isString(value)) {
+				this.css('width', value);
+				return this
+			}
+			if(G.isWindow(this[0])) {
+				return document.documentElement.clientWidth
+			}
+			if(G.isHTMLDocument(this[0])) {
+				return document.documentElement.offsetWidth
+			}
+			return Number(parseFloat(this.css('width')).toFixed(2))
+		},
+		height: function(value) {
+			if(value && G.isString(value)) {
+				this.css('height', value);
+				return this
+			}
+			if(G.isWindow(this[0])) {
+				return document.documentElement.clientHeight
+			}
+			if(G.isHTMLDocument(this[0])) {
+
+				return document.documentElement.offsetHeight
+			}
+			return Number(parseFloat(this.css('height')).toFixed(2))
+		},
+		offset: function() {
+			var elem = this[0];
+			var o = {};
+			if(!elem) {
+				return {
+					top: 0,
+					left: 0
+				}
+			}
+			o.left = elem.offsetLeft;
+			o.top = elem.offsetTop;
+			while(elem.offsetParent) {
+				elem = elem.offsetParent;
+				o.left += elem.offsetLeft;
+				o.top += elem.offsetTop
+			}
+			return o
+		},
+		scrollTop: function(value) {
+			var elem = this[0];
+
+			if(G.isWindow(this.selector) || G.isHTMLDocument(this.selector)) {
+				if(value || value == 0) {
+					if(document.body.scrollTop) {
+						document.body.scrollTop = value
+					} else {
+						document.documentElement.scrollTop = value;
+					}
+					return this
+				}
+
+				return document.body.scrollTop || document.documentElement.scrollTop;
+			}
+
+			if(value || value == 0) {
+				elem.scrollTop = value;
+				return this
+			}
+			return elem.scrollTop
+
+		},
+		scrollLeft: function(value) {
+			var elem = this[0];
+			if(G.isWindow(this.selector) || G.isHTMLDocument(this.selector)) {
+				if(value || value == 0) {
+					if(document.body.scrollLeft) {
+						document.body.scrollLeft = value
+					} else {
+						document.documentElement.scrollLeft = value
+					}
+					return this
+				}
+				return document.body.scrollLeft || document.documentElement.scrollLeft
+			}
+			if(G(elem).css('overflow') != "visible") {
+				if(value || value == 0) {
+					elem.scrollLeft = value;
+					return this
+				}
+				return elem.scrollLeft
+			}
+		}
+	});
+})(gjTool,typeof window !== 'undefined' ? window : this)
+/**gjTool.js
+ * DOM操作
+ * @author Gao Jin
+ * @update 2018/03/16 17:53
+ */
+ ;(function(G,g){
+	G.fn.extend({
+		//在当前元素节点之后插入内容、元素
+		after: function(selector, move) {
+			return this.each(function(i, elem) {
+				var parent = elem.parentNode;
+				var children = parent.children;
+				for(var i = 0, len = children.length; i < len; i++) {
+					if(children[i] == elem) {
+						var next = children[i + 1];
+						break;
+					}
+				}
+				var lastChild = children[children.length - 1];
+				if(G.isString(selector)) {
+					var arr = G.public.parseHtml(selector);
+					for(var i = 0, len = arr.length; i < len; i++) {
+						if(lastChild == elem) {
+							parent.appendChild(arr[i].cloneNode(true))
+						} else {
+							parent.insertBefore(arr[i].cloneNode(true), next)
+						}
+					}
+				} else if(G.isHTMLElement(selector)) {
+					if(!move) {
+						selector = selector.cloneNode(true)
+					}
+					if(lastChild == elem) {
+						parent.appendChild(selector)
+					} else {
+						parent.insertBefore(selector, next)
+					}
+				}else if(selector.length){
+					for(var i=0,len=selector.length;i<len;i++){
+						var node = selector[i];
+						if(!move) {
+							node = node.cloneNode(true);
+						}
+						if(lastChild == elem) {
+							parent.appendChild(node)
+						} else {
+							parent.insertBefore(node, next)
+						}
+					}
+				}
+			})
+		},
+		//在当前元素节点之前插入内容、元素
+		before: function(selector, move) {
+			return this.each(function(i, elem) {
+				var parent = elem.parentNode;
+				var children = parent.children;
+				for(var i = 0, len = children.length; i < len; i++) {
+					if(children[i] == elem) {
+						var prev = children[i - 1];
+						break;
+					}
+				}
+				var firstChild = children[0];
+				if(G.isString(selector)) {
+					var arr = G.public.parseHtml(selector);
+					for(var i = 0, len = arr.length; i < len; i++) {
+						if(firstChild == elem) {
+							parent.insertBefore(arr[i].cloneNode(true), elem)
+						} else {
+							parent.insertBefore(arr[i].cloneNode(true), prev)
+						}
+					}
+				} else if(G.isHTMLElement(selector)) {
+					if(!move) {
+						selector = selector.cloneNode(true)
+					}
+					if(firstChild == elem) {
+						parent.insertBefore(selector, elem)
+					} else {
+						parent.insertBefore(selector, prev)
+					}
+				}else if(selector.length){
+					for(var i=0,len=selector.length;i<len;i++){
+						var node = selector[i];
+						if(!move) {
+							node = node.cloneNode(true);
+						}
+						if(firstChild == elem) {
+							parent.insertBefore(node, elem)
+						} else {
+							parent.insertBefore(node, prev)
+						}
+					}
+				}
+			})
+		},
+		
+		//在被选元素的内部结尾插入内容
+		append: function(selector, move) {
+			return this.each(function(i, elem) {
+				if(G.isString(selector)) {
+					var arr = G.public.parseHtml(selector);
+					for(var i = 0, len = arr.length; i < len; i++) {
+						elem.appendChild(arr[i].cloneNode(true));
+					}
+				} else if(G.isHTMLElement(selector)) {
+
+					if(!move) {
+						selector = selector.cloneNode(true);
+					}
+					elem.appendChild(selector)
+				}else if(selector.length){
+					for(var i=0,len=selector.length;i<len;i++){
+						var node = selector[i];
+						if(!move) {
+							node = node.cloneNode(true);
+						}
+						elem.appendChild(node)
+					}
+				}
+			})
+
+		},
+		//在被选元素的内部开头插入内容
+		prepend: function(selector, move) {
+			return this.each(function(i, elem) {
+				var firstChild = elem.children[0];
+				if(G.isString(selector)) {
+					arr = G.public.parseHtml(selector);
+					for(var i = 0, len = arr.length; i < len; i++) {
+						elem.insertBefore(arr[i].cloneNode(true), firstChild)
+					}
+				} else if(G.isHTMLElement(selector)) {
+					if(!move) {
+						selector = selector.cloneNode(true)
+					}
+					elem.insertBefore(selector, firstChild)
+				} else if(selector.length){
+					for(var i=0,len=selector.length;i<len;i++){
+						var node = selector[i];
+						if(!move) {
+							node = node.cloneNode(true);
+						}
+						elem.insertBefore(node, firstChild)
+					}
+				}
+			})
+		},
+		remove: function() {
+			return this.each(function(i, elem) {
+				if(G.isHTMLElement(elem) && elem.parentNode) {
+					var parentNode = elem.parentNode;
+					parentNode.removeChild(elem);
+				}
+			})
+		},
+		clone: function(){
+			var arr = [];
+			this.each(function(i, elem) {
+				arr.push(elem.cloneNode(true)) 
+			})
+			return this.toArray(arr);
+		},
+		//将被选元素插入selector的内部
+		appendTo: function(selector) {
+			return this.each(function(i, elem) {
+				var node = elem.cloneNode(true);
+				G(selector).each(function(i,elem2){
+					elem2.appendChild(node)
+				})
+			})
+		}
+	});
+ })(gjTool,typeof window !== 'undefined' ? window : this)
+/**gjTool.js
+ * 拖拽插件
+ * @author Gao Jin
+ * @update 2018/03/16 17:53
+ */
+ ;(function(G,g){
+	//拖拽插件
+	G.fn.extend({
+		drag: function() {
+			return this.each(function(i, elem) {
+				G(elem).mousedown(function(e) {
+					e.preventDefault();
+					var o = G(this).offset();
+					var disX = e.clientX - o.left;
+					var disY = e.clientY - o.top;
+					var self = this;
+					G(document).mousemove(function(e) {
+						if(self.nodrag) {
+							return
+						}
+						e.preventDefault();
+						var l = e.clientX - disX;
+						var t = e.clientY - disY;
+
+						var wid = document.documentElement.clientWidth;
+						var hei = document.documentElement.clientHeight;
+						var w = parseFloat(self.style.width);
+						var h = parseFloat(self.style.height);
+						l = l <= 0 ? 0 : (l >= wid - w ? wid - w : l);
+						t = t <= 0 ? 0 : (t >= hei - h ? hei - h : t);
+						self.style.left = l + 'px';
+						self.style.top = t + 'px'
+					});
+					G(document).mouseup(function() {
+						G(document).off('mousemove')
+					})
+				})
+			})
+		},
+		nodrag: function(flag) {
+			if(G.isUndefined(flag)) {
+				flag = true
+			}
+			return this.each(function(i, elem) {
+				elem.nodrag = flag
+			})
+		}
+	})
+ })(gjTool,typeof window !== 'undefined' ? window : this)
+/**gjTool.js
+ * 遍历
+ * @author Gao Jin
+ * @update 2018/03/16 17:53
+ */
+ ;(function(G,g){
+ 	//遍历
+	G.extend({
+		/**
+		 *	each 遍历
+		 *	@param arr DOM数组对象
+		 *	@param fn 函数方法
+		 */
+		each: function(arr, fn) {
+			for(var i = 0, len = arr.length; i < len; i++) {
+				var result = fn.call(arr[i], i, arr[i]);
+				if(result === true) {
+					continue
+				} else if(result === false) {
+					break
+				}
+			}
+		},
+		/**
+		 *	map 遍历
+		 *	@param arr 数组对象
+		 *	@param fn 函数方法
+		 */
+		map: function(arr, fn) {
+			var arr2 = [];
+			for(var i = 0, len = arr.length; i < len; i++) {
+				arr2.push(fn.call(arr[i], i, arr[i]))
+			}
+			return arr2
+		}
+	});
+	//遍历实例
+	G.fn.extend({
+		/**
+		 *	each 遍历
+		 *	@param fn 函数方法
+		 */
+		each: function(fn) {
+			G.each(this, fn)
+			return this
+		},
+		map: function(fn) {
+			G.map(this, fn)
+			return this
+		},
+		//eq返回的是gjTool对象
+		eq: function(num) {
+			num = Number(num);
+			if(isNaN(num)) {
+				console.warn("eq parameter invalid !");
+				return this
+			}
+			return G(this[num])
+		},
+		index: function() {
+			var elem = this[0];
+			if(!G.isHTMLElement(elem)) {
+				return null
+			}
+			var arr = elem.parentNode.children;
+			if(arr && arr.length >= 1) {
+				for(var i = 0, len = arr.length; i < len; i++) {
+					if(arr[i] == elem) {
+						return Number(i)
+					}
+				}
+			}else if(arr){
+				return 0;
+			}
+
+			return null
+		},
+		//根据选择器寻找元素
+		find: function(selector) {
+			var node = this[0] || document;
+			//html字符串
+			if(/^</.test(selector)) {
+				return this.toArray(G.public.parseHtml(selector));
+			} // div.test 、.div.abc
+			else if(/[A-Za-z0-9]+\./.test(selector.trim()) && !/\s/.test(selector.trim()) && !/,/.test(selector.trim())) {
+				return this.toArray(G.public.classSelector(selector))
+			} // input[type=button]
+			else if(/\w+\[\w+\=\w+\]/g.test(selector)) {
+				var aStr = selector.split(/\[|\=|\]/g);
+				var aRes = node.getElementsByTagName(aStr[0]);
+				var result = [];
+				G.each(aRes, function(i, ele) {
+					if(ele.getAttribute(aStr[1]) == aStr[2]) {
+						result.push(ele)
+					}
+				})
+				return this.toArray(G.unique(result))
+			} // .div:not() 
+			else if(!/\s/.test(selector.trim()) && !/,/.test(selector.trim()) && /:/.test(selector.trim())) {
+				return this.toArray(G.public.descendantSelector(node, selector));
+			}
+			//群组选择器或包含选择器或基本选择器
+			else {
+				return this.toArray(G.public.groupSelector(node, selector))
+			}
+		},
+		parent: function(selector) {
+			var arr = [],
+				arr2 = [];
+			for(var i = 0, len = this.length; i < len; i++) {
+				var elem = this[i];
+				arr.push(elem.parentNode)
+			}
+			arr = G.unique(arr);
+			if(G.isString(selector)) {
+				for(var j = 0, len = arr.length; j < len; j++) {
+					if(arr[j].tagName.toLowerCase() == selector || (selector.indexOf("#") != -1 && arr[j].id == selector.replace('#', "")) || (selector.indexOf(".") != -1 && G(arr[j]).hasClass(selector.replace('.', "")))) {
+						arr2.push(arr[j])
+					}
+				}
+				return this.toArray(arr2)
+			} else {
+				return this.toArray(arr)
+			}
+		},
+		parents: function(selector) {
+			var arr = [],
+				arr2 = [];
+			for(var i = 0, len = this.length; i < len; i++) {
+				var elem = this[i];
+				arr = G.public.getParentNode(elem, arr)
+			}
+			arr = G.unique(arr);
+			if(G.isString(selector)) {
+				for(var j = 0, len = arr.length; j < len; j++) {
+					if(arr[j].tagName.toLowerCase() == selector || (selector.indexOf("#") != -1 && arr[j].id == selector.replace('#', "")) || (selector.indexOf(".") != -1 && G(arr[j]).hasClass(selector.replace('.', "")))) {
+						arr2.push(arr[j])
+					}
+				}
+				return this.toArray(arr2)
+			} else {
+				return this.toArray(arr)
+			}
+		},
+		children: function(selector) {
+			var elem = this[0];
+			var m = G.public.regSelector.exec(selector);
+			var arr2 = [];
+
+			this.each(function(i, elem) {
+				if(!G.isHTMLElement(elem)) {
+					return
+				}
+				var arr = elem.children;
+				if(selector === undefined) {
+					for(var i = 0, len = arr.length; i < len; i++) {
+						if(G.isHTMLElement(arr[i])) {
+							arr2.push(arr[i]);
+						}
+					}
+				} else if(m) {
+					for(var i = 0, len = arr.length; i < len; i++) {
+						if(G.isHTMLElement(arr[i])) {
+							if(m[1]) { // id选择器
+								if(arr[i].id == m[1]) {
+									arr2.push(arr[i])
+								}
+							} else if(m[2]) { // class选择器
+								if(G.public.regName(m[2]).test(arr[i].className)) {
+									arr2.push(arr[i])
+								}
+							} else if(m[3]) { //通配符选择器
+								arr2.push(arr[i])
+							} else if(m[4]) { //标签选择器
+								if(arr[i].tagName.toLowerCase() == m[4]) {
+									arr2.push(arr[i])
+								}
+							}
+						}
+					}
+				}
+			})
+			return this.toArray(arr2)
+		},
+		
+		siblings: function(selector) {
+			var elem = this[0];
+			if(!G.isHTMLElement(elem)) {
+				return this
+			}
+			var m = G.public.regSelector.exec(selector);
+			var arr2 = [];
+			if(selector === undefined) {
+				var arr = elem.parentNode.children;
+				if(arr && arr.length >= 1) {
+					for(var i = 0, len = arr.length; i < len; i++) {
+						if(arr[i] != elem && G.isHTMLElement(arr[i])) {
+							arr2.push(arr[i])
+						}
+					}
+				}
+
+			} else if(m) {
+				this.each(function(i, elem) {
+					var arr = elem.parentNode.children;
+					if(arr && arr.length >= 1) {
+						for(var i = 0, len = arr.length; i < len; i++) {
+							if(G.isHTMLElement(arr[i]) && arr[i] != elem) {
+								if(m[1]) { // id选择器
+									if(arr[i].id == m[1]) {
+										arr2.push(arr[i])
+									}
+								} else if(m[2]) { // class选择器
+									if(G.public.regName(m[2]).test(arr[i].className)) {
+										arr2.push(arr[i])
+									}
+								} else if(m[3]) { //通配符选择器
+									arr2.push(arr[i])
+								} else if(m[4]) { //标签选择器
+									if(arr[i].tagName.toLowerCase() == m[4]) {
+										arr2.push(arr[i])
+									}
+								}
+							}
+						}
+					}
+
+				})
+			}
+			return this.toArray(arr2)
+		},
+		prev: function() {
+			var elem = this[0];
+			if(!G.isHTMLElement(elem)) {
+				return this
+			}
+			if(elem == document || elem == document.body || elem == document.documentElement) {
+				return this;
+			}
+			var arr = elem.parentNode.children;
+			if(arr && arr.length >= 1) {
+				for(var i = 0, len = arr.length; i < len; i++) {
+					if(arr[i + 1] == elem) {
+						return this.toArray([arr[i]])
+					}
+				}
+			}
+			return this;
+		},
+		next: function() {
+			var elem = this[0];
+			if(!G.isHTMLElement(elem)) {
+				return this
+			}
+			if(elem == document || elem == document.body || elem == document.documentElement) {
+				return this;
+			}
+			var arr = elem.parentNode.children;
+			if(arr && arr.length >= 1) {
+				for(var i = 1, len = arr.length; i < len; i++) {
+					if(arr[i - 1] == elem) {
+						return this.toArray([arr[i]])
+					}
+				}
+			}
+			return this;
+		},
+		first: function() {
+			return this.find(this[0])
+		},
+		last: function() {
+			return this.find(this[this.length - 1])
+		}
+	})
+ })(gjTool,typeof window !== 'undefined' ? window : this)
+/**gjTool.js
+ * 事件相关
+ * @author Gao Jin
+ * @update 2018/03/16 17:53
+ */
+ ;(function(G,g){
+	//DOM事件
+	G.fn.extend({
+		/**
+		 *	ready 文档加载完成后执行fn
+		 *	@param fn 函数方法
+		 */
+		ready: function(fn) {
+			if(this.selector == 'document') {
+				G.public.DOMLoaded(fn)
+			} else {
+				throw new Error("DOMLoad ready function selector parameter invalid !")
+			}
+		},
+		on: function(type, selector, fn, useCapture) {
+			if(G.isFunction(selector)) {
+				fn = selector;
+				selector = null
+			}
+			useCapture = useCapture || false;
+			return this.each(function(i, ele) {
+				if(selector) {
+					var fnc = function(e) {
+						e = G.public.event(e, type);
+						G(ele).find(selector).each(function(i, el) {
+							if(el === e.target) {
+								fn.call(el, e)
+							}
+						})
+					}
+				} else {
+					var fnc = function(e) {
+						fn.call(ele, G.public.event(e, type))
+					}
+				}
+				ele[type + "Event"] = fnc;
+				G.public.addEvent(ele, type, fnc, useCapture)
+			})
+		},
+		off: function(type) {
+			return this.each(function(i, ele) {
+				G.public.removeEvent(ele, type, ele[type + "Event"]);
+				ele[type + "Event"] = null
+			});
+		},
+		hover: function(fn1, fn2) {
+			this.mouseenter(fn1);
+			this.mouseleave(fn2);
+			return this
+		}
+	});
+	//DOM其他事件注册
+	G.each(G.public.eventsArr, function(i, type) {
+		G.fn[type] = function(fn) {
+			return this.on(type, null, fn)
+		}
+	});
+ })(gjTool,typeof window !== 'undefined' ? window : this)
+/**gjTool.js
+ * 函数队列（异步函数同步执行）
+ * @author Gao Jin
+ * @update 2018/03/16 17:53
+ */
+ ;(function(G,g){
 	var dataArr = [];
 	G.extend({
 		//增加队列
@@ -1936,105 +2274,56 @@
 			return this;
 		}
 	});
-	//DOM事件
-	G.fn.extend({
-		/**
-		 *	ready 文档加载完成后执行fn
-		 *	@param fn 函数方法
-		 */
-		ready: function(fn) {
-			if(this.selector == 'document') {
-				Gpublic.DOMLoaded(fn)
-			} else {
-				throw new Error("DOMLoad ready function selector parameter invalid !")
-			}
-		},
-		on: function(type, selector, fn, useCapture) {
-			if(G.isFunction(selector)) {
-				fn = selector;
-				selector = null
-			}
-			useCapture = useCapture || false;
-			return this.each(function(i, ele) {
-				if(selector) {
-					var fnc = function(e) {
-						e = Gpublic.event(e, type);
-						G(ele).find(selector).each(function(i, el) {
-							if(el === e.target) {
-								fn.call(el, e)
-							}
-						})
-					}
-				} else {
-					var fnc = function(e) {
-						fn.call(ele, Gpublic.event(e, type))
-					}
-				}
-				ele[type + "Event"] = fnc;
-				Gpublic.addEvent(ele, type, fnc, useCapture)
-			})
-		},
-		off: function(type) {
-			return this.each(function(i, ele) {
-				Gpublic.removeEvent(ele, type, ele[type + "Event"]);
-				ele[type + "Event"] = null
-			});
-		},
-		hover: function(fn1, fn2) {
-			this.mouseenter(fn1);
-			this.mouseleave(fn2);
-			return this
-		}
-	});
-	//DOM其他事件注册
-	G.each(Gpublic.eventsArr, function(i, type) {
-		G.fn[type] = function(fn) {
-			return this.on(type, null, fn)
-		}
-	});
+ })(gjTool,typeof window !== 'undefined' ? window : this)
+/**gjTool.js
+ * 常用方法工具
+ * @author Gao Jin
+ * @update 2018/03/16 17:53
+ */
+ ;(function(G,g){
 	//工具类 扩展插件、静态方法
 	G.extend({
 		//获取浏览器的版本
-		browser: Gpublic.getBrowser(),
+		browser: G.public.getBrowser(),
 		//h获取当前时间戳
 		now: function() {
 			return +new Date();
 		},
 		isString: function(obj) {
-			return Gpublic.is().String(obj)
+			return G.public.is().String(obj)
 		},
 		isUndefined: function(obj) {
-			return Gpublic.is().Undefined(obj)
+			return G.public.is().Undefined(obj)
 		},
 		isNull: function(obj) {
-			return Gpublic.is().Null(obj)
+			return G.public.is().Null(obj)
 		},
 		isNumber: function(obj) {
-			return Gpublic.is().Number(obj)
+			return G.public.is().Number(obj)
 		},
 		isBoolean: function(obj) {
-			return Gpublic.is().Boolean(obj)
+			return G.public.is().Boolean(obj)
 		},
 		isDate: function(obj) {
-			return Gpublic.is().Date(obj)
+			return G.public.is().Date(obj)
 		},
 		isObject: function(obj) {
-			return Gpublic.is().Object(obj)
+			return G.public.is().Object(obj)
 		},
 		isArray: function(obj) {
-			return Gpublic.is().Array(obj)
+			return G.public.is().Array(obj)
 		},
 		isFunction: function(obj) {
-			return Gpublic.is().Function(obj)
+			return G.public.is().Function(obj)
 		},
 		isRegExp: function(obj) {
-			return Gpublic.is().RegExp(obj)
+			return G.public.is().RegExp(obj)
 		},
 		isWindow: function(obj) {
-			return Gpublic.is().Window(obj) || obj === g
+			return G.public.is().Window(obj) || obj === g
 		},
 		isHTMLDocument: function(obj) {
-			return Gpublic.is().HTMLDocument(obj) || Gpublic.is().Document(obj) || obj === document
+			return G.public.is().HTMLDocument(obj) || G.public.is().Document(obj) || obj === document
 		},
 		isHTMLElement: function(obj) {
 			g.HTMLElement = g.HTMLElement || g.Element;
@@ -2072,11 +2361,11 @@
 			var date = new Date(),
 				obj = {};
 			obj.y = date.getFullYear();
-			obj.m = Gpublic.add0(date.getMonth() + 1);
-			obj.d = Gpublic.add0(date.getDate());
-			obj.h = Gpublic.add0(date.getHours());
-			obj.mi = Gpublic.add0(date.getMinutes());
-			obj.s = Gpublic.add0(date.getSeconds());
+			obj.m = G.public.add0(date.getMonth() + 1);
+			obj.d = G.public.add0(date.getDate());
+			obj.h = G.public.add0(date.getHours());
+			obj.mi = G.public.add0(date.getMinutes());
+			obj.s = G.public.add0(date.getSeconds());
 			obj.w = G.toWeek(date.getDay());
 			return obj
 		},
@@ -2258,220 +2547,4 @@
 		}
 	});
 	
-	//ajax异步请求
-	G.extend({
-		ajax: function(obj) {
-
-			var xmlhttp, type, url, async, dataType, data, cache, ifModified;
-			if(!G.isObject(obj)) {
-				return false
-			}
-			type = obj.type == undefined ? 'get' : obj.type.toUpperCase();
-			url = obj.url == undefined ? G.url : obj.url;
-			async = obj.async == undefined ? true : obj.type;
-			dataType = obj.dataType == undefined ? 'text' : obj.dataType.toUpperCase();
-			data = obj.data == undefined ? {} : obj.data;
-
-			var formatParams = function() {
-				if(G.isObject(obj)) {
-					var str = "";
-					for(var pro in data) {
-						str += pro + "=" + data[pro] + "&"
-					}
-					data = str.substr(0, str.length - 1)
-				}
-				if(type == 'GET' || dataType == 'JSONP') {
-					if(url.lastIndexOf('?') == -1) {
-						url += '?' + data
-					} else {
-						url += '&' + data
-					}
-				}
-				if(obj.cache === undefined || obj.cache == false) {
-					url += "?t=" + Math.random()
-				}
-			}
-			if(g.XMLHttpRequest) {
-				xmlhttp = new XMLHttpRequest()
-			} else {
-				xmlhttp = new ActiveXObject("Microsoft.XMLHTTP")
-			}
-			if(dataType == 'JSONP') {
-				formatParams();
-				if(G.isFunction(obj.beforeSend)) {
-					obj.beforeSend(xmlhttp)
-				}
-				var callbackName = ('jsonp_' + Math.random()).replace(".", "");
-				var oHead = document.getElementsByTagName('head')[0];
-				data.callback = callbackName;
-				var ele = document.createElement('script');
-				ele.type = "text/javascript";
-				ele.src = url;
-				oHead.appendChild(ele);
-				ele.onerror = function() {
-					obj.error && obj.error("请求失败", xmlhttp)
-				}
-				var start = G.now();
-				g[callbackName] = function(json) {
-					xmlhttp.time = G.now() - start;
-					oHead.removeChild(ele);
-					g[callbackName] = null;
-					obj.success && obj.success(json, xmlhttp)
-				}
-				return
-			} else {
-				formatParams();
-				xmlhttp.open(type, url, async);
-				xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded; charset=utf-8");
-				if(G.isFunction(obj.beforeSend)) {
-					obj.beforeSend(xmlhttp)
-				}
-				xmlhttp.send(data);
-				var start = G.now();
-				xmlhttp.onreadystatechange = function() {
-					xmlhttp.time = G.now() - start;
-					var res = "";
-					if(xmlhttp.readyState != 4) {
-						obj.error && obj.error("请求失败", xmlhttp);
-						return
-					}
-					if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-						if(dataType == 'JSON') {
-							try {
-								res = JSON.parse(xmlhttp.responseText)
-							} catch(e) {
-								if(G.browser.ie && G.browser.ie <= 7) {
-									res = eval('(' + xmlhttp.responseText + ')')
-								} else {
-									res = "返回JSON格式不正确或者请尝试JSONP请求"
-								}
-							}
-						} else if(dataType == 'XML') {
-							res = xmlhttp.responseXML
-						} else {
-							if(url.toLowerCase().indexOf(".json") != -1) {
-								try {
-									res = JSON.parse(xmlhttp.responseText)
-								} catch(e) {
-									if(G.browser.ie && G.browser.ie <= 7) {
-										res = eval('(' + xmlhttp.responseText + ')')
-									} else {
-										res = "返回JSON格式不正确或者请尝试JSONP请求"
-									}
-								}
-							} else if(url.toLowerCase().indexOf(".xml") != -1) {
-								res = xmlhttp.responseXML
-							} else {
-								res = xmlhttp.responseText
-							}
-						}
-						obj.success && obj.success(res, xmlhttp)
-					}
-				}
-			}
-		},
-		get: function(string, data, fn) {
-			if(G.isFunction(data)) {
-				fn = data;
-				data = {}
-			}
-			this.ajax({
-				type: 'get',
-				data: data,
-				url: string,
-				success: function(data, e) {
-					fn && fn(data, e)
-				},
-				error: function(err, e) {
-					fn && fn(err, e)
-				}
-			})
-		},
-		post: function(string, data, fn) {
-			if(G.isFunction(data)) {
-				fn = data;
-				data = {}
-			}
-			this.ajax({
-				type: 'post',
-				data: data,
-				url: string,
-				success: function(data, e) {
-					fn && fn(data, e)
-				},
-				error: function(err, e) {
-					fn && fn(err, e)
-				}
-			})
-		},
-		getJSON: function(string, fn) {
-			this.ajax({
-				type: 'get',
-				url: string,
-				dataType: 'json',
-				success: function(data) {
-					fn && fn(data)
-				},
-				error: function(err) {
-					fn && fn(err)
-				}
-			})
-		},
-		getXML: function(string, fn) {
-			this.ajax({
-				type: 'get',
-				url: string,
-				dataType: 'xml',
-				success: function(data) {
-					fn && fn(data)
-				},
-				error: function(err) {
-					fn && fn(err)
-				}
-			})
-		}
-	});
-	//拖拽插件
-	G.fn.extend({
-		drag: function() {
-			return this.each(function(i, elem) {
-				G(elem).mousedown(function(e) {
-					e.preventDefault();
-					var o = G(this).offset();
-					var disX = e.clientX - o.left;
-					var disY = e.clientY - o.top;
-					var self = this;
-					G(document).mousemove(function(e) {
-						if(self.nodrag) {
-							return
-						}
-						e.preventDefault();
-						var l = e.clientX - disX;
-						var t = e.clientY - disY;
-
-						var wid = document.documentElement.clientWidth;
-						var hei = document.documentElement.clientHeight;
-						var w = parseFloat(self.style.width);
-						var h = parseFloat(self.style.height);
-						l = l <= 0 ? 0 : (l >= wid - w ? wid - w : l);
-						t = t <= 0 ? 0 : (t >= hei - h ? hei - h : t);
-						self.style.left = l + 'px';
-						self.style.top = t + 'px'
-					});
-					G(document).mouseup(function() {
-						G(document).off('mousemove')
-					})
-				})
-			})
-		},
-		nodrag: function(flag) {
-			if(G.isUndefined(flag)) {
-				flag = true
-			}
-			return this.each(function(i, elem) {
-				elem.nodrag = flag
-			})
-		}
-	})
-
-})(typeof window !== 'undefined' ? window : this);
+ })(gjTool,typeof window !== 'undefined' ? window : this)

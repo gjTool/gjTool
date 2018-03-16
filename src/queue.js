@@ -3,7 +3,7 @@
  * @author Gao Jin
  * @update 2018/03/16 17:53
  */
- ;(function(G,g){
+ ;(function(G){
 	var dataArr = [];
 	G.extend({
 		//增加队列
@@ -81,4 +81,4 @@
 			return this;
 		}
 	});
- })(gjTool,typeof window !== 'undefined' ? window : this)
+ })(gjTool)

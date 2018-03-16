@@ -3,12 +3,9 @@
  * @author Gao Jin
  * @update 2018/03/16 17:53
  */
- ;(function(G,g){
-	G.fn.extend({
-		/**
-		 *	addClass 添加class
-		 *	@param string 字符串class名
-		 */
+ ;(function(G){
+ 	G.fn.extend({
+ 		//添加class
 		addClass: function(name) {
 			return this.each(function(i, ele) {
 				if(!ele.className.length) {
@@ -18,10 +15,7 @@
 				}
 			})
 		},
-		/**
-		 *	removeClass 移除class
-		 *	@param string 字符串class名
-		 */
+		//移除class
 		removeClass: function(name) {
 			return this.each(function(i, ele) {
 				if(!ele.className) {
@@ -31,17 +25,11 @@
 				}
 			})
 		},
-		/**
-		 *	hasClass 判断是否含有class
-		 *	@param string 字符串class名
-		 */
+		//判断是否含有class
 		hasClass: function(name) {
 			return G.public.regName(name).test(this[0].className);
 		},
-		/**
-		 *	toggleClass 移除添加class
-		 *	@param string 字符串class名
-		 */
+		//移除添加class
 		toggleClass: function(name) {
 			return this.each(function(i, ele) {
 				if(G(this).hasClass(name)) {
@@ -51,5 +39,6 @@
 				}
 			})
 		}
-	});
- })(gjTool,typeof window !== 'undefined' ? window : this)
+ 	})
+	
+ })(gjTool)

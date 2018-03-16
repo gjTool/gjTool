@@ -3,10 +3,9 @@
  * @author Gao Jin
  * @update 2018/03/16 17:53
  */
- ;(function(G,g){
+ ;(function(G){
 	G.extend({
 		ajax: function(obj) {
-
 			var xmlhttp, type, url, async, dataType, data, cache, ifModified;
 			if(!G.isObject(obj)) {
 				return false
@@ -176,4 +175,4 @@
 			})
 		}
 	});
- })(gjTool,typeof window !== 'undefined' ? window : this)
+ })(gjTool)

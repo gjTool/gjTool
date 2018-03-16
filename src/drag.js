@@ -3,7 +3,7 @@
  * @author Gao Jin
  * @update 2018/03/16 17:53
  */
- ;(function(G,g){
+ ;(function(G){
 	//拖拽插件
 	G.fn.extend({
 		drag: function() {
@@ -46,4 +46,4 @@
 			})
 		}
 	})
- })(gjTool,typeof window !== 'undefined' ? window : this)
+ })(gjTool)

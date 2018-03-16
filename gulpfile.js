@@ -4,15 +4,11 @@ const uglify = require('gulp-uglify');
 const rename = require("gulp-rename");
 const concat = require("gulp-concat");
 
-var files = fs.readdirSync("src"), gjtool,pub;
+var files = fs.readdirSync("src"), gjtool;
 
 for(var i=0;i<files.length;i++){
 	if(files[i] == 'gjTool.js'){
 		gjtool = "./src/"+files[i];
-		delete files[i]
-	}
-	if(files[i] == 'public.js'){
-		pub = "./src/"+files[i];
 		delete files[i]
 	}
 }
@@ -20,8 +16,6 @@ for(var i=0;i<files.length;i++){
 files.forEach(function(item,index){
 	files[index] = "./src/"+files[index];
 });
-
-files.unshift(pub);
 
 files.unshift(gjtool);
 

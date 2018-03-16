@@ -3,79 +3,10 @@
  * @author Gao Jin
  * @update 2018/03/16 17:53
  */
- ;(function(G,g){
+ ;(function(G){
 	//工具类 扩展插件、静态方法
 	G.extend({
-		//获取浏览器的版本
-		browser: G.public.getBrowser(),
-		//h获取当前时间戳
-		now: function() {
-			return +new Date();
-		},
-		isString: function(obj) {
-			return G.public.is().String(obj)
-		},
-		isUndefined: function(obj) {
-			return G.public.is().Undefined(obj)
-		},
-		isNull: function(obj) {
-			return G.public.is().Null(obj)
-		},
-		isNumber: function(obj) {
-			return G.public.is().Number(obj)
-		},
-		isBoolean: function(obj) {
-			return G.public.is().Boolean(obj)
-		},
-		isDate: function(obj) {
-			return G.public.is().Date(obj)
-		},
-		isObject: function(obj) {
-			return G.public.is().Object(obj)
-		},
-		isArray: function(obj) {
-			return G.public.is().Array(obj)
-		},
-		isFunction: function(obj) {
-			return G.public.is().Function(obj)
-		},
-		isRegExp: function(obj) {
-			return G.public.is().RegExp(obj)
-		},
-		isWindow: function(obj) {
-			return G.public.is().Window(obj) || obj === g
-		},
-		isHTMLDocument: function(obj) {
-			return G.public.is().HTMLDocument(obj) || G.public.is().Document(obj) || obj === document
-		},
-		isHTMLElement: function(obj) {
-			g.HTMLElement = g.HTMLElement || g.Element;
-			if(G.browser.ie && G.browser.ie <= 8) {
-				if(obj && obj.scopeName && obj.scopeName == 'HTML') {
-					return true
-				} else {
-					return false
-				}
-
-			} else {
-				return(obj instanceof HTMLElement)
-			}
-		},
-		isJSON: function(string) {
-			if(typeof string == 'string') {
-				try {
-					JSON.parse(string);
-					return true
-				} catch(e) {
-					var obj = eval('(' + xmlhttp.responseText + ')');
-					if(G.isObject(obj) || G.isArray(obj)) {
-						return true
-					} else {
-						return false
-					}
-				}
-			}
-		},
+		
 		toWeek: function(m) {
 			var week = '日一二三四五六';
 			return week.substring(m, m + 1)
@@ -148,11 +79,15 @@
 		//写cookie
 		setCookie: function(name, value, hour) {
 			if(location.href.indexOf('http://') == -1) {
-				console.error('setCookie error: no domain http:// is included');
+				if(console && console.error){
+					console.error('setCookie error: no domain http:// is included');
+				}
 				return
 			}
 			if(!name || !value) {
-				console.error('setCookie error: no name or value ');
+				if(console && console.error){
+					console.error('setCookie error: no name or value ');
+				}
 				return
 			}
 			if(isNaN(hour) || hour < 0) {
@@ -165,7 +100,9 @@
 		//读cookie
 		getCookie: function(name) {
 			if(location.href.indexOf('http://') == -1) {
-				console.error('getCookie error: no domain http:// is included');
+				if(console && console.error){
+					console.error('getCookie error: no domain http:// is included');
+				}
 				return
 			}
 			var cookie = document.cookie;
@@ -182,7 +119,9 @@
 		//删cookie
 		delCookie: function(name) {
 			if(G.url.indexOf('http://') == -1) {
-				console.error('No domain http:// is included');
+				if(console && console.error){
+					console.error('No domain http:// is included');
+				}
 				return
 			}
 			var exp = new Date();
@@ -270,4 +209,4 @@
 		}
 	});
 	
- })(gjTool,typeof window !== 'undefined' ? window : this)
+ })(gjTool)

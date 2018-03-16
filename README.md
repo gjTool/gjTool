@@ -19,11 +19,11 @@ Author: Gao Jin. Mail: 861366490@qq.com
 
 ## Update information
 
-- v1.1.0
+- v1.1.2
 
 - The code is arranged and optimized, and it is more concise.
 
-- Now you can use $, without reference to JQ and zepto.Disuse Gj and keep gjTool.
+- Now you can use $.Disuse Gj and keep gjTool.
 
 - The new method, clone(), is used to clone elements.appendTo()，Insert element.
 

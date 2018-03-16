@@ -1,29 +1,34 @@
-/**
- * 个人js类库gjTool.js（方法、插件集合）
- * @version 1.1
- * @author Gao Jin
- * @update 2018/03/16 17:53
+/** 个人js类库gjTool.js（方法、插件集合）
+ *  @version 1.1.2
+ *  @author Gao Jin
+ *  @update 2018/03/16 17:53
  */
 ;(function(g) {
 	"use strict";
-	//定义gjTool类
-	function G(selector) {
-		return new G.fn.gjTool(selector)
+	if(g.console && g.console.info){
+		console.info("gjTool.js v1.1.2. The latest version && API on GitHub:  https://github.com/gjTool/gjTool && http://gjTool.github.io/gjToolAPI")
 	}
 	//注册全局变量
 	g.gjTool = G;
+
 	g.$ === undefined && (g.$ = G);
+
 	if(typeof module !== 'undefined' && module.exports) {
 		module.exports = G
 	}
+
 	if(typeof define === 'function' && define.amd) {
 		define(function() {
 			return G
 		})
 	}
+	//定义gjTool类
+	function G(selector) {
+		return new G.fn.gjTool(selector)
+	}
 	G.fn = G.prototype = {
-		version: "gjTool.js v1.1 by Gao Jin && Mail:861366490@qq.com",
-		//gjTool实例选择器
+		//gjTool基础库
+		//选择器 selector gjTool实例 
 		gjTool: function(selector) {
 			if(G.isFunction(selector)) {
 				this.selector = "document";
@@ -38,10 +43,7 @@
 				return this.toArray([selector])
 			}
 		},
-		/**
-		 *	toArray  返回元素集合 转化gjTool实例
-		 &	@param arr Dom元素对象集合
-		 */
+		//toArray  返回元素集合 转化gjTool实例
 		toArray: function(arr) {
 			for(var i = 0, len = this.length; i < len; i++) {
 				[].pop.apply(this)
@@ -49,6 +51,43 @@
 			this.length = 0;
 			[].push.apply(this, arr);
 			return this
+		},
+		//文档加载完成
+		ready: function(fn) {
+			if(this.selector == 'document') {
+				G.public.DOMLoaded(fn)
+			} else {
+				throw new Error("DOMLoad ready function selector parameter invalid !")
+			}
+		},
+		//根据选择器寻找元素
+		find: function(selector) {
+			var node = this[0] || document;
+			//html字符串
+			if(/^</.test(selector)) {
+				return this.toArray(G.public.parseHtml(selector));
+			} // div.test 、.div.abc
+			else if(/[A-Za-z0-9]+\./.test(selector.trim()) && !/\s/.test(selector.trim()) && !/,/.test(selector.trim())) {
+				return this.toArray(G.public.classSelector(selector))
+			} // input[type=button]
+			else if(/\w+\[\w+\=\w+\]/g.test(selector)) {
+				var aStr = selector.split(/\[|\=|\]/g);
+				var aRes = node.getElementsByTagName(aStr[0]);
+				var result = [];
+				G.each(aRes, function(i, ele) {
+					if(ele.getAttribute(aStr[1]) == aStr[2]) {
+						result.push(ele)
+					}
+				})
+				return this.toArray(G.unique(result))
+			} // .div:not() 
+			else if(!/\s/.test(selector.trim()) && !/,/.test(selector.trim()) && /:/.test(selector.trim())) {
+				return this.toArray(G.public.descendantSelector(node, selector));
+			}
+			//群组选择器或包含选择器或基本选择器
+			else {
+				return this.toArray(G.public.groupSelector(node, selector))
+			}
 		}
 	};
 	G.fn.gjTool.prototype = G.fn;
@@ -71,18 +110,10 @@
 			return temp
 		}
 	};
-	
-})(typeof window !== 'undefined' ? window : this);
-/**gjTool.js
- * 公用基础方法、属性
- * @author Gao Jin
- * @update 2018/03/16 17:53
- */
- ;(function(G,g){
 	if(typeof window === 'undefined'){
 		return;
 	}
- 	//封装getElementsByClassName
+	//封装getElementsByClassName
 	if(g.document && !g.document.getElementsByClassName) {
 		g.document.getElementsByClassName = function(className, element) {
 			var children = (element || document).getElementsByTagName('*');
@@ -126,62 +157,46 @@
 	}
 	//内部基础公用方法、属性
 	G.public = {
-		//选择器
-		regSelector: /^(?:\#([\w\-]+)|\.([\w\-]+)|(\*)|(\w+))$/,
-		//DOM其他事件
-		eventsArr:
-			("blur focus input focusin focusout load resize scroll unload click dblclick " +
-				"mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave " +
-				"change select submit keydown keypress keyup error contextmenu").split(' '),
-		//变量类型
-		is: function() {
-			var is = {
-				types: ["Array", "Boolean", "Date", "Number", "Object", "RegExp", "String", "Undefined", "Null", "Function", "Window", "HTMLDocument", "Document", "XMLDocument"]
-			};
-			for(var i = 0, c; c = is.types[i++];) {
-				is[c] = (function(type) {
-					return function(obj) {
-						return Object.prototype.toString.call(obj) == "[object " + type + "]";
+		//判断文档加载完成后
+		DOMLoaded: function(fn){
+			var sys = G.public.getBrowser();
+			var isReady = false;
+			var timer = null;
+			if(document.addEventListener) {
+				G.public.addEvent(document, 'DOMContentLoaded', function fn2() {
+					fn();
+					G.public.removeEvent(document, 'DOMContentLoaded', fn2)
+				})
+			} else if(document.attachEvent) {
+				G.public.addEvent(document, 'readystatechange', function fn2() {
+					if(document.readyState == "complete") {
+						fn();
+						G.public.removeEvent(document, 'readystatechange', fn2)
 					}
-				})(c)
-			}
-			return is
-		},
-		regName: function(name) {
-			return new RegExp('(^|\\s)' + name + '(\\s|$)')
-		},
-		///'alpha(opacity:' + name[i] * 100 + ')';
-		getStyle: function(elem, styleName) {
-			var str,index;
-			if(g.getComputedStyle) {
-				if(styleName == 'scrollTop' || styleName == 'scrollLeft') {
-					return elem[styleName]
-				}
-				str = g.getComputedStyle(elem, false)[styleName];
-			} else if(elem && elem.currentStyle) {
-				str = elem.currentStyle[styleName];
-				if(styleName == 'opacity' && elem.currentStyle['filter']) {
-					str = elem.currentStyle['filter'];
-					if(str.indexOf(':') != -1) {
-						index = str.indexOf(':');
-					} else if(str.indexOf('=') != -1) {
-						index = str.indexOf('=');
+				})
+			} else if(sys.ie && sys.ie < 9) {
+				timer = setInterval(function() {
+					try {
+						document.documentElement.doScroll('left');
+					} catch(error) {};
+					doReady()
+				}, 1)
+			} else if((sys.opera && sys.opera < 9) || (sys.firefox && sys.firefox < 3) || (sys.webkit && sys.webkit < 525)) {
+				timer = setInterval(function() {
+					if(document && document.getElementById && document.getElementsByTagName && document.body) {
+						doReady()
 					}
-					str = str.substring(index + 1, str.length - 1) / 100;
-					str = isNaN(str) ? 1 : str;
-				}
-				if(styleName == 'scrollTop' || styleName == 'scrollLeftl') {
-					str = elem[styleName]
-				}
+				}, 1)
 			}
-			if(str && (str == "auto" || str.toString().indexOf('%') != -1) && styleName == 'width') {
-				str = elem.offsetWidth;
+			//文档加载完成后执行fn
+			function doReady() {
+				if(timer) clearInterval(timer);
+				if(isReady) return;
+				isReady = true;
+				fn()
 			}
-			if(str && (str == "auto" || str.toString().indexOf('%') != -1) && styleName == "height") {
-				str = elem.offsetHeight
-			}
-			return str
 		},
+		//获取浏览器版本
 		getBrowser: function() {
 			var userAgent = navigator.userAgent;
 
@@ -241,6 +256,63 @@
 			}
 			return sys
 		},
+		//选择器
+		regSelector: /^(?:\#([\w\-]+)|\.([\w\-]+)|(\*)|(\w+))$/,
+		//DOM其他事件
+		eventsArr:
+			("blur focus input focusin focusout load resize scroll unload click dblclick " +
+				"mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave " +
+				"change select submit keydown keypress keyup error contextmenu").split(' '),
+		//变量类型
+		is: function() {
+			var is = {
+				types: ["Array", "Boolean", "Date", "Number", "Object", "RegExp", "String", "Undefined", "Null", "Function", "Window", "HTMLDocument", "Document", "XMLDocument"]
+			};
+			for(var i = 0, c; c = is.types[i++];) {
+				is[c] = (function(type) {
+					return function(obj) {
+						return Object.prototype.toString.call(obj) == "[object " + type + "]";
+					}
+				})(c)
+			}
+			return is
+		},
+		regName: function(name) {
+			return new RegExp('(^|\\s)' + name + '(\\s|$)')
+		},
+		///'alpha(opacity:' + name[i] * 100 + ')';
+		getStyle: function(elem, styleName) {
+			var str,index;
+			if(g.getComputedStyle) {
+				if(styleName == 'scrollTop' || styleName == 'scrollLeft') {
+					return elem[styleName]
+				}
+				str = g.getComputedStyle(elem, false)[styleName];
+			} else if(elem && elem.currentStyle) {
+				str = elem.currentStyle[styleName];
+				if(styleName == 'opacity' && elem.currentStyle['filter']) {
+					str = elem.currentStyle['filter'];
+					if(str.indexOf(':') != -1) {
+						index = str.indexOf(':');
+					} else if(str.indexOf('=') != -1) {
+						index = str.indexOf('=');
+					}
+					str = str.substring(index + 1, str.length - 1) / 100;
+					str = isNaN(str) ? 1 : str;
+				}
+				if(styleName == 'scrollTop' || styleName == 'scrollLeftl') {
+					str = elem[styleName]
+				}
+			}
+			if(str && (str == "auto" || str.toString().indexOf('%') != -1) && styleName == 'width') {
+				str = elem.offsetWidth;
+			}
+			if(str && (str == "auto" || str.toString().indexOf('%') != -1) && styleName == "height") {
+				str = elem.offsetHeight
+			}
+			return str
+		},
+		
 		//鼠标按键
 		getButton: function(e) {
 			if(document.implementation.hasFeature("MouseEvents", "20")) {
@@ -293,46 +365,7 @@
 			obj.originalEvent = e;
 			return obj
 		},
-		//判断文档加载完成后
-		DOMLoaded: function(fn) {
-			var sys = G.public.getBrowser();
-			var isReady = false;
-			var timer = null;
-
-			if(document.addEventListener) {
-				G.public.addEvent(document, 'DOMContentLoaded', function fn2() {
-					fn();
-					G.public.removeEvent(document, 'DOMContentLoaded', fn2)
-				})
-			} else if(document.attachEvent) {
-				G.public.addEvent(document, 'readystatechange', function fn2() {
-					if(document.readyState == "complete") {
-						fn();
-						G.public.removeEvent(document, 'readystatechange', fn2)
-					}
-				})
-			} else if(sys.ie && sys.ie < 9) {
-				timer = setInterval(function() {
-					try {
-						document.documentElement.doScroll('left');
-					} catch(error) {};
-					doReady()
-				}, 1)
-			} else if((sys.opera && sys.opera < 9) || (sys.firefox && sys.firefox < 3) || (sys.webkit && sys.webkit < 525)) {
-				timer = setInterval(function() {
-					if(document && document.getElementById && document.getElementsByTagName && document.body) {
-						doReady()
-					}
-				}, 1)
-			}
-			//文档加载完成后执行fn
-			function doReady() {
-				if(timer) clearInterval(timer);
-				if(isReady) return;
-				isReady = true;
-				fn()
-			}
-		},
+		
 		//添加事件监听
 		addEvent: function(element, type, fn, useCapture) {
 			if(element.addEventListener) {
@@ -708,86 +741,127 @@
 			}
 			return aChild;
 		},
-		//获取父级节点
-		getParentNode: function(elem, arr) {
-			if(!G.isHTMLElement(elem)) {
-				return arr
-			}
-			if(elem.parentNode == document) {
-				return arr
-			}
-			arr.push(elem.parentNode);
-			return G.public.getParentNode(elem.parentNode, arr)
-		},
+		//不足10前面加0
 		add0: function(num) {
 			return num = num < 10 ? '0' + num : num
 		}
 	};
- })(gjTool,typeof window !== 'undefined' ? window : this)
-/**gjTool.js
- * class类名操作
- * @author Gao Jin
- * @update 2018/03/16 17:53
- */
- ;(function(G,g){
-	G.fn.extend({
-		/**
-		 *	addClass 添加class
-		 *	@param string 字符串class名
-		 */
-		addClass: function(name) {
-			return this.each(function(i, ele) {
-				if(!ele.className.length) {
-					ele.className += '' + name
-				} else if(!G.public.regName(name).test(ele.className)) {
-					ele.className += ' ' + name
-				}
-			})
+	//常用工具
+	G.extend({
+		//获取浏览器版本
+		browser: G.public.getBrowser(),
+		//h获取当前时间戳
+		now: function() {
+			return +new Date();
 		},
-		/**
-		 *	removeClass 移除class
-		 *	@param string 字符串class名
-		 */
-		removeClass: function(name) {
-			return this.each(function(i, ele) {
-				if(!ele.className) {
-					return
-				} else if(G.public.regName(name).test(ele.className)) {
-					ele.className = ele.className.replace(G.public.regName(name), ' ').trim()
-				}
-			})
+		isString: function(obj) {
+			return G.public.is().String(obj)
 		},
-		/**
-		 *	hasClass 判断是否含有class
-		 *	@param string 字符串class名
-		 */
-		hasClass: function(name) {
-			return G.public.regName(name).test(this[0].className);
+		isUndefined: function(obj) {
+			return G.public.is().Undefined(obj)
 		},
-		/**
-		 *	toggleClass 移除添加class
-		 *	@param string 字符串class名
-		 */
-		toggleClass: function(name) {
-			return this.each(function(i, ele) {
-				if(G(this).hasClass(name)) {
-					G(this).removeClass(name)
+		isNull: function(obj) {
+			return G.public.is().Null(obj)
+		},
+		isNumber: function(obj) {
+			return G.public.is().Number(obj)
+		},
+		isBoolean: function(obj) {
+			return G.public.is().Boolean(obj)
+		},
+		isDate: function(obj) {
+			return G.public.is().Date(obj)
+		},
+		isObject: function(obj) {
+			return G.public.is().Object(obj)
+		},
+		isArray: function(obj) {
+			return G.public.is().Array(obj)
+		},
+		isFunction: function(obj) {
+			return G.public.is().Function(obj)
+		},
+		isRegExp: function(obj) {
+			return G.public.is().RegExp(obj)
+		},
+		isWindow: function(obj) {
+			return G.public.is().Window(obj) || obj === g
+		},
+		isHTMLDocument: function(obj) {
+			return G.public.is().HTMLDocument(obj) || G.public.is().Document(obj) || obj === document
+		},
+		isHTMLElement: function(obj) {
+			g.HTMLElement = g.HTMLElement || g.Element;
+			if(G.browser.ie && G.browser.ie <= 8) {
+				if(obj && obj.scopeName && obj.scopeName == 'HTML') {
+					return true
 				} else {
-					G(this).addClass(name)
+					return false
 				}
-			})
+
+			} else {
+				return(obj instanceof HTMLElement)
+			}
+		},
+		isJSON: function(string) {
+			if(typeof string == 'string') {
+				try {
+					JSON.parse(string);
+					return true
+				} catch(e) {
+					var obj = eval('(' + xmlhttp.responseText + ')');
+					if(G.isObject(obj) || G.isArray(obj)) {
+						return true
+					} else {
+						return false
+					}
+				}
+			}
+		}
+	})
+	
+	//遍历
+	G.extend({
+		each: function(arr, fn) {
+			for(var i = 0, len = arr.length; i < len; i++) {
+				var result = fn.call(arr[i], i, arr[i]);
+				if(result === true) {
+					continue
+				} else if(result === false) {
+					break
+				}
+			}
+		},
+		map: function(arr, fn) {
+			var arr2 = [];
+			for(var i = 0, len = arr.length; i < len; i++) {
+				arr2.push(fn.call(arr[i], i, arr[i]))
+			}
+			return arr2
 		}
 	});
- })(gjTool,typeof window !== 'undefined' ? window : this)
+
+	//遍历实例
+	G.fn.extend({
+		each: function(fn) {
+			G.each(this, fn)
+			return this
+		},
+		map: function(fn) {
+			G.map(this, fn)
+			return this
+		}
+	})
+	
+})(typeof window !== 'undefined' ? window : this);
 /**gjTool.js
  * ajax异步请求
  * @author Gao Jin
  * @update 2018/03/16 17:53
  */
- ;(function(G,g){
+ ;(function(G){
 	G.extend({
 		ajax: function(obj) {
-
 			var xmlhttp, type, url, async, dataType, data, cache, ifModified;
 			if(!G.isObject(obj)) {
 				return false
@@ -957,7 +1031,7 @@
 			})
 		}
 	});
- })(gjTool,typeof window !== 'undefined' ? window : this)
+ })(gjTool)
 /**gjTool.js
  * 动画相关
  * @author Gao Jin
@@ -1410,7 +1484,7 @@
  * @author Gao Jin
  * @update 2018/03/16 17:53
  */
-;(function(G,g){
+;(function(G){
 	G.fn.extend({
 		attr: function(name, value) {
 			if(G.isString(name) && (G.isString(value) || G.isBoolean(value) || !isNaN(value))) {
@@ -1446,7 +1520,9 @@
 		},
 		prop: function(name, value) {
 			if(!G.isString(name)) {
-				console.error("prop parameter invalid !");
+				if(console && console.error){
+					console.error("prop parameter invalid !");
+				}
 				return this
 			}
 			if((name == "innerText" || name == "innerHTML") && !name in this[0]) {
@@ -1483,13 +1559,57 @@
 		}
 	});
 
-})(gjTool,typeof window !== 'undefined' ? window : this)
+})(gjTool)
+/**gjTool.js
+ * class类名操作
+ * @author Gao Jin
+ * @update 2018/03/16 17:53
+ */
+ ;(function(G){
+ 	G.fn.extend({
+ 		//添加class
+		addClass: function(name) {
+			return this.each(function(i, ele) {
+				if(!ele.className.length) {
+					ele.className += '' + name
+				} else if(!G.public.regName(name).test(ele.className)) {
+					ele.className += ' ' + name
+				}
+			})
+		},
+		//移除class
+		removeClass: function(name) {
+			return this.each(function(i, ele) {
+				if(!ele.className) {
+					return
+				} else if(G.public.regName(name).test(ele.className)) {
+					ele.className = ele.className.replace(G.public.regName(name), ' ').trim()
+				}
+			})
+		},
+		//判断是否含有class
+		hasClass: function(name) {
+			return G.public.regName(name).test(this[0].className);
+		},
+		//移除添加class
+		toggleClass: function(name) {
+			return this.each(function(i, ele) {
+				if(G(this).hasClass(name)) {
+					G(this).removeClass(name)
+				} else {
+					G(this).addClass(name)
+				}
+			})
+		}
+ 	})
+	
+ })(gjTool)
 /**gjTool.js
  * css类 样式操作
  * @author Gao Jin
  * @update 2018/03/16 17:53
  */
-;(function(G,g){
+;(function(G){
 	G.fn.extend({
 		/**
 		 *	css 获取设置样式
@@ -1628,13 +1748,13 @@
 			}
 		}
 	});
-})(gjTool,typeof window !== 'undefined' ? window : this)
+})(gjTool)
 /**gjTool.js
  * DOM操作
  * @author Gao Jin
  * @update 2018/03/16 17:53
  */
- ;(function(G,g){
+ ;(function(G){
 	G.fn.extend({
 		//在当前元素节点之后插入内容、元素
 		after: function(selector, move) {
@@ -1803,13 +1923,13 @@
 			})
 		}
 	});
- })(gjTool,typeof window !== 'undefined' ? window : this)
+ })(gjTool)
 /**gjTool.js
  * 拖拽插件
  * @author Gao Jin
  * @update 2018/03/16 17:53
  */
- ;(function(G,g){
+ ;(function(G){
 	//拖拽插件
 	G.fn.extend({
 		drag: function() {
@@ -1852,62 +1972,32 @@
 			})
 		}
 	})
- })(gjTool,typeof window !== 'undefined' ? window : this)
+ })(gjTool)
 /**gjTool.js
- * 遍历
+ * 遍历实例对象
  * @author Gao Jin
  * @update 2018/03/16 17:53
  */
- ;(function(G,g){
- 	//遍历
-	G.extend({
-		/**
-		 *	each 遍历
-		 *	@param arr DOM数组对象
-		 *	@param fn 函数方法
-		 */
-		each: function(arr, fn) {
-			for(var i = 0, len = arr.length; i < len; i++) {
-				var result = fn.call(arr[i], i, arr[i]);
-				if(result === true) {
-					continue
-				} else if(result === false) {
-					break
-				}
-			}
-		},
-		/**
-		 *	map 遍历
-		 *	@param arr 数组对象
-		 *	@param fn 函数方法
-		 */
-		map: function(arr, fn) {
-			var arr2 = [];
-			for(var i = 0, len = arr.length; i < len; i++) {
-				arr2.push(fn.call(arr[i], i, arr[i]))
-			}
-			return arr2
+ ;(function(G){
+ 	//获取父级节点
+	var getParentNode = function(elem, arr) {
+		if(!G.isHTMLElement(elem)) {
+			return arr
 		}
-	});
-	//遍历实例
+		if(elem.parentNode == document) {
+			return arr
+		}
+		arr.push(elem.parentNode);
+		return getParentNode(elem.parentNode, arr)
+	}
 	G.fn.extend({
-		/**
-		 *	each 遍历
-		 *	@param fn 函数方法
-		 */
-		each: function(fn) {
-			G.each(this, fn)
-			return this
-		},
-		map: function(fn) {
-			G.map(this, fn)
-			return this
-		},
-		//eq返回的是gjTool对象
+		//eq返回的是gjTool实例
 		eq: function(num) {
 			num = Number(num);
 			if(isNaN(num)) {
-				console.warn("eq parameter invalid !");
+				if(console && console.warn){
+					console.warn("eq parameter invalid !");
+				}
 				return this
 			}
 			return G(this[num])
@@ -1929,35 +2019,6 @@
 			}
 
 			return null
-		},
-		//根据选择器寻找元素
-		find: function(selector) {
-			var node = this[0] || document;
-			//html字符串
-			if(/^</.test(selector)) {
-				return this.toArray(G.public.parseHtml(selector));
-			} // div.test 、.div.abc
-			else if(/[A-Za-z0-9]+\./.test(selector.trim()) && !/\s/.test(selector.trim()) && !/,/.test(selector.trim())) {
-				return this.toArray(G.public.classSelector(selector))
-			} // input[type=button]
-			else if(/\w+\[\w+\=\w+\]/g.test(selector)) {
-				var aStr = selector.split(/\[|\=|\]/g);
-				var aRes = node.getElementsByTagName(aStr[0]);
-				var result = [];
-				G.each(aRes, function(i, ele) {
-					if(ele.getAttribute(aStr[1]) == aStr[2]) {
-						result.push(ele)
-					}
-				})
-				return this.toArray(G.unique(result))
-			} // .div:not() 
-			else if(!/\s/.test(selector.trim()) && !/,/.test(selector.trim()) && /:/.test(selector.trim())) {
-				return this.toArray(G.public.descendantSelector(node, selector));
-			}
-			//群组选择器或包含选择器或基本选择器
-			else {
-				return this.toArray(G.public.groupSelector(node, selector))
-			}
 		},
 		parent: function(selector) {
 			var arr = [],
@@ -1983,7 +2044,7 @@
 				arr2 = [];
 			for(var i = 0, len = this.length; i < len; i++) {
 				var elem = this[i];
-				arr = G.public.getParentNode(elem, arr)
+				arr = getParentNode(elem, arr)
 			}
 			arr = G.unique(arr);
 			if(G.isString(selector)) {
@@ -2127,26 +2188,17 @@
 			return this.find(this[this.length - 1])
 		}
 	})
- })(gjTool,typeof window !== 'undefined' ? window : this)
+	
+ })(gjTool)
 /**gjTool.js
  * 事件相关
  * @author Gao Jin
  * @update 2018/03/16 17:53
  */
- ;(function(G,g){
+ ;(function(G){
 	//DOM事件
 	G.fn.extend({
-		/**
-		 *	ready 文档加载完成后执行fn
-		 *	@param fn 函数方法
-		 */
-		ready: function(fn) {
-			if(this.selector == 'document') {
-				G.public.DOMLoaded(fn)
-			} else {
-				throw new Error("DOMLoad ready function selector parameter invalid !")
-			}
-		},
+		
 		on: function(type, selector, fn, useCapture) {
 			if(G.isFunction(selector)) {
 				fn = selector;
@@ -2190,13 +2242,13 @@
 			return this.on(type, null, fn)
 		}
 	});
- })(gjTool,typeof window !== 'undefined' ? window : this)
+ })(gjTool)
 /**gjTool.js
  * 函数队列（异步函数同步执行）
  * @author Gao Jin
  * @update 2018/03/16 17:53
  */
- ;(function(G,g){
+ ;(function(G){
 	var dataArr = [];
 	G.extend({
 		//增加队列
@@ -2274,85 +2326,16 @@
 			return this;
 		}
 	});
- })(gjTool,typeof window !== 'undefined' ? window : this)
+ })(gjTool)
 /**gjTool.js
  * 常用方法工具
  * @author Gao Jin
  * @update 2018/03/16 17:53
  */
- ;(function(G,g){
+ ;(function(G){
 	//工具类 扩展插件、静态方法
 	G.extend({
-		//获取浏览器的版本
-		browser: G.public.getBrowser(),
-		//h获取当前时间戳
-		now: function() {
-			return +new Date();
-		},
-		isString: function(obj) {
-			return G.public.is().String(obj)
-		},
-		isUndefined: function(obj) {
-			return G.public.is().Undefined(obj)
-		},
-		isNull: function(obj) {
-			return G.public.is().Null(obj)
-		},
-		isNumber: function(obj) {
-			return G.public.is().Number(obj)
-		},
-		isBoolean: function(obj) {
-			return G.public.is().Boolean(obj)
-		},
-		isDate: function(obj) {
-			return G.public.is().Date(obj)
-		},
-		isObject: function(obj) {
-			return G.public.is().Object(obj)
-		},
-		isArray: function(obj) {
-			return G.public.is().Array(obj)
-		},
-		isFunction: function(obj) {
-			return G.public.is().Function(obj)
-		},
-		isRegExp: function(obj) {
-			return G.public.is().RegExp(obj)
-		},
-		isWindow: function(obj) {
-			return G.public.is().Window(obj) || obj === g
-		},
-		isHTMLDocument: function(obj) {
-			return G.public.is().HTMLDocument(obj) || G.public.is().Document(obj) || obj === document
-		},
-		isHTMLElement: function(obj) {
-			g.HTMLElement = g.HTMLElement || g.Element;
-			if(G.browser.ie && G.browser.ie <= 8) {
-				if(obj && obj.scopeName && obj.scopeName == 'HTML') {
-					return true
-				} else {
-					return false
-				}
-
-			} else {
-				return(obj instanceof HTMLElement)
-			}
-		},
-		isJSON: function(string) {
-			if(typeof string == 'string') {
-				try {
-					JSON.parse(string);
-					return true
-				} catch(e) {
-					var obj = eval('(' + xmlhttp.responseText + ')');
-					if(G.isObject(obj) || G.isArray(obj)) {
-						return true
-					} else {
-						return false
-					}
-				}
-			}
-		},
+		
 		toWeek: function(m) {
 			var week = '日一二三四五六';
 			return week.substring(m, m + 1)
@@ -2425,11 +2408,15 @@
 		//写cookie
 		setCookie: function(name, value, hour) {
 			if(location.href.indexOf('http://') == -1) {
-				console.error('setCookie error: no domain http:// is included');
+				if(console && console.error){
+					console.error('setCookie error: no domain http:// is included');
+				}
 				return
 			}
 			if(!name || !value) {
-				console.error('setCookie error: no name or value ');
+				if(console && console.error){
+					console.error('setCookie error: no name or value ');
+				}
 				return
 			}
 			if(isNaN(hour) || hour < 0) {
@@ -2442,7 +2429,9 @@
 		//读cookie
 		getCookie: function(name) {
 			if(location.href.indexOf('http://') == -1) {
-				console.error('getCookie error: no domain http:// is included');
+				if(console && console.error){
+					console.error('getCookie error: no domain http:// is included');
+				}
 				return
 			}
 			var cookie = document.cookie;
@@ -2459,7 +2448,9 @@
 		//删cookie
 		delCookie: function(name) {
 			if(G.url.indexOf('http://') == -1) {
-				console.error('No domain http:// is included');
+				if(console && console.error){
+					console.error('No domain http:// is included');
+				}
 				return
 			}
 			var exp = new Date();
@@ -2547,4 +2538,4 @@
 		}
 	});
 	
- })(gjTool,typeof window !== 'undefined' ? window : this)
+ })(gjTool)

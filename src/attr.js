@@ -3,7 +3,7 @@
  * @author Gao Jin
  * @update 2018/03/16 17:53
  */
-;(function(G,g){
+;(function(G){
 	G.fn.extend({
 		attr: function(name, value) {
 			if(G.isString(name) && (G.isString(value) || G.isBoolean(value) || !isNaN(value))) {
@@ -39,7 +39,9 @@
 		},
 		prop: function(name, value) {
 			if(!G.isString(name)) {
-				console.error("prop parameter invalid !");
+				if(console && console.error){
+					console.error("prop parameter invalid !");
+				}
 				return this
 			}
 			if((name == "innerText" || name == "innerHTML") && !name in this[0]) {
@@ -76,4 +78,4 @@
 		}
 	});
 
-})(gjTool,typeof window !== 'undefined' ? window : this)
+})(gjTool)

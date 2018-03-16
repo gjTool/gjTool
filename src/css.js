@@ -3,7 +3,7 @@
  * @author Gao Jin
  * @update 2018/03/16 17:53
  */
-;(function(G,g){
+;(function(G){
 	G.fn.extend({
 		/**
 		 *	css 获取设置样式
@@ -142,4 +142,4 @@
 			}
 		}
 	});
-})(gjTool,typeof window !== 'undefined' ? window : this)
+})(gjTool)

@@ -15,17 +15,21 @@
 	<div id="test" >
 		<div>
 			<p></p>
+			<p class="p"></p>
+			<p></p>
 		</div>
+
 	</div>
 	<div id="test1"></div>
 	<script type="text/javascript" src="dist/gjtool.js"></script>
 	<script type="text/javascript" >
 		$('#test').clone().appendTo('#test1');
-		console.log($.browser);
 		$('#test').css({
-			width: '50vw'
+			width: '500'
 		})
 		$('#test').hide(5000)
+			console.log($)		
+			console.log($('#test'))		
 	</script>
 </body>
 </html>

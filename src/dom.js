@@ -3,7 +3,7 @@
  * @author Gao Jin
  * @update 2018/03/16 17:53
  */
- ;(function(G,g){
+ ;(function(G){
 	G.fn.extend({
 		//在当前元素节点之后插入内容、元素
 		after: function(selector, move) {
@@ -172,4 +172,4 @@
 			})
 		}
 	});
- })(gjTool,typeof window !== 'undefined' ? window : this)
+ })(gjTool)

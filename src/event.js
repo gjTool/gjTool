@@ -3,20 +3,10 @@
  * @author Gao Jin
  * @update 2018/03/16 17:53
  */
- ;(function(G,g){
+ ;(function(G){
 	//DOM事件
 	G.fn.extend({
-		/**
-		 *	ready 文档加载完成后执行fn
-		 *	@param fn 函数方法
-		 */
-		ready: function(fn) {
-			if(this.selector == 'document') {
-				G.public.DOMLoaded(fn)
-			} else {
-				throw new Error("DOMLoad ready function selector parameter invalid !")
-			}
-		},
+		
 		on: function(type, selector, fn, useCapture) {
 			if(G.isFunction(selector)) {
 				fn = selector;
@@ -60,4 +50,4 @@
 			return this.on(type, null, fn)
 		}
 	});
- })(gjTool,typeof window !== 'undefined' ? window : this)
+ })(gjTool)

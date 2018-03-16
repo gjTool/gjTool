@@ -748,6 +748,7 @@
 	};
 	//常用工具
 	G.extend({
+		url: window.location.href,
 		//获取浏览器版本
 		browser: G.public.getBrowser(),
 		//h获取当前时间戳

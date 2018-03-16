@@ -87,7 +87,9 @@
 					var c = end - iCur[attr];
 					var p = G.easing[easing](t, b, c, d);
 
-					if(attr == 'opacity') {
+					if(attr == 'display'){
+						elem.style.display = json[attr];
+					}else if(attr == 'opacity') {
 						elem.style.opacity = p / 100;
 						var op = elem.style.filter;
 						if(op && op.indexOf(':') != -1) {
@@ -297,6 +299,8 @@
 					fn && fn();
 					return;
 				}
+				ele.oldStyles.display = (ele.display && ele.display != 'none') ? ele.display : 'block';
+				
 				G(ele).css(start).animate(ele.oldStyles, speed, easying, function() {
 					ele.style.display = (ele.display && ele.display != 'none') ? ele.display : 'block';
 					ele.isShow = false;

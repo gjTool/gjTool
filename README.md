@@ -29,7 +29,7 @@ Author: Gao Jin. Mail: 861366490@qq.com
 
 - The new attributes of the $.browser object,$.browser.pc、$.browser.phone、$.browser.tablet, the new attributes to determine whether the computer, the phone, the tablet.
 
-- The method of optimizing and perfecting the DOM operation class，after、before、append、prepend. Repair the CSS、animate method bug.
+- The method of optimizing and perfecting the DOM operation class，after、before、append、prepend. Repair the Css、Show、FadeIn method bug.
 
 
 ### How To Install

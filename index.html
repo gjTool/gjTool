@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>gjTool.js测试demo</title>
+	<style type="text/css">
+ 		#test {
+            overflow: hidden;
+            margin: 50px auto;
+            width: 500px;
+            height: 500px;
+            border: 1px solid #ccc;
+        }
+        .one,
+        .two {
+            float: left;
+            margin: 10px;
+            width: 150px;
+            height: 150px;
+            text-align: center;
+            line-height: 150px;
+            font-size: 32px;
+        }
+        .one {
+            background-color: #ccc;
+        }
+        .two {
+            background-color: #999;
+        }
+	</style>
+</head>
+<body>
+	<div id="test">
+        <div class="one">one</div>
+        <div class="two">two</div>
+    </div>
+	<script type="text/javascript" src="dist/gjtool.js"></script>
+	<script type="text/javascript" >
+        if($.browser.pc){
+            $('#test').on("click",".one",function(e){
+                e.stopPropagation();
+                console.log(e.target)
+            })
+            
+
+            $('.two').on("abc",function(){
+                alert(1);
+
+            });
+
+            $('.two').on("click",function(e){
+                e.stopPropagation();
+                console.log(e.target)
+                $('.two').trigger('abc');
+            })
+
+            setTimeout(function(){
+                $('#test').off('click');
+                $('.two').off('abc');
+                console.log('删除事件');
+            },5000)
+           setTimeout(function(){
+                $('.two').on('abc',function(){
+                    alert(1);
+                });
+                console.log('绑定事件');
+            },8000)
+        }else {
+            $('.two,.one,#test').touch("tap",function(e){
+                console.log("点按触发")
+            })
+            $('.two,.one,#test').touch("longTap",function(e){
+                console.log("长按触发")
+            })
+            $('.two,.one,#test').touch("singleTap",function(e){
+                console.log("轻按触发")
+            })
+            $('.two,.one,#test').touch("doubleTap",function(e){
+                console.log("双击触发")
+            })
+            // $('.two,.one,#test').touch("singleTap",function(e){
+            //     console.log("轻按触发")
+            // })
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+
+    function  attr(elem,attrName,value){
+        if(arguments.length < 2) return;
+        if(arguments.length == 2){
+            return elem.getAttribute(attrName);
+        }
+        elem.setAttribute(attrName,value);
+    }
+
+    var eventWrap={};
+    var eventIdKey='eventId'+new Date().getTime();
+    var uuid=0;
+    function bind(elem,eName,func){
+        if(elem && eName && func){
+            var eId=attr(elem,eventIdKey);
+            if(!eId){
+                eId='eid'+(++uuid);
+                attr(elem,eventIdKey,eId);
+                eventWrap[eId]={};
+            }
+            var fArr=eventWrap[eId][eName];
+            if(!fArr){
+                fArr=eventWrap[eId][eName]=[];
+            }
+            fArr.push(func);
+        }
+        trigger(elem,eName);
+    }
+    function trigger(elem,eName){
+        if(elem && eName){
+            var eId=attr(elem,eventIdKey);
+            if(eId){
+                var fArr=eventWrap[eId][eName];
+                if(fArr){                    
+                    for(var i=0;i<fArr.length;i++){
+                        if(typeof fArr[i]=='function'){
+                            fArr[i].call(elem);
+                        }
+                    }
+                }
+            }
+        }
+    }
+        
+        $(function(){
+            //测试
+            var $div=$('div.tdiv')[0];
+            bind($div,'aaa',function(){alert(111);});
+            bind($div,'aaa2',function(){alert(222);});
+            
+        }); 
+	</script>
+</body>
+</html>

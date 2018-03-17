@@ -2,10 +2,10 @@
 
 [![Build Status](https://travis-ci.org/gjTool/gjTool.svg?branch=master)](https://travis-ci.org/gjTool/gjTool)
 [![npm version](https://img.shields.io/npm/v/gjtool.svg)](https://www.npmjs.com/package/gjtool)
-[![npm downloads](https://img.shields.io/npm/dt/gjtool.svg)](https://www.npmjs.com/package/gjtool)
+[![npm downloads](https://img.shields.io/npm/dm/gjtool.svg)](https://www.npmjs.com/package/gjtool)
 
-gjTool.js是一个js个人类库，模仿jQuery的链式调用，API用法和jQuery的差不多，相当于简版JQ。
-支持extend方法扩展，在extend上增加属性、方法。gjTool.fn.extend、gjTool.extend。
+gjTool.js是一个js个人类库（PC端和移动端），模仿jQuery的链式调用，API用法和jQuery的差不多，相当于简版JQ。
+支持extend方法扩展，在gjTool上增加属性、方法。gjTool.fn.extend、gjTool.extend。
 
 作者：Gao Jin  邮箱: 861366490@qq.com
 
@@ -19,9 +19,10 @@ gjTool.js是一个js个人类库，模仿jQuery的链式调用，API用法和jQu
 
 ## 更新信息
 
-- v1.1.3
+- v1.1.4
 
-- 代码整理优化，更简洁。
+- 增加touch模块，移动端触摸事件tap、longTap、 singleTap、 doubleTap、 swipe、 swipeLeft、swipeRight、 swipeUp、 swipeDown。
+  增加自定义事件，触发trigger。
 
 - 在没有引用jq、zepto的情况下，可以使用$。废弃Gj，保留gjTool。
 
@@ -98,11 +99,13 @@ animate、stop、show、hide、fadeIn、fadeOut、fadeTo、fadeToggle
 
 事件：
 
-on、off、hover、还有其他的普通事件、
+on、off、hover、trigger、还有其他的普通事件、
 文档加载完成：gjTool(function(){})、gjTool(document).ready(function(){});
 例如：blur focus input load resize scroll unload click dblclick 等
 
+touch事件：
 
+touchstart touchmove touchend touchcancel tap longTap singleTap doubleTap swipe swipeLeft swipeRight swipeUp swipeDown
 
 
 ajax异步请求:（gjTool.ajax）

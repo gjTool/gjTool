@@ -2,9 +2,10 @@
 
 [![Build Status](https://travis-ci.org/gjTool/gjTool.svg?branch=master)](https://travis-ci.org/gjTool/gjTool)
 [![npm version](https://img.shields.io/npm/v/gjtool.svg)](https://www.npmjs.com/package/gjtool)
-[![npm downloads](https://img.shields.io/npm/dt/gjtool.svg)](https://www.npmjs.com/package/gjtool)
+[![npm downloads](https://img.shields.io/npm/dm/gjtool.svg)](https://www.npmjs.com/package/gjtool)
 
-gjTool.js is a javascript class library that mimics the chain call of jQuery, and the API usage is similar to jQuery, gjTool like a simple version of JQ.
+
+gjTool.js is a javascript class library (PC && Mobile). that mimics the chain call of jQuery, and the API usage is similar to jQuery, gjTool like a simple version of JQ.
 Support extension plug-ins. gjTool.fn.extend、gjTool.extend.
 
 Author: Gao Jin. Mail: 861366490@qq.com
@@ -19,9 +20,11 @@ Author: Gao Jin. Mail: 861366490@qq.com
 
 ## Update information
 
-- v1.1.3
+- v1.1.4
 
-- The code is arranged and optimized, and it is more concise.
+- Add the touch module, the mobile end touch event: tap、longTap、 singleTap、 doubleTap、 swipe、 swipeLeft、swipeRight、 swipeUp、 swipeDown.
+
+  Add custom events and trigger.
 
 - Now you can use $.Disuse Gj and keep gjTool.
 
@@ -108,11 +111,14 @@ animate、stop、show、hide、fadeIn、fadeOut、fadeTo、fadeToggle
 
 Event：
 
-on、off、hover, and other common events,
+on、off、hover、trigger, and other common events,
 The document is loaded:：gjTool(function(){})、gjTool(document).ready(function(){});
 
 For example: blur focus input load resize scroll unload click dblclick …… and so on.
 
+Touch events:
+
+touchstart touchmove touchend touchcancel tap longTap singleTap doubleTap swipe swipeLeft swipeRight swipeUp swipeDown
 
 
 Ajax asynchronous request: (gjTool.ajax)

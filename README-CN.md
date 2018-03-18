@@ -105,7 +105,7 @@ on、off、hover、trigger、还有其他的普通事件、
 
 touch事件：
 
-touchstart touchmove touchend touchcancel tap longTap singleTap doubleTap swipe swipeLeft swipeRight swipeUp swipeDown
+touchstart touchmove touchend touchcancel tap longTap doubleTap swipe swipeLeft swipeRight swipeUp swipeDown
 
 
 ajax异步请求:（gjTool.ajax）

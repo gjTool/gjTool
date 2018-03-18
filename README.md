@@ -118,7 +118,7 @@ For example: blur focus input load resize scroll unload click dblclick …… an
 
 Touch events:
 
-touchstart touchmove touchend touchcancel tap longTap singleTap doubleTap swipe swipeLeft swipeRight swipeUp swipeDown
+touchstart touchmove touchend touchcancel tap longTap doubleTap swipe swipeLeft swipeRight swipeUp swipeDown
 
 
 Ajax asynchronous request: (gjTool.ajax)

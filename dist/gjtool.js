@@ -2871,6 +2871,7 @@
  		 handles = {
 
                 touchstart : function( e ){
+                	e.preventDefault ? e.preventDefault() : e.returnValue = false;
                     var touches = e.touches[0];
 
                     startTx = touches.clientX;
@@ -2879,6 +2880,7 @@
                 },
 
                 touchmove : function( e ){
+                	e.preventDefault ? e.preventDefault() : e.returnValue = false;
                     isTouchMove = true;
                 },
 

@@ -64,23 +64,26 @@
                     alert(1);
                 });
                 console.log('绑定事件');
-            },8000)
+            },10000)
         }else {
-            $('.two,.one,#test').touch("tap",function(e){
-                console.log("点按触发")
-            })
-            $('.two,.one,#test').touch("longTap",function(e){
-                console.log("长按触发")
-            })
-            $('.two,.one,#test').touch("singleTap",function(e){
-                console.log("轻按触发")
-            })
-            $('.two,.one,#test').touch("doubleTap",function(e){
-                console.log("双击触发")
-            })
-            // $('.two,.one,#test').touch("singleTap",function(e){
-            //     console.log("轻按触发")
-            // })
+            
+            
+            $('#test').touch("swipe",function(e){
+                console.log("滑动",e.target)
+            });
+             $('#test').touch("swipeLeft",function(e){
+                console.log("左滑",e.target)
+            });
+              $('#test').touch("swipeRight",function(e){
+                console.log("右滑",e.target)
+            });
+               $('#test').touch("swipeUp",function(e){
+                console.log("上滑",e.target)
+            });
+                $('#test').touch("swipeDown",function(e){
+                console.log("下滑",e.target)
+            });
+            
         }
 
 

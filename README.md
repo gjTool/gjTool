@@ -22,7 +22,7 @@ Author: Gao Jin. Mail: 861366490@qq.com
 
 - v1.1.4
 
-- Add the touch module, the mobile end touch event: tap、longTap、 singleTap、 doubleTap、 swipe、 swipeLeft、swipeRight、 swipeUp、 swipeDown.
+- Add the touch module, the mobile end touch event: tap、longTap、 doubleTap、 swipe、 swipeLeft、swipeRight、 swipeUp、 swipeDown.
 
   Add custom events and trigger.
 

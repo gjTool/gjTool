@@ -372,7 +372,6 @@
 		                }
 		            }
 		        }
-		        el[type + "Event"] = null;
 			},
 			//转换html
 			parseHtml: function(html) {

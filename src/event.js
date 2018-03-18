@@ -29,10 +29,10 @@
 	n.Event = function (event,type){
 		var e = g.event || event;
 		this.preventDefault = function() {
-			return e.preventDefault ? e.preventDefault() : e.returnValue = false
+			e.preventDefault ? e.preventDefault() : e.returnValue = false
 		}
 		this.stopPropagation = function() {
-			return e.stopPropagation ? e.stopPropagation() : e.cancelBubble = true
+			e.stopPropagation ? e.stopPropagation() : e.cancelBubble = true
 		}
 		this.target = e.target || e.srcElement;
 		this.srcElement = e.srcElement;
@@ -86,14 +86,24 @@
 						fn.call(ele, new n.Event(e, type))
 					}
 				}
-				ele[type + "Event"] = fnc;
+				if(!ele[type+"Event"]){
+            		ele[type+"Event"] = [];
+            	}
+				ele[type + "Event"].push(fnc);
 				G.public.addEvent(ele, type, fnc, useCapture)
 			})
 		},
 		off: function(type) {
-			return this.each(function(i, ele) {
-				G.public.removeEvent(ele, type, ele[type + "Event"]);
-				ele[type + "Event"] = null
+			return this.each(function(i, elem) {
+				if(elem[type+"Event"] && elem[type+"Event"].length){
+					for(var i=0,len =elem[type+"Event"].length;i<len;i++ ){
+						if(typeof elem[type+"Event"][i] === 'function' ){
+							G.public.removeEvent(elem, type,elem[type+"Event"][i]);
+							delete elem[type+"Event"][i];
+							elem[type+"Event"].length--;
+						}
+					}
+				}
 			});
 		},
 		hover: function(fn1, fn2) {

@@ -21,7 +21,7 @@ gjTool.js是一个js个人类库（PC端和移动端），模仿jQuery的链式�
 
 - v1.1.4
 
-- 增加touch模块，移动端触摸事件tap、longTap、 singleTap、 doubleTap、 swipe、 swipeLeft、swipeRight、 swipeUp、 swipeDown。
+- 增加touch模块，移动端触摸事件tap、longTap、 doubleTap、 swipe、 swipeLeft、swipeRight、 swipeUp、 swipeDown。
   增加自定义事件，触发trigger。
 
 - 在没有引用jq、zepto的情况下，可以使用$。废弃Gj，保留gjTool。

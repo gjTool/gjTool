@@ -23,7 +23,9 @@ Author: Gao Jin.[Mail: 861366490@qq.com](mailto:861366490@qq.com)
 
 ## Update information
 
-- v1.1.5
+- v1.1.6
+
+- Disuse method drag().
 
 - Add the touch module, the mobile end touch event:touchstart、touchmove、touchend、touchcancel、  tap、longTap、 doubleTap、 swipe、 swipeLeft、swipeRight、 swipeUp、 swipeDown. touch == on、untouch == off. Touch and untouch are only effective for touch events. Both on and off are available.  Add custom events and trigger.
 

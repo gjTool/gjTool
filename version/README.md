@@ -1,5 +1,9 @@
 ﻿# gjTool version
 
+## v1.1.6
+
+- Disuse method drag().
+
 ## v1.1.5
 
 - The mobile touch event: touch == on 、untouch == off.Touch and untouch are only effective for touch events. Both on and off are available.

@@ -121,7 +121,7 @@ For example: blur focus input load resize scroll unload click dblclick …… an
 
 Touch:
 
-touch、untouch、touchstart、 touchmove、 touchend、 touchcancel、 tap、 longTap、 doubleTap、 swipe、 swipeLeft、 swipeRigh、t swipeUp、 swipeDown
+touch、untouch、touchstart、 touchmove、 touchend、 touchcancel、 tap、 longTap、 doubleTap、 swipe、 swipeLeft、 swipeRight、 swipeUp、 swipeDown
 
 
 Ajax asynchronous request: (gjTool.ajax)

@@ -1,7 +1,7 @@
 /**gjTool.js
  * 事件相关
  * @author Gao Jin
- * @update 2018/03/16 17:53
+ * @update 2018/03/19 17:53
  */
  ;(function(G,g){
  	var n = {};
@@ -66,6 +66,9 @@
 	//DOM事件
 	G.fn.extend({
 		on: function(type, selector, fn, useCapture) {
+			if(G.public.checkTouch(type)){
+				return this.touch(type, selector, fn, useCapture);
+			}
 			if(G.isFunction(selector)) {
 				fn = selector;
 				selector = null
@@ -94,6 +97,9 @@
 			})
 		},
 		off: function(type) {
+			if(G.public.checkTouch(type)){
+				return this.untouch(type);
+			}
 			return this.each(function(i, elem) {
 				if(elem[type+"Event"] && elem[type+"Event"].length){
 					for(var i=0,len =elem[type+"Event"].length;i<len;i++ ){

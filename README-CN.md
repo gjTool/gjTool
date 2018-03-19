@@ -19,9 +19,9 @@ gjTool.js是一个js个人类库（PC端和移动端），模仿jQuery的链式�
 
 ## 更新信息
 
-- v1.1.4
+- v1.1.5
 
-- 增加touch模块，移动端触摸事件tap、longTap、 doubleTap、 swipe、 swipeLeft、swipeRight、 swipeUp、 swipeDown。
+- 增加touch模块，移动端触摸事件touchstart、touchmove、touchend、touchcancel、 tap、longTap、 doubleTap、 swipe、 swipeLeft、swipeRight、 swipeUp、 swipeDown。touch == on、untouch == off。touch和untouch只对触摸事件生效。on和off都可以。
   增加自定义事件，触发trigger。
 
 - 在没有引用jq、zepto的情况下，可以使用$。废弃Gj，保留gjTool。
@@ -103,9 +103,9 @@ on、off、hover、trigger、还有其他的普通事件、
 文档加载完成：gjTool(function(){})、gjTool(document).ready(function(){});
 例如：blur focus input load resize scroll unload click dblclick 等
 
-touch事件：
+Touch模块：
 
-touchstart touchmove touchend touchcancel tap longTap doubleTap swipe swipeLeft swipeRight swipeUp swipeDown
+touch、untouch、touchstart、 touchmove、 touchend、 touchcancel、 tap、 longTap、 doubleTap、 swipe、 swipeLeft、 swipeRigh、t swipeUp、 swipeDown
 
 
 ajax异步请求:（gjTool.ajax）

@@ -1,7 +1,7 @@
 /** 个人js类库gjTool.js（方法、插件集合）
- *  @version 1.1.5
+ *  @version 1.1.4
  *  @author Gao Jin
- *  @update 2018/03/19 17:53
+ *  @update 2018/03/16 17:53
  */
 (function(g, fn) {
 	if(typeof define === 'function' && define.amd) {
@@ -17,7 +17,7 @@
 	'use strict';
 	var gjTool = (function() {
 		if(g.console && g.console.info) {
-			console.info("gjTool.js v1.1.5. The latest version and API on GitHub:  https://github.com/gjTool/gjTool")
+			console.info("gjTool.js v1.1.4. The latest version on GitHub:  https://github.com/gjTool/gjTool")
 		}
 		//定义gjTool类
 		var G = function(selector, context) {
@@ -158,16 +158,6 @@
 		}
 		//内部基础公用方法、属性
 		G.public = {
-			//touch模块事件
- 			touchEvents: ("touchstart touchmove touchend touchcancel  tap longTap doubleTap swipe swipeLeft swipeRight swipeUp swipeDown").split(' '),
-			checkTouch : function(type){
-		 		for(var i=0,len=G.public.touchEvents.length;i<len;i++){
-		 			if(G.public.touchEvents[i] == type){
-		 				return true
-		 			}
-		 		}
-		 		return false
-		 	},
 			//判断文档加载完成后
 			DOMLoaded: function(fn) {
 				var sys = G.public.getBrowser();
@@ -2197,7 +2187,7 @@
 /**gjTool.js
  * 事件相关
  * @author Gao Jin
- * @update 2018/03/19 17:53
+ * @update 2018/03/16 17:53
  */
  ;(function(G,g){
  	var n = {};
@@ -2262,9 +2252,6 @@
 	//DOM事件
 	G.fn.extend({
 		on: function(type, selector, fn, useCapture) {
-			if(G.public.checkTouch(type)){
-				return this.touch(type, selector, fn, useCapture);
-			}
 			if(G.isFunction(selector)) {
 				fn = selector;
 				selector = null
@@ -2293,9 +2280,6 @@
 			})
 		},
 		off: function(type) {
-			if(G.public.checkTouch(type)){
-				return this.untouch(type);
-			}
 			return this.each(function(i, elem) {
 				if(elem[type+"Event"] && elem[type+"Event"].length){
 					for(var i=0,len =elem[type+"Event"].length;i<len;i++ ){
@@ -2630,7 +2614,7 @@
 /**gjTool.js
  * 移动端事件相关 touch.js
  * @author Gao Jin
- * @update 2018/03/19 23:53
+ * @update 2018/03/18 23:53
  */
  ;(function(G,g){
  	//event事件对象封装
@@ -2951,7 +2935,8 @@
  	}
  	G.fn.extend({
  		touch: function(type, selector, fn1,fn2){
- 			if(!G.public.checkTouch(type)){
+ 			
+ 			if(!checkTouch(type)){
 				return;
 			}
 			if(G.isFunction(selector) && G.isFunction(fn1) ){
@@ -2998,9 +2983,17 @@
 	 	}
  	})
 
- 	
- 	// touch事件注册
-	G.each(G.public.touchEvents, function(i, type) {
+ 	var touchEvents = ("touchstart touchmove touchend touchcancel  tap longTap doubleTap swipe swipeLeft swipeRight swipeUp swipeDown").split(' ');
+ 	var checkTouch = function(type){
+ 		for(var i=0,len=touchEvents.length;i<len;i++){
+ 			if(touchEvents[i] == type){
+ 				return true
+ 			}
+ 		}
+ 		return false
+ 	}
+ 	//touch事件注册
+	G.each(touchEvents, function(i, type) {
 		G.fn[type] = function(fn) {
 			return this.touch(type, null, fn)
 		}

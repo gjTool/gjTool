@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name=viewport content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<title>doubleTap事件测试</title>
+		<link rel="stylesheet" href="public.css" />
+	</head>
+
+	<body>
+
+		<h2>doubleTap事件测试</h1>
+		
+<hr>
+
+<div  id="log"></div>
+<button id="btn" class="btn">卸载事件</button>
+<div id="box" class="box">触发事件</div>
+
+<pre>
+
+
+	var $box = $( '#box' ),
+		$btn = $( '#btn' ),
+		log = $( '#log' )[0];
+	
+	$box.on( 'doubleTap', function(e){
+		log.innerHTML +=   (e.type+"&lt;br/&gt;");
+	});
+	
+	$btn.on( 'click', function(){
+		$box.off( 'doubleTap' );
+	});
+
+
+</pre>
+<p>请使用移动设备测试，或者用浏览器开发者手机模式测试</p>
+<script src="../dist/gjtool.js"></script>
+<script>
+
+$(function(){
+
+	var $box = $( '#box' ),
+		$btn = $( '#btn' ),
+		log = $( '#log' )[0];
+	
+	$box.on( 'doubleTap', function(e){
+		log.innerHTML += (e.type+"<br/>") ;
+	});
+	
+	$btn.on( 'click', function(){
+		$box.off( 'doubleTap' );
+	});
+
+});
+
+</script>
+
+</body>
+</html>

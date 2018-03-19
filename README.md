@@ -20,11 +20,9 @@ Author: Gao Jin. Mail: 861366490@qq.com
 
 ## Update information
 
-- v1.1.4
+- v1.1.5
 
-- Add the touch module, the mobile end touch event: tap、longTap、 doubleTap、 swipe、 swipeLeft、swipeRight、 swipeUp、 swipeDown.
-
-  Add custom events and trigger.
+- Add the touch module, the mobile end touch event:touchstart、touchmove、touchend、touchcancel、  tap、longTap、 doubleTap、 swipe、 swipeLeft、swipeRight、 swipeUp、 swipeDown. touch == on、untouch == off. Touch and untouch are only effective for touch events. Both on and off are available.  Add custom events and trigger.
 
 - Now you can use $.Disuse Gj and keep gjTool.
 
@@ -116,9 +114,9 @@ The document is loaded:：gjTool(function(){})、gjTool(document).ready(function
 
 For example: blur focus input load resize scroll unload click dblclick …… and so on.
 
-Touch events:
+Touch:
 
-touchstart touchmove touchend touchcancel tap longTap doubleTap swipe swipeLeft swipeRight swipeUp swipeDown
+touch、untouch、touchstart、 touchmove、 touchend、 touchcancel、 tap、 longTap、 doubleTap、 swipe、 swipeLeft、 swipeRigh、t swipeUp、 swipeDown
 
 
 Ajax asynchronous request: (gjTool.ajax)

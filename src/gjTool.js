@@ -1,7 +1,7 @@
 /** 个人js类库gjTool.js（方法、插件集合）
- *  @version 1.1.4
+ *  @version 1.1.5
  *  @author Gao Jin
- *  @update 2018/03/16 17:53
+ *  @update 2018/03/19 17:53
  */
 (function(g, fn) {
 	if(typeof define === 'function' && define.amd) {
@@ -17,7 +17,7 @@
 	'use strict';
 	var gjTool = (function() {
 		if(g.console && g.console.info) {
-			console.info("gjTool.js v1.1.4. The latest version on GitHub:  https://github.com/gjTool/gjTool")
+			console.info("gjTool.js v1.1.5. The latest version and API on GitHub:  https://github.com/gjTool/gjTool")
 		}
 		//定义gjTool类
 		var G = function(selector, context) {
@@ -158,6 +158,16 @@
 		}
 		//内部基础公用方法、属性
 		G.public = {
+			//touch模块事件
+ 			touchEvents: ("touchstart touchmove touchend touchcancel  tap longTap doubleTap swipe swipeLeft swipeRight swipeUp swipeDown").split(' '),
+			checkTouch : function(type){
+		 		for(var i=0,len=G.public.touchEvents.length;i<len;i++){
+		 			if(G.public.touchEvents[i] == type){
+		 				return true
+		 			}
+		 		}
+		 		return false
+		 	},
 			//判断文档加载完成后
 			DOMLoaded: function(fn) {
 				var sys = G.public.getBrowser();

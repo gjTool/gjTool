@@ -1,7 +1,7 @@
 /**gjTool.js
  * 移动端事件相关 touch.js
  * @author Gao Jin
- * @update 2018/03/18 23:53
+ * @update 2018/03/19 23:53
  */
  ;(function(G,g){
  	//event事件对象封装
@@ -322,8 +322,7 @@
  	}
  	G.fn.extend({
  		touch: function(type, selector, fn1,fn2){
- 			
- 			if(!checkTouch(type)){
+ 			if(!G.public.checkTouch(type)){
 				return;
 			}
 			if(G.isFunction(selector) && G.isFunction(fn1) ){
@@ -370,17 +369,9 @@
 	 	}
  	})
 
- 	var touchEvents = ("touchstart touchmove touchend touchcancel  tap longTap doubleTap swipe swipeLeft swipeRight swipeUp swipeDown").split(' ');
- 	var checkTouch = function(type){
- 		for(var i=0,len=touchEvents.length;i<len;i++){
- 			if(touchEvents[i] == type){
- 				return true
- 			}
- 		}
- 		return false
- 	}
- 	//touch事件注册
-	G.each(touchEvents, function(i, type) {
+ 	
+ 	// touch事件注册
+	G.each(G.public.touchEvents, function(i, type) {
 		G.fn[type] = function(fn) {
 			return this.touch(type, null, fn)
 		}

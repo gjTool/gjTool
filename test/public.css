@@ -1,0 +1,69 @@
+html,
+body {
+	height: 100%;
+	-webkit-user-select: none;
+	user-select: none;
+}
+
+h2 {
+	text-align: center;
+}
+p {
+	color:#c33;
+	position: fixed;
+	width: 260px;
+	top: 190px;
+	left: 10px;
+}
+.box {
+	width: 100px;
+	height: 100px;
+	background: #999;
+	position: absolute;
+	top: 130px;
+	right: 0px;
+	line-height: 100px;
+	text-align: center;
+	color: #000;
+}
+
+.btn {
+	position: absolute;
+	top: 80px;
+	right: 10px;
+	width: 80px;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+	border-radius:4px ;
+}
+
+#log {
+	padding: 3px;
+	background: orange;
+	color: #fff;
+	line-height: 18px;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 2;
+}
+
+pre {
+	position: absolute;
+	top: 255px;
+	left: 0;
+	background: blanchedalmond;
+	width: 100%;
+	margin: 0;
+	padding: 10px;
+	-webkit-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	font-size: 12px;
+	font-family: Monaco, Consolas, "Lucida Console", monospace;
+	z-index: 1;
+	-webkit-user-select: text ;
+	user-select: text ;
+}

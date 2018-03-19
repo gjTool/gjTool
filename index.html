@@ -1,178 +1,45 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-	<meta charset="utf-8">
-	<title>gjTool.js测试demo</title>
-	<style type="text/css">
- 		#test {
-            overflow: hidden;
-            margin: 50px auto;
-            width: 500px;
-            height: 500px;
-            border: 1px solid #ccc;
-        }
-        .one,
-        .two {
-            float: left;
-            margin: 10px;
-            width: 150px;
-            height: 150px;
-            text-align: center;
-            line-height: 150px;
-            font-size: 32px;
-        }
-        .one {
-            background-color: #ccc;
-        }
-        .two {
-            background-color: #999;
-        }
-	</style>
-</head>
-<body>
-	<div id="test">
-        <div class="one">one</div>
-        <div class="two">two</div>
-    </div>
-	<script type="text/javascript" src="dist/gjtool.js"></script>
-	<script type="text/javascript" >
-        if($.browser.pc){
-            $('#test').on("click",".one",function(e){
-                e.stopPropagation();
-                console.log(e.target)
-            })
-            
 
-            $('.two').on("abc",function(){
-                alert(1);
+	<head>
+		<meta charset="UTF-8">
+		<meta name=viewport content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<title>gjTool.js测试</title>
+	</head>
 
-            });
+	<body>
 
-            $('.two').on("click",function(e){
-                e.stopPropagation();
-                console.log(e.target)
-                $('.two').trigger('abc');
-            })
+		<h1>gjTool.js测试，有任何问题欢迎提交 <a href="https://github.com/gjTool/gjTool/issues/new" target="_blank">GitHub的issue</a></h1>
+		<a href="https://github.com/gjTool/gjTool" target="_blank" style="
+color: red;">~~~~ 如果觉得还可以请帮忙去GitHub的gjTool点个star，谢谢 *^·^* ~~~~</a>
+		<div>
+			<h3>一、Touch事件测试，请使用移动设备测试，或者用浏览器开发者手机模式测试</h3>
+			<ul>
+				<li>
+					<a href="test/touchstart.html">touchstart事件测试</a>
+				</li>
+				<li>
+					<a href="test/tap.html">tap事件测试</a>
+				</li>
+				<li>
+					<a href="test/doubleTap.html">doubleTap事件测试</a>
+				</li>
+				<li>
+					<a href="test/longTap.html">longTap事件测试</a>
+				</li>
+				<li>
+					<a href="test/swipe.html">swipe事件测试</a>
+				</li>
+			</ul>
+		</div>
+		<div>
+			<h3>二、其他测试</h3>
+			<ul>
+				<li>
+					
+				</li>
+			</ul>
+		</div>
+	</body>
 
-            setTimeout(function(){
-                $('#test').off('click');
-                $('.two').off('abc');
-                console.log('删除事件');
-            },5000)
-           setTimeout(function(){
-                $('.two').on('abc',function(){
-                    alert(1);
-                });
-                console.log('绑定事件');
-            },10000)
-        }else {
-            
-            
-            $('#test').touch("swipe",function(e){
-                console.log("滑动",e.target)
-            });
-             $('#test').touch("swipeLeft",function(e){
-                console.log("左滑",e.target)
-            });
-              $('#test').touch("swipeRight",function(e){
-                console.log("右滑",e.target)
-            });
-               $('#test').touch("swipeUp",function(e){
-                console.log("上滑",e.target)
-            });
-                $('#test').touch("swipeDown",function(e){
-                console.log("下滑",e.target)
-            });
-            
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-
-    function  attr(elem,attrName,value){
-        if(arguments.length < 2) return;
-        if(arguments.length == 2){
-            return elem.getAttribute(attrName);
-        }
-        elem.setAttribute(attrName,value);
-    }
-
-    var eventWrap={};
-    var eventIdKey='eventId'+new Date().getTime();
-    var uuid=0;
-    function bind(elem,eName,func){
-        if(elem && eName && func){
-            var eId=attr(elem,eventIdKey);
-            if(!eId){
-                eId='eid'+(++uuid);
-                attr(elem,eventIdKey,eId);
-                eventWrap[eId]={};
-            }
-            var fArr=eventWrap[eId][eName];
-            if(!fArr){
-                fArr=eventWrap[eId][eName]=[];
-            }
-            fArr.push(func);
-        }
-        trigger(elem,eName);
-    }
-    function trigger(elem,eName){
-        if(elem && eName){
-            var eId=attr(elem,eventIdKey);
-            if(eId){
-                var fArr=eventWrap[eId][eName];
-                if(fArr){                    
-                    for(var i=0;i<fArr.length;i++){
-                        if(typeof fArr[i]=='function'){
-                            fArr[i].call(elem);
-                        }
-                    }
-                }
-            }
-        }
-    }
-        
-        $(function(){
-            //测试
-            var $div=$('div.tdiv')[0];
-            bind($div,'aaa',function(){alert(111);});
-            bind($div,'aaa2',function(){alert(222);});
-            
-        }); 
-	</script>
-</body>
 </html>

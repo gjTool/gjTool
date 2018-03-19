@@ -148,7 +148,7 @@
  	}
   	//点按事件
  	touchEvent.tap =  function(elem,type,fnc){
-      var handles,startTx, startTy,startTime = 0, delayTime = 150;
+      var handles,startTx, startTy,startTime = 0, delayTime = 200;
         handles = {
             touchstart : function( e ){
             	e.preventDefault ? e.preventDefault() : e.returnValue = false;

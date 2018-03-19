@@ -8,7 +8,7 @@
 gjTool.js is a javascript class library (PC && Mobile). that mimics the chain call of jQuery, and the API usage is similar to jQuery, gjTool like a simple version of JQ.
 Support extension plug-ins. gjTool.fn.extend、gjTool.extend.
 
-Author: Gao Jin. Mail: 861366490@qq.com
+Author: Gao Jin.[Mail: 861366490@qq.com](mailto:861366490@qq.com)
 
 ## Language
 
@@ -112,7 +112,7 @@ animate、stop、show、hide、fadeIn、fadeOut、fadeTo、fadeToggle
 
 Event：
 
-on、off、hover、trigger, and other common events,
+on、off、hover、trigger, and other common events，
 The document is loaded:：gjTool(function(){})、gjTool(document).ready(function(){});
 
 For example: blur focus input load resize scroll unload click dblclick …… and so on.

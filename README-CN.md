@@ -7,7 +7,7 @@
 gjTool.js是一个js个人类库（PC端和移动端），模仿jQuery的链式调用，API用法和jQuery的差不多，相当于简版JQ。
 支持extend方法扩展，在gjTool上增加属性、方法。gjTool.fn.extend、gjTool.extend。
 
-作者：Gao Jin  邮箱: 861366490@qq.com
+作者：Gao Jin  [邮箱: 861366490@qq.com](mailto:861366490@qq.com)
 
 ## 语言
 
@@ -102,7 +102,7 @@ animate、stop、show、hide、fadeIn、fadeOut、fadeTo、fadeToggle
 
 事件：
 
-on、off、hover、trigger、还有其他的普通事件、
+on、off、hover、trigger、还有其他的普通事件，
 文档加载完成：gjTool(function(){})、gjTool(document).ready(function(){});
 例如：blur focus input load resize scroll unload click dblclick 等
 

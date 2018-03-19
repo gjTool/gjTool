@@ -3,6 +3,7 @@ body {
 	height: 100%;
 	-webkit-user-select: none;
 	user-select: none;
+	overflow: hidden;
 }
 
 h2 {

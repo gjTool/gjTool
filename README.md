@@ -19,7 +19,7 @@ Author: Gao Jin. Mail: 861366490@qq.com
 
 ## gjTool Test
 
-- [gjTool测试](https://gjtool.github.io/gjTool/index.html)
+- [gjTool Test](https://gjtool.github.io/gjTool/index.html)
 
 ## Update information
 

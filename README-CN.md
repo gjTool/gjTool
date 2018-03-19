@@ -16,6 +16,9 @@ gjTool.js是一个js个人类库（PC端和移动端），模仿jQuery的链式�
 
 - [中文](README-CN.md)
 
+## gjTool 测试
+
+- [gjTool测试](https://gjtool.github.io/gjTool/index.html)
 
 ## 更新信息
 

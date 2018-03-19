@@ -19,7 +19,7 @@ p {
 .box {
 	width: 100px;
 	height: 100px;
-	background: #999;
+	background: blanchedalmond;
 	position: absolute;
 	top: 130px;
 	right: 0px;
@@ -53,18 +53,19 @@ p {
 pre {
 	position: absolute;
 	top: 255px;
-	left: 0;
-	background: blanchedalmond;
+	left: 10px;
+	background: #f0f0f0;;
 	width: 100%;
 	margin: 0;
-	padding: 10px;
+	padding: 20px 0px 20px 20px;
 	-webkit-box-sizing: border-box;
 	-ms-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
-	font-size: 12px;
+	font-size: 14px;
 	font-family: Monaco, Consolas, "Lucida Console", monospace;
 	z-index: 1;
 	-webkit-user-select: text ;
 	user-select: text ;
+	border-left:2px solid olivedrab;
 }

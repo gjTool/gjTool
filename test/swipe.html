@@ -18,32 +18,30 @@
 <button id="btn" class="btn">卸载事件</button>
 <div id="box" class="box">触发事件</div>
 
-<pre>
-	
-	var $box = $( '#box' ),
-		$btn = $( '#btn' ),
-		log = $( 'log' )[0];
-	
-	$box.on( 'swipeLeft', function( e ){
-		log.innerHTML += (e.type+"&lt;br/&gt;");
-	});
-	$box.on( 'swipeRight', function( e ){
-		log.innerHTML += (e.type+"&lt;br/&gt;");
-	});
-	$box.on( 'swipeUp', function( e ){
-		log.innerHTML += (e.type+"&lt;br/&gt;");
-	});
-	$box.on( 'swipeDown', function( e ){
-		log.innerHTML += (e.type+"&lt;br/&gt;");
-	});
-	
-	$btn.on( 'click', function(){
-		$box.off( 'swipeLeft');
-		$box.off( 'swipeRight');
-		$box.off( 'swipeUp');
-		$box.off( 'swipeDown');
-	});
+<pre>	
+var $box = $( '#box' ),
+	$btn = $( '#btn' ),
+	log = $( 'log' )[0];
 
+$box.on( 'swipeLeft', function( e ){
+	log.innerHTML += (e.type+"&lt;br/&gt;");
+});
+$box.on( 'swipeRight', function( e ){
+	log.innerHTML += (e.type+"&lt;br/&gt;");
+});
+$box.on( 'swipeUp', function( e ){
+	log.innerHTML += (e.type+"&lt;br/&gt;");
+});
+$box.on( 'swipeDown', function( e ){
+	log.innerHTML += (e.type+"&lt;br/&gt;");
+});
+
+$btn.on( 'click', function(){
+	$box.off( 'swipeLeft');
+	$box.off( 'swipeRight');
+	$box.off( 'swipeUp');
+	$box.off( 'swipeDown');
+});
 </pre>
 <p>请使用移动设备测试，或者用浏览器开发者手机模式测试</p>
 <script src="../dist/gjtool.js"></script>

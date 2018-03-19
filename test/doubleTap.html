@@ -19,21 +19,17 @@
 <div id="box" class="box">触发事件</div>
 
 <pre>
+var $box = $( '#box' ),
+	$btn = $( '#btn' ),
+	log = $( '#log' )[0];
 
+$box.on( 'doubleTap', function(e){
+	log.innerHTML +=   (e.type+"&lt;br/&gt;");
+});
 
-	var $box = $( '#box' ),
-		$btn = $( '#btn' ),
-		log = $( '#log' )[0];
-	
-	$box.on( 'doubleTap', function(e){
-		log.innerHTML +=   (e.type+"&lt;br/&gt;");
-	});
-	
-	$btn.on( 'click', function(){
-		$box.off( 'doubleTap' );
-	});
-
-
+$btn.on( 'click', function(){
+	$box.off( 'doubleTap' );
+});
 </pre>
 <p>请使用移动设备测试，或者用浏览器开发者手机模式测试</p>
 <script src="../dist/gjtool.js"></script>

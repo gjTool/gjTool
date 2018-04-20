@@ -1,7 +1,7 @@
 /**gjTool.js
  * 移动端事件相关 touch.js
  * @author Gao Jin
- * @update 2018/03/19 23:53
+ * @update 2018/04/20 23:53
  */
  ;(function(G,g){
  	//event事件对象封装
@@ -59,7 +59,6 @@
  		touchstart : function(elem,type,fnc){
            var handles = {
                 touchstart : function( e ){
-                	e.preventDefault ? e.preventDefault() : e.returnValue = false;
                     fnc(new n.TouchEvent(e,touchstart)); 
                 }
             };
@@ -68,7 +67,6 @@
 	 	touchmove :function(elem,type,fnc){
 	 		var handles = {
                 touchmove : function( e ){
-                	e.preventDefault ? e.preventDefault() : e.returnValue = false;
                     fnc(new n.TouchEvent(e,touchmove)); 
                 }
             };
@@ -368,8 +366,8 @@
 			})
 	 	}
  	})
-
- 	
+ 	//touch模块事件
+    G.public.touchEvents = ("touchstart touchmove touchend touchcancel  tap longTap doubleTap swipe swipeLeft swipeRight swipeUp swipeDown").split(' '),
  	// touch事件注册
 	G.each(G.public.touchEvents, function(i, type) {
 		G.fn[type] = function(fn) {
@@ -377,3 +375,53 @@
 		}
 	});
  })(gjTool,typeof window !== 'undefined' ? window : this)
+
+ function Gesture(el) {
+    var obj = {}; //定义一个对象
+    var istouch = false;
+    var start = [];
+    var $scale = 1;
+    var $rotation = 0;
+    el.addEventListener("touchstart", function(e) {
+        if(e.targetTouches.length >= 2) { //判断是否有两个点在屏幕上
+            e.preventDefault();
+            istouch = true;
+            start = e.targetTouches; //得到第一组两个点
+            e.scale = $scale;
+            e.rotation = $rotation;
+            obj.gesturestart && obj.gesturestart.call(el,e); //执行gesturestart方法
+        };
+    }, false);
+    document.addEventListener("touchmove", function(e) {
+        if(e.targetTouches.length >= 2 && istouch) {
+            e.preventDefault();
+            var now = e.targetTouches; //得到第二组两个点
+            var scale = getDistance(now[0], now[1]) / getDistance(start[0], start[1]); //得到缩放比例，getDistance是勾股定理的一个方法
+            var rotation = getAngle(now[0], now[1]) - getAngle(start[0], start[1]); //得到旋转角度，getAngle是得到夹角的一个方法
+            e.scale = $scale = scale.toFixed(2);
+            e.rotation = $rotation = rotation.toFixed(2);
+            obj.gesturechange && obj.gesturechange.call(el, e); //执行gesturemove方法
+        };
+    }, false);
+    document.addEventListener("touchend", function(e) {
+        if(istouch) {
+            e.preventDefault();
+            istouch = false;
+            e.scale = $scale;
+            e.rotation = $rotation;
+            obj.gestureend && obj.gestureend.call(el,e); //执行gestureend方法
+        };
+    }, false);
+    return obj;
+};
+
+function getDistance(p1, p2) {
+    var x = p2.pageX - p1.pageX,
+        y = p2.pageY - p1.pageY;
+    return Math.sqrt((x * x) + (y * y));
+};
+function getAngle(p1, p2) {
+    var x = p1.pageX - p2.pageX,
+        y = p1.pageY - p2.pageY;
+    return Math.atan2(y, x) * 180 / Math.PI;
+};

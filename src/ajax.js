@@ -6,16 +6,18 @@
  ;(function(G,g){
 	G.extend({
 		ajax: function(obj) {
-			var xmlhttp, type, url, async, dataType, data, cache, ifModified;
+			var xmlhttp, type, url, async, dataType, data, cache, ifModified,timeout,mimeType;
 			if(!G.isObject(obj)) {
 				return false
 			}
 			type = obj.type == undefined ? 'get' : obj.type.toUpperCase();
 			url = obj.url == undefined ? G.url : obj.url;
-			async = obj.async == undefined ? true : obj.type;
+			async = obj.async == undefined ? true : obj.async;
 			dataType = obj.dataType == undefined ? 'text' : obj.dataType.toUpperCase();
 			data = obj.data == undefined ? {} : obj.data;
-
+			timeout = obj.timeout == undefined ? "" : obj.timeout;
+			mimeType = obj.mimeType == undefined ? "" : obj.mimeType; // 'text/plain; charset=x-user-defined'
+			
 			var formatParams = function() {
 				if(G.isObject(obj)) {
 					var str = "";
@@ -66,10 +68,21 @@
 			} else {
 				formatParams();
 				xmlhttp.open(type, url, async);
+				if(mimeType !== ""){
+					xhr.overrideMimeType(mimeType);
+				}
 				xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded; charset=utf-8");
 				if(G.isFunction(obj.beforeSend)) {
 					obj.beforeSend(xmlhttp)
 				}
+				//超时
+				if(timeout !== ""){
+					xmlhttp.ontimeout = function(){
+					    console.log('The request timed out.');
+					}
+					xmlhttp.timeout = timeout;
+				}
+				
 				xmlhttp.send(data);
 				var start = G.now();
 				xmlhttp.onreadystatechange = function() {

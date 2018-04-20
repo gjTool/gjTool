@@ -158,8 +158,6 @@
 		}
 		//内部基础公用方法、属性
 		G.public = {
-			//touch模块事件
- 			touchEvents: ("touchstart touchmove touchend touchcancel  tap longTap doubleTap swipe swipeLeft swipeRight swipeUp swipeDown").split(' '),
 			checkTouch : function(type){
 		 		for(var i=0,len=G.public.touchEvents.length;i<len;i++){
 		 			if(G.public.touchEvents[i] == type){

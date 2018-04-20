@@ -1,7 +1,7 @@
 /** 个人js类库gjTool.js（方法、插件集合）
- *  @version 1.1.5
+ *  @version 1.1.8
  *  @author Gao Jin
- *  @update 2018/03/19 17:53
+ *  @update 2018/04/20 22:53
  */
 (function(g, fn) {
 	if(typeof define === 'function' && define.amd) {
@@ -17,7 +17,7 @@
 	'use strict';
 	var gjTool = (function() {
 		if(g.console && g.console.info) {
-			console.info("gjTool.js v1.1.5. The latest version and API on GitHub:  https://github.com/gjTool/gjTool")
+			console.info("gjTool.js v1.1.8 by Gao Jin. The latest version and API from: http://www.gjtool.cn/gjToolAPI")
 		}
 		//定义gjTool类
 		var G = function(selector, context) {
@@ -68,7 +68,9 @@
 				//html字符串
 				if(/^</.test(selector)) {
 					return this.toArray(G.public.parseHtml(selector));
-				} // div.test 、.div.abc
+				}
+				
+				 // div.test 、.div.abc
 				else if(/[A-Za-z0-9]+\./.test(selector.trim()) && !/\s/.test(selector.trim()) && !/,/.test(selector.trim())) {
 					return this.toArray(G.public.classSelector(selector))
 				} // input[type=button]
@@ -86,8 +88,10 @@
 				else if(!/\s/.test(selector.trim()) && !/,/.test(selector.trim()) && /:/.test(selector.trim())) {
 					return this.toArray(G.public.descendantSelector(node, selector));
 				}
+				
 				//群组选择器或包含选择器或基本选择器
 				else {
+
 					return this.toArray(G.public.groupSelector(node, selector))
 				}
 			}
@@ -116,8 +120,9 @@
 		}
 		//封装getElementsByClassName
 		if(g.document && !g.document.getElementsByClassName) {
-			g.document.getElementsByClassName = function(className, element) {
+			document.getElementsByClassName = function(className, element) {
 				var children = (element || document).getElementsByTagName('*');
+				console.log(element,className)
 				var elements = [];
 				for(var i = 0, len = children.length; i < len; i++) {
 					var classNames = children[i].className.split(' ');
@@ -128,6 +133,7 @@
 						}
 					}
 				}
+				console.log(elements)
 				return elements
 			}
 		}
@@ -430,7 +436,6 @@
 					} else {
 						// 基本选择器
 						arr = G.public.basicSelector(node, subselector);
-
 					}
 					if(arr) {
 						if(!arr.length) {
@@ -442,7 +447,6 @@
 						}
 					}
 				});
-
 				return G.unique(results)
 			},
 			//包含选择器 空格隔开
@@ -463,7 +467,10 @@
 				if(m[1]) { // id选择器
 					return document.getElementById(m[1])
 				} else if(m[2]) { // class选择器
-					return document.getElementsByClassName(m[2], node)
+					if(!g.document.getElementsByClassName){
+						return document.getElementsByClassName(m[2], node)
+					}
+					return node.getElementsByClassName(m[2])
 				} else if(m[3]) { //通配符选择器
 					return node.getElementsByTagName(m[3])
 				} else if(m[4]) { //标签选择器

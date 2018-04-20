@@ -6,7 +6,7 @@
  ;(function(G,g){
 	G.extend({
 		ajax: function(obj) {
-			var xmlhttp, type, url, async, dataType, data, cache, ifModified,timeout,mimeType;
+			var xmlhttp, type, url, async, dataType, data, cache, ifModified,timeout,mimeType,status;
 			if(!G.isObject(obj)) {
 				return false
 			}
@@ -62,23 +62,27 @@
 					xmlhttp.time = G.now() - start;
 					oHead.removeChild(ele);
 					g[callbackName] = null;
+					status = 'success';
 					obj.success && obj.success(json, xmlhttp)
+					obj.complete && obj.complete(json, xmlhttp,status)
 				}
 				return
 			} else {
 				formatParams();
-				xmlhttp.open(type, url, async);
 				if(mimeType !== ""){
-					xhr.overrideMimeType(mimeType);
+					xmlhttp.open(type, url, true);
+					xmlhttp.overrideMimeType(mimeType);
+				}else {
+					xmlhttp.open(type, url, async);
+					xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded; charset=utf-8");
 				}
-				xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded; charset=utf-8");
 				if(G.isFunction(obj.beforeSend)) {
 					obj.beforeSend(xmlhttp)
 				}
 				//超时
 				if(timeout !== ""){
 					xmlhttp.ontimeout = function(){
-					    console.log('The request timed out.');
+					    status = 'timeout';
 					}
 					xmlhttp.timeout = timeout;
 				}
@@ -89,7 +93,9 @@
 					xmlhttp.time = G.now() - start;
 					var res = "";
 					if(xmlhttp.readyState != 4) {
+						status = 'error';
 						obj.error && obj.error("请求失败", xmlhttp);
+						obj.complete && obj.complete("请求失败", xmlhttp,status)
 						return
 					}
 					if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -122,7 +128,9 @@
 								res = xmlhttp.responseText
 							}
 						}
-						obj.success && obj.success(res, xmlhttp)
+						status = 'success';
+						obj.success && obj.success(res,xmlhttp)
+						obj.complete && obj.complete(res,xmlhttp,status)
 					}
 				}
 			}

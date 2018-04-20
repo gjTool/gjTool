@@ -1,7 +1,7 @@
 /** 个人js类库gjTool.js（方法、插件集合）
- *  @version 1.1.5
+ *  @version 1.1.8
  *  @author Gao Jin
- *  @update 2018/03/19 17:53
+ *  @update 2018/04/20 22:53
  */
 (function(g, fn) {
 	if(typeof define === 'function' && define.amd) {
@@ -17,7 +17,7 @@
 	'use strict';
 	var gjTool = (function() {
 		if(g.console && g.console.info) {
-			console.info("gjTool.js v1.1.5. The latest version and API on GitHub:  https://github.com/gjTool/gjTool")
+			console.info("gjTool.js v1.1.8 by Gao Jin. The latest version and API from: http://www.gjtool.cn/gjToolAPI")
 		}
 		//定义gjTool类
 		var G = function(selector, context) {
@@ -68,7 +68,9 @@
 				//html字符串
 				if(/^</.test(selector)) {
 					return this.toArray(G.public.parseHtml(selector));
-				} // div.test 、.div.abc
+				}
+				
+				 // div.test 、.div.abc
 				else if(/[A-Za-z0-9]+\./.test(selector.trim()) && !/\s/.test(selector.trim()) && !/,/.test(selector.trim())) {
 					return this.toArray(G.public.classSelector(selector))
 				} // input[type=button]
@@ -86,8 +88,10 @@
 				else if(!/\s/.test(selector.trim()) && !/,/.test(selector.trim()) && /:/.test(selector.trim())) {
 					return this.toArray(G.public.descendantSelector(node, selector));
 				}
+				
 				//群组选择器或包含选择器或基本选择器
 				else {
+
 					return this.toArray(G.public.groupSelector(node, selector))
 				}
 			}
@@ -116,8 +120,9 @@
 		}
 		//封装getElementsByClassName
 		if(g.document && !g.document.getElementsByClassName) {
-			g.document.getElementsByClassName = function(className, element) {
+			document.getElementsByClassName = function(className, element) {
 				var children = (element || document).getElementsByTagName('*');
+				console.log(element,className)
 				var elements = [];
 				for(var i = 0, len = children.length; i < len; i++) {
 					var classNames = children[i].className.split(' ');
@@ -128,6 +133,7 @@
 						}
 					}
 				}
+				console.log(elements)
 				return elements
 			}
 		}
@@ -158,8 +164,6 @@
 		}
 		//内部基础公用方法、属性
 		G.public = {
-			//touch模块事件
- 			touchEvents: ("touchstart touchmove touchend touchcancel  tap longTap doubleTap swipe swipeLeft swipeRight swipeUp swipeDown").split(' '),
 			checkTouch : function(type){
 		 		for(var i=0,len=G.public.touchEvents.length;i<len;i++){
 		 			if(G.public.touchEvents[i] == type){
@@ -432,7 +436,6 @@
 					} else {
 						// 基本选择器
 						arr = G.public.basicSelector(node, subselector);
-
 					}
 					if(arr) {
 						if(!arr.length) {
@@ -444,7 +447,6 @@
 						}
 					}
 				});
-
 				return G.unique(results)
 			},
 			//包含选择器 空格隔开
@@ -465,7 +467,10 @@
 				if(m[1]) { // id选择器
 					return document.getElementById(m[1])
 				} else if(m[2]) { // class选择器
-					return document.getElementsByClassName(m[2], node)
+					if(!g.document.getElementsByClassName){
+						return document.getElementsByClassName(m[2], node)
+					}
+					return node.getElementsByClassName(m[2])
 				} else if(m[3]) { //通配符选择器
 					return node.getElementsByTagName(m[3])
 				} else if(m[4]) { //标签选择器
@@ -906,16 +911,18 @@
  ;(function(G,g){
 	G.extend({
 		ajax: function(obj) {
-			var xmlhttp, type, url, async, dataType, data, cache, ifModified;
+			var xmlhttp, type, url, async, dataType, data, cache, ifModified,timeout,mimeType,status;
 			if(!G.isObject(obj)) {
 				return false
 			}
 			type = obj.type == undefined ? 'get' : obj.type.toUpperCase();
 			url = obj.url == undefined ? G.url : obj.url;
-			async = obj.async == undefined ? true : obj.type;
+			async = obj.async == undefined ? true : obj.async;
 			dataType = obj.dataType == undefined ? 'text' : obj.dataType.toUpperCase();
 			data = obj.data == undefined ? {} : obj.data;
-
+			timeout = obj.timeout == undefined ? "" : obj.timeout;
+			mimeType = obj.mimeType == undefined ? "" : obj.mimeType; // 'text/plain; charset=x-user-defined'
+			
 			var formatParams = function() {
 				if(G.isObject(obj)) {
 					var str = "";
@@ -960,23 +967,40 @@
 					xmlhttp.time = G.now() - start;
 					oHead.removeChild(ele);
 					g[callbackName] = null;
+					status = 'success';
 					obj.success && obj.success(json, xmlhttp)
+					obj.complete && obj.complete(json, xmlhttp,status)
 				}
 				return
 			} else {
 				formatParams();
-				xmlhttp.open(type, url, async);
-				xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded; charset=utf-8");
+				if(mimeType !== ""){
+					xmlhttp.open(type, url, true);
+					xmlhttp.overrideMimeType(mimeType);
+				}else {
+					xmlhttp.open(type, url, async);
+					xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded; charset=utf-8");
+				}
 				if(G.isFunction(obj.beforeSend)) {
 					obj.beforeSend(xmlhttp)
 				}
+				//超时
+				if(timeout !== ""){
+					xmlhttp.ontimeout = function(){
+					    status = 'timeout';
+					}
+					xmlhttp.timeout = timeout;
+				}
+				
 				xmlhttp.send(data);
 				var start = G.now();
 				xmlhttp.onreadystatechange = function() {
 					xmlhttp.time = G.now() - start;
 					var res = "";
 					if(xmlhttp.readyState != 4) {
+						status = 'error';
 						obj.error && obj.error("请求失败", xmlhttp);
+						obj.complete && obj.complete("请求失败", xmlhttp,status)
 						return
 					}
 					if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -1009,7 +1033,9 @@
 								res = xmlhttp.responseText
 							}
 						}
-						obj.success && obj.success(res, xmlhttp)
+						status = 'success';
+						obj.success && obj.success(res,xmlhttp)
+						obj.complete && obj.complete(res,xmlhttp,status)
 					}
 				}
 			}
@@ -1642,7 +1668,9 @@
 							ele[i] = name[i]
 						} else {
 							var str = name[i].toString();
-							if(str.indexOf('%') == -1 && str.indexOf('px') == -1 && str.indexOf('em') == -1 && str.indexOf('rem') == -1 && str.indexOf('vw') == -1 && str.indexOf('vh') == -1&& str.indexOf('vmin') == -1 && str.indexOf('vmax') == -1) {
+							if(i.indexOf('transform') != -1 || i.indexOf('-webkit-') != -1 ){
+								ele.style[i] = name[i];
+							}else if(str.indexOf('%') == -1 && str.indexOf('px') == -1 && str.indexOf('em') == -1 && str.indexOf('rem') == -1 && str.indexOf('vw') == -1 && str.indexOf('vh') == -1&& str.indexOf('vmin') == -1 && str.indexOf('vmax') == -1) {
 								ele.style[i] = name[i] + "px";
 							}else {
 								ele.style[i] = name[i];
@@ -2581,12 +2609,12 @@
 /**gjTool.js
  * 移动端事件相关 touch.js
  * @author Gao Jin
- * @update 2018/03/19 23:53
+ * @update 2018/04/20 23:53
  */
  ;(function(G,g){
  	//event事件对象封装
  	var n = {};
-	n.TouchEvent = function (event,type){
+	n.TouchEvent = function (event,type,scale,rotate){
 		var e = g.event || event;
 		this.preventDefault = function() {
 			e.preventDefault ? e.preventDefault() : e.returnValue = false
@@ -2609,6 +2637,8 @@
 		this.targetTouches = e.targetTouches;
 		this.changedTouches = e.changedTouches;
 		this.originalType = e.type;
+		this.rotate = rotate;
+		this.scale = scale;
 		this.originalEvent = e;
 	}
  	var touchstart, touchmove,touchend;    
@@ -2631,7 +2661,11 @@
     	}
         for(var item in handles){
         	elem[type+"Touch"][item] = handles[item];
-        	G.public.addEvent(elem,item,handles[item]);
+        	if((type === "pinch" || type === "pinchin" || type === "pinchout" || type === "pinchend" ) && item === "touchstart"  ){
+        		G.public.addEvent(document,item,handles[item],false);
+        	}else {
+        		G.public.addEvent(elem,item,handles[item]);
+        	}
         }
     }
  	// touch事件封装
@@ -2639,7 +2673,6 @@
  		touchstart : function(elem,type,fnc){
            var handles = {
                 touchstart : function( e ){
-                	e.preventDefault ? e.preventDefault() : e.returnValue = false;
                     fnc(new n.TouchEvent(e,touchstart)); 
                 }
             };
@@ -2648,7 +2681,6 @@
 	 	touchmove :function(elem,type,fnc){
 	 		var handles = {
                 touchmove : function( e ){
-                	e.preventDefault ? e.preventDefault() : e.returnValue = false;
                     fnc(new n.TouchEvent(e,touchmove)); 
                 }
             };
@@ -2673,7 +2705,7 @@
  	};
  	
  	//长按事件
- 	touchEvent.longTap = function(elem,type,fnc1,fnc2){
+ 	touchEvent.press = function(elem,type,fnc1,fnc2){
 
  		var startTx, startTy, lTapTimer,isMove = false,startTime = 0, delayTime = 750,
 
@@ -2683,7 +2715,7 @@
             },
 	   	handles = {
 	   		touchstart : function( e ){
-	   			e.preventDefault ? e.preventDefault() : e.returnValue = false;
+	   			
                 if( lTapTimer ){
                     clearTimer();
                 }
@@ -2701,7 +2733,7 @@
             },
 
             touchmove : function( e ){
-	   			e.preventDefault ? e.preventDefault() : e.returnValue = false;
+	   			
                 var touches = e.targetTouches[0],
                     moveTx = touches.clientX,
                     moveTy = touches.clientY;
@@ -2731,14 +2763,14 @@
       var handles,startTx, startTy,startTime = 0, delayTime = 200;
         handles = {
             touchstart : function( e ){
-            	e.preventDefault ? e.preventDefault() : e.returnValue = false;
+            
                 startTime = Date.now(); 
 				var touches = e.targetTouches[0];
 			    startTx = touches.clientX;
 			    startTy = touches.clientY;
             },
             touchend : function( e ){
-            	e.preventDefault ? e.preventDefault() : e.returnValue = false;
+            	
                 var touches = e.changedTouches[0],
                     endTx = touches.clientX,
                     endTy = touches.clientY,
@@ -2755,7 +2787,7 @@
  	}
 
  	//双击事件
- 	touchEvent.doubleTap = function(elem,type,fnc){
+ 	touchEvent.doubletap = function(elem,type,fnc){
  		var firstTouchEnd = true,
             lastTime = 0,
             lastTx = null,
@@ -2765,7 +2797,7 @@
             handles = {
 
                 touchstart : function( e ){
-                	e.preventDefault ? e.preventDefault() : e.returnValue = false;
+                	
                     if( dTapTimer ){
                         clearTimeout( dTapTimer );
                         dTapTimer = null;
@@ -2818,27 +2850,27 @@
  		swipeEvent(elem,type,fnc)
  	}
  	//左滑
- 	touchEvent.swipeLeft = function(elem,type,fnc){
+ 	touchEvent.swipeleft = function(elem,type,fnc){
  		swipeEvent(elem,type,fnc)
  	}
  	//右滑
- 	touchEvent.swipeRight = function(elem,type,fnc){
+ 	touchEvent.swiperight = function(elem,type,fnc){
  		swipeEvent(elem,type,fnc)
  	}
  	//上滑
- 	touchEvent.swipeUp = function(elem,type,fnc){
+ 	touchEvent.swipeup = function(elem,type,fnc){
  		swipeEvent(elem,type,fnc)
  	}
  	//下滑
- 	touchEvent.swipeDown = function(elem,type,fnc){
+ 	touchEvent.swipedown = function(elem,type,fnc){
  		swipeEvent(elem,type,fnc)
  	}
+ 	//滑动事件
  	var swipeEvent = function(elem,type,fnc){
  		var startTx, startTy, isTouchMove,
  		 handles = {
-
                 touchstart : function( e ){
-                	e.preventDefault ? e.preventDefault() : e.returnValue = false;
+                	
                     var touches = e.touches[0];
 
                     startTx = touches.clientX;
@@ -2847,7 +2879,7 @@
                 },
 
                 touchmove : function( e ){
-                	e.preventDefault ? e.preventDefault() : e.returnValue = false;
+                	
                     isTouchMove = true;
                 },
 
@@ -2866,13 +2898,13 @@
                     if( Math.abs(distanceX) >= Math.abs(distanceY) ){
                         if( distanceX > 20 ){
                             isSwipe = true;
-                            if( type === 'swipeLeft' ){
+                            if( type === 'swipeleft' ){
                                 fnc.call( this, new n.TouchEvent(e,type) );
                             }
                         }
                         else if( distanceX < -20 ){
                             isSwipe = true;
-                            if( type === 'swipeRight' ){
+                            if( type === 'swiperight' ){
                                 fnc.call( this, new n.TouchEvent(e,type));
                             }
                         }
@@ -2880,13 +2912,13 @@
                     else{
                         if( distanceY > 20 ){
                             isSwipe = true;
-                            if( type === 'swipeUp' ){
+                            if( type === 'swipeup' ){
                                 fnc.call( this, new n.TouchEvent(e,type) );
                             }
                         }
                         else if( distanceY < -20 ){
                             isSwipe = true;
-                            if( type === 'swipeDown' ){
+                            if( type === 'swipedown' ){
                                 fnc.call( this, new n.TouchEvent(e,type));
                             }
                         }
@@ -2900,6 +2932,97 @@
             };
         addEvent(elem,type,handles);
  	}
+ 	
+ 	//捏合手势开始
+ 	touchEvent.pinchstart = function(elem,type,fnc){
+ 		pinchEvent(elem,type,fnc)
+ 	}
+ 	//捏合手势结束
+ 	touchEvent.pinchend = function(elem,type,fnc){
+ 		pinchEvent(elem,type,fnc)
+ 	}
+ 	//捏合手势
+ 	touchEvent.pinch = function(elem,type,fnc){
+ 		pinchEvent(elem,type,fnc)
+ 	}
+ 	//捏合手势放大
+ 	touchEvent.pinchout = function(elem,type,fnc){
+ 		pinchEvent(elem,type,fnc)
+ 	}
+ 	//捏合手势缩小
+ 	touchEvent.pinchin = function(elem,type,fnc){
+ 		pinchEvent(elem,type,fnc)
+ 	}
+ 
+ 	//捏合手势事件
+ 	var pinchEvent =  function(elem,type,fnc){
+ 		var istouch = false;
+		var start = [];
+		var $scale = 1;
+		var $rotation = 0;
+		function getDistance(p1, p2) {
+			var x = p2.pageX - p1.pageX,
+				y = p2.pageY - p1.pageY;
+			return Math.sqrt((x * x) + (y * y));
+		};
+		function getAngle(p1, p2) {
+			var x = p1.pageX - p2.pageX,
+				y = p1.pageY - p2.pageY;
+			return Math.atan2(y, x) * 180 / Math.PI;
+		};
+        handles = {
+            touchstart : function( e ){
+            	if(e.targetTouches.length >= 2) { //判断是否有两个点在屏幕上
+            		e.preventDefault ? e.preventDefault() : e.returnValue = false
+					istouch = true;
+					start = e.targetTouches; //得到第一组两个点
+					e.scale = $scale;
+					e.rotation = $rotation;
+					if( type === 'pinchstart' ){
+                        fnc.call( this, new n.TouchEvent(e,type,e.scale,e.rotation) );
+                    }
+				};
+            },
+            touchmove : function( e ){
+            	if(e.targetTouches.length >= 2 && istouch) {
+            		e.preventDefault ? e.preventDefault() : e.returnValue = false
+					var now = e.targetTouches; //得到第二组两个点
+					var scale = getDistance(now[0], now[1]) / getDistance(start[0], start[1]); //得到缩放比例，getDistance是勾股定理的一个方法
+					var rotation = getAngle(now[0], now[1]) - getAngle(start[0], start[1]); //得到旋转角度，getAngle是得到夹角的一个方法
+					e.scale = scale.toFixed(2);
+					e.rotation = rotation.toFixed(2);
+					if( type === 'pinch' ){
+                        fnc.call( this, new n.TouchEvent(e,type,e.scale,e.rotation) );
+                    }
+                    if($scale < e.scale){
+                    	if( type === 'pinchout' ){
+	                        fnc.call( this, new n.TouchEvent(e,type,e.scale,e.rotation) );
+	                    }
+                    }
+                    if($scale > e.scale){
+                    	if( type === 'pinchin' ){
+	                        fnc.call( this, new n.TouchEvent(e,type,e.scale,e.rotation) );
+	                    }
+                    }
+                    $scale = e.scale;
+                    $rotation = e.rotation;
+				};
+            },
+            touchend : function( e ){
+            	if(istouch) {
+					istouch = false;
+					e.scale = $scale;
+					e.rotation = $rotation;
+					if( type === 'pinchend' ){
+                        fnc.call( this, new n.TouchEvent(e,type,e.scale,e.rotation) );
+                    }
+				};
+            }
+        };
+        addEvent(elem,type,handles);
+ 	}
+ 	
+
  	G.fn.extend({
  		touch: function(type, selector, fn1,fn2){
  			if(!G.public.checkTouch(type)){
@@ -2940,16 +3063,21 @@
 				if(elem[type+"Touch"]){
 					for(var i in elem[type+"Touch"] ){
 						if(typeof elem[type+"Touch"][i] === 'function' ){
-							G.public.removeEvent(elem, i, elem[type+"Touch"][i]);
-							delete elem[type+"Touch"][i];
+							if((type === "pinch" || type === "pinchin" || type === "pinchout" || type === "pinchend" ) && item === "touchstart"  ){
+				        		G.public.removeEvent(document,item,handles[item],false);
+				        		delete document[type+"Touch"][i];
+				        	}else {
+				        		G.public.removeEvent(elem,item,handles[item]);
+				        		delete elem[type+"Touch"][i];
+				        	}
 						}
 					}
 				}
 			})
 	 	}
  	})
-
- 	
+ 	//touch模块事件
+    G.public.touchEvents = ("touchstart touchmove touchend touchcancel press tap doubletap swipe swipeleft swiperight swipeup swipedown pinchend pinchstart pinchin pinchout pinch").split(' '),
  	// touch事件注册
 	G.each(G.public.touchEvents, function(i, type) {
 		G.fn[type] = function(fn) {

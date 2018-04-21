@@ -125,4 +125,4 @@ Such as:extend、 each、map、browser、now、getTime、getdate、arrSort、clo
 
 Plug-in unit：
 
-Drag and drop elements: gjTool ("#test").drag (); prohibit drag and drop gjTool ("#test").nodrag (), and allow drag and drop gjTool ("#test").nodrag (false);
+

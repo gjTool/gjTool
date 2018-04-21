@@ -112,4 +112,4 @@ extend、 each、map、browser、now、getTime、getdate、arrSort、cloneArr、
 
 插件：
 
-拖拽元素： gjTool("#test").drag(); 禁止拖拽gjTool("#test").nodrag(),允许拖拽gjTool("#test").nodrag(false);
+

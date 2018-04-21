@@ -23,24 +23,24 @@ var $box = $( '#box' ),
 	$btn = $( '#btn' ),
 	log = $( 'log' )[0];
 
-$box.on( 'swipeLeft', function( e ){
+$box.on( 'swipeleft', function( e ){
 	log.innerHTML += (e.type+"&lt;br/&gt;");
 });
-$box.on( 'swipeRight', function( e ){
+$box.on( 'swiperight', function( e ){
 	log.innerHTML += (e.type+"&lt;br/&gt;");
 });
-$box.on( 'swipeUp', function( e ){
+$box.on( 'swipeup', function( e ){
 	log.innerHTML += (e.type+"&lt;br/&gt;");
 });
-$box.on( 'swipeDown', function( e ){
+$box.on( 'swipedown', function( e ){
 	log.innerHTML += (e.type+"&lt;br/&gt;");
 });
 
 $btn.on( 'click', function(){
-	$box.off( 'swipeLeft');
-	$box.off( 'swipeRight');
-	$box.off( 'swipeUp');
-	$box.off( 'swipeDown');
+	$box.off( 'swipeleft');
+	$box.off( 'swiperight');
+	$box.off( 'swipeup');
+	$box.off( 'swipedown');
 });
 </pre>
 <p>请使用移动设备测试，或者用浏览器开发者手机模式测试</p>
@@ -52,24 +52,24 @@ $(function(){
 		$btn = $( '#btn' ),
 		log = $( '#log' )[0];
 	
-	$box.on( 'swipeLeft', function( e ){
+	$box.on( 'swipeleft', function( e ){
 		log.innerHTML += (e.type+"<br/>") ;
 	});
-	$box.on( 'swipeRight', function( e ){
+	$box.on( 'swiperight', function( e ){
 		log.innerHTML += (e.type+"<br/>") ;
 	});
-	$box.on( 'swipeUp', function( e ){
+	$box.on( 'swipeup', function( e ){
 		log.innerHTML += (e.type+"<br/>") ;
 	});
-	$box.on( 'swipeDown', function( e ){
+	$box.on( 'swipedown', function( e ){
 		log.innerHTML += (e.type+"<br/>") ;
 	});
 	
 	$btn.on( 'click', function(){
-		$box.off( 'swipeLeft');
-		$box.off( 'swipeRight');
-		$box.off( 'swipeUp');
-		$box.off( 'swipeDown');
+		$box.off( 'swipeleft');
+		$box.off( 'swiperight');
+		$box.off( 'swipeup');
+		$box.off( 'swipedown');
 	});
 
 });

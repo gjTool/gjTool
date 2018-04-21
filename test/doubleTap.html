@@ -23,12 +23,12 @@ var $box = $( '#box' ),
 	$btn = $( '#btn' ),
 	log = $( '#log' )[0];
 
-$box.on( 'doubleTap', function(e){
+$box.on( 'doubletap', function(e){
 	log.innerHTML +=   (e.type+"&lt;br/&gt;");
 });
 
 $btn.on( 'click', function(){
-	$box.off( 'doubleTap' );
+	$box.off( 'doubletap' );
 });
 </pre>
 <p>请使用移动设备测试，或者用浏览器开发者手机模式测试</p>
@@ -41,12 +41,12 @@ $(function(){
 		$btn = $( '#btn' ),
 		log = $( '#log' )[0];
 	
-	$box.on( 'doubleTap', function(e){
+	$box.on( 'doubletap', function(e){
 		log.innerHTML += (e.type+"<br/>") ;
 	});
 	
 	$btn.on( 'click', function(){
-		$box.off( 'doubleTap' );
+		$box.off( 'doubletap' );
 	});
 
 });

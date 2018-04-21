@@ -1,5 +1,5 @@
 /** 个人js类库gjTool.js（方法、插件集合）
- *  @version 1.2.2
+ *  @version 1.2.3
  *  @author Gao Jin
  *  @update 2018/04/21 22:53
  */
@@ -17,7 +17,7 @@
 	'use strict';
 	var gjTool = (function() {
 		if(g.console && g.console.info) {
-			console.info("gjTool.js v1.2.2 by Gao Jin. The latest version and API from: http://www.gjtool.cn/gjToolAPI")
+			console.info("gjTool.js v1.2.3 by Gao Jin. The latest version and API from: http://www.gjtool.cn/gjToolAPI")
 		}
 		//定义gjTool类
 		var G = function(selector, context) {

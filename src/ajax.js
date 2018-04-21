@@ -15,7 +15,7 @@
 			async = obj.async == undefined ? true : obj.async;
 			dataType = obj.dataType == undefined ? 'text' : obj.dataType.toUpperCase();
 			data = obj.data == undefined ? {} : obj.data;
-			timeout = obj.timeout == undefined ? "" : obj.timeout;
+			timeout = obj.timeout == undefined ? 10000 : obj.timeout;
 			mimeType = obj.mimeType == undefined ? "" : obj.mimeType; // 'text/plain; charset=x-user-defined'
 			
 			var formatParams = function() {
@@ -55,7 +55,9 @@
 				ele.src = url;
 				oHead.appendChild(ele);
 				ele.onerror = function() {
+					status = 'error';
 					obj.error && obj.error("请求失败", xmlhttp)
+					obj.complete && obj.complete(json, xmlhttp,status)
 				}
 				var start = G.now();
 				g[callbackName] = function(json) {
@@ -80,12 +82,11 @@
 					obj.beforeSend(xmlhttp)
 				}
 				//超时
-				if(timeout !== ""){
-					xmlhttp.ontimeout = function(){
-					    status = 'timeout';
-					}
-					xmlhttp.timeout = timeout;
+				xmlhttp.ontimeout = function(){
+				    status = 'timeout';
+				    obj.complete && obj.complete("请求超时", xmlhttp,status)
 				}
+				xmlhttp.timeout = timeout;
 				
 				xmlhttp.send(data);
 				var start = G.now();

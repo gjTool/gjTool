@@ -50,11 +50,11 @@
 			if(name == "text" && !"text" in this[0]) {
 				name = "textContent"
 			}
-			if(G.isString(name) && (value === false || value === true || value === "" || G.isString(value))) {
+			if(G.isString(name) && value !== undefined && (value === false || value === true || value === "" || G.isString(value))) {
 				return this.each(function(i, ele) {
 					ele[name] = value
 				})
-			} else {
+			} else if(value === undefined){
 				return this[0][name]
 			}
 		},
@@ -71,7 +71,7 @@
 			return this.prop('innerHTML', html)
 		},
 		text: function(text) {
-			return this.prop('innerText', "" + text)
+			return this.prop('innerText', text)
 		},
 		empty: function() {
 			return this.html('');

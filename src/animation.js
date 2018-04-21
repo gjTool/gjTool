@@ -178,8 +178,7 @@
 				ele.opacity = G.public.getStyle(ele, 'opacity');
 			}
 			var option = {
-				opacity: 0,
-				display: (ele.display && ele.display != 'none') ? ele.display : 'block'
+				opacity: 0
 			};
 			var option2 = {
 				opacity: G.public.getStyle(ele, 'opacity'),
@@ -293,14 +292,16 @@
 				}
 				ele.isShow = true;
 				ele.isHide = false;
+				var opacity = ele.opacity ? ele.opacity : G.public.getStyle(ele, 'opacity');
 				if(speed == 0) {
 					ele.isShow = false;
 					ele.style.display = (ele.display && ele.display != 'none') ? ele.display : 'block';
+					ele.style.opacity = opacity == '0' ? '1' : opacity;
 					fn && fn();
 					return;
 				}
 				ele.oldStyles.display = (ele.display && ele.display != 'none') ? ele.display : 'block';
-				
+				ele.oldStyles.opacity = opacity == '0' ? '1' : opacity;
 				G(ele).css(start).animate(ele.oldStyles, speed, easying, function() {
 					ele.style.display = (ele.display && ele.display != 'none') ? ele.display : 'block';
 					ele.isShow = false;

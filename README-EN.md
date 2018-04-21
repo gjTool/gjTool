@@ -23,7 +23,7 @@ Author: Gao Jin.[Mail: 861366490@qq.com](mailto:861366490@qq.com)
 
 ## Update information
 
-- v1.2.2
+- v1.2.3
 
 - Disuse gesture pinch、 pinchin、 pinchout、 pinchstart、 pinchend
 

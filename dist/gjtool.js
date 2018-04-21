@@ -48,7 +48,13 @@
 					[].pop.apply(this)
 				}
 				this.length = 0;
-				[].push.apply(this, arr);
+				var arr2 = [];
+				for(var j = 0, len = arr.length; j < len; j++){
+					if(arr[j] != undefined && (arr[j] == window || arr[j] == document || arr[j].nodeName !== undefined)){
+						arr2.push(arr[j])
+					}
+				}
+				[].push.apply(this, arr2);
 				return this
 			},
 			//文档加载完成
@@ -149,7 +155,7 @@
 						}
 					}
 				}
-				console.log(elements)
+				
 				return elements
 			}
 		}
@@ -880,20 +886,24 @@
 	 		//添加class
 			addClass: function(name) {
 				return this.each(function(i, ele) {
-					if(!ele.className.length) {
-						ele.className += '' + name
-					} else if(!G.public.regName(name).test(ele.className)) {
-						ele.className += ' ' + name
+					if(ele){
+						if(!ele.className.length) {
+							ele.className += '' + name
+						} else if(!G.public.regName(name).test(ele.className)) {
+							ele.className += ' ' + name
+						}
 					}
 				})
 			},
 			//移除class
 			removeClass: function(name) {
 				return this.each(function(i, ele) {
-					if(!ele.className) {
-						return
-					} else if(G.public.regName(name).test(ele.className)) {
-						ele.className = ele.className.replace(G.public.regName(name), ' ').trim()
+					if(ele){
+						if(!ele.className) {
+							return
+						} else if(G.public.regName(name).test(ele.className)) {
+							ele.className = ele.className.replace(G.public.regName(name), ' ').trim()
+						}
 					}
 				})
 			},
@@ -1298,8 +1308,7 @@
 				ele.opacity = G.public.getStyle(ele, 'opacity');
 			}
 			var option = {
-				opacity: 0,
-				display: (ele.display && ele.display != 'none') ? ele.display : 'block'
+				opacity: 0
 			};
 			var option2 = {
 				opacity: G.public.getStyle(ele, 'opacity'),
@@ -1413,14 +1422,16 @@
 				}
 				ele.isShow = true;
 				ele.isHide = false;
+				var opacity = ele.opacity ? ele.opacity : G.public.getStyle(ele, 'opacity');
 				if(speed == 0) {
 					ele.isShow = false;
 					ele.style.display = (ele.display && ele.display != 'none') ? ele.display : 'block';
+					ele.style.opacity = opacity == '0' ? '1' : opacity;
 					fn && fn();
 					return;
 				}
 				ele.oldStyles.display = (ele.display && ele.display != 'none') ? ele.display : 'block';
-				
+				ele.oldStyles.opacity = opacity == '0' ? '1' : opacity;
 				G(ele).css(start).animate(ele.oldStyles, speed, easying, function() {
 					ele.style.display = (ele.display && ele.display != 'none') ? ele.display : 'block';
 					ele.isShow = false;
@@ -1621,11 +1632,11 @@
 			if(name == "text" && !"text" in this[0]) {
 				name = "textContent"
 			}
-			if(G.isString(name) && (value === false || value === true || value === "" || G.isString(value))) {
+			if(G.isString(name) && value !== undefined && (value === false || value === true || value === "" || G.isString(value))) {
 				return this.each(function(i, ele) {
 					ele[name] = value
 				})
-			} else {
+			} else if(value === undefined){
 				return this[0][name]
 			}
 		},
@@ -1642,7 +1653,7 @@
 			return this.prop('innerHTML', html)
 		},
 		text: function(text) {
-			return this.prop('innerText', "" + text)
+			return this.prop('innerText', text)
 		},
 		empty: function() {
 			return this.html('');
@@ -1663,33 +1674,41 @@
 		 *	@param value 样式值
 		 */
 		css: function(name, value) {
-			if(G.isString(name) && G.isString(value)) {
-				return this.each(function(i, ele) {
-					if(name == 'opacity') {
-						elem.style.opacity = value;
-						elem.style.filter = 'alpha(opacity:' + value * 100 + ')'
-					} else if(name == 'scrollTop' || name == 'scrollLeft') {
-						ele[name] = value
-					} else {
-						ele.style[name] = value
-					}
-				})
-			} else if(!value && G.isObject(name)) {
-				return this.each(function(i, ele) {
-					for(var i in name) {
-						if(i == 'opacity') {
-							ele.style.opacity = name[i];
-							ele.style.filter = 'alpha(opacity:' + name[i] * 100 + ')'
-						} else if(name == 'scrollTop' || name == 'scrollLeft') {
-							ele[i] = name[i]
-						} else {
-							ele.style[i] = name[i];
+
+			if(G.isHTMLElement(this[0])){
+				if(G.isString(name) && G.isString(value)) {
+					return this.each(function(i, ele) {
+						if(ele){
+							if(name == 'opacity') {
+								ele.style.opacity = value;
+								ele.style.filter = 'alpha(opacity:' + value * 100 + ')'
+							} else if(name == 'scrollTop' || name == 'scrollLeft') {
+								ele[name] = value
+							} else {
+								ele.style[name] = value
+							}
 						}
-					}
-				})
-			} else if(G.isString(name)) {
-				return G.public.getStyle(this[0], name)
+					})
+				} else if(!value && G.isObject(name)) {
+					return this.each(function(i, ele) {
+						if(ele){
+							for(var i in name) {
+								if(i == 'opacity') {
+									ele.style.opacity = name[i];
+									ele.style.filter = 'alpha(opacity:' + name[i] * 100 + ')'
+								} else if(name == 'scrollTop' || name == 'scrollLeft') {
+									ele[i] = name[i]
+								} else {
+									ele.style[i] = name[i];
+								}
+							}
+						}
+					})
+				} else if(G.isString(name)) {
+					return G.public.getStyle(this[0], name)
+				}
 			}
+			
 		},
 		width: function(value) {
 			if(value && G.isString(value)) {
@@ -2256,13 +2275,15 @@
 						e = new n.Event(e, type);
 						G(ele).find(selector).each(function(i, el) {
 							if(el === e.target) {
-								fn.call(el, e)
+								fn && fn.call(el, e)
 							}
 						})
 					}
 				} else {
 					var fnc = function(e) {
-						fn.call(ele, new n.Event(e, type))
+						if(ele){
+							fn && fn.call(ele, new n.Event(e, type))
+						}
 					}
 				}
 				if(!ele[type+"Event"]){
@@ -2277,7 +2298,7 @@
 				return this.untouch(type);
 			}
 			return this.each(function(i, elem) {
-				if(elem[type+"Event"] && elem[type+"Event"].length){
+				if(elem && elem[type+"Event"] && elem[type+"Event"].length){
 					for(var i=0,len =elem[type+"Event"].length;i<len;i++ ){
 						if(typeof elem[type+"Event"][i] === 'function' ){
 							G.public.removeEvent(elem, type,elem[type+"Event"][i]);
@@ -3054,14 +3075,16 @@
 					
 				} else {
 					if(touchEvent[type]){
-						touchEvent[type](elem,type,fn1,fn2);
+                        if(elem){
+                            touchEvent[type](elem,type,fn1,fn2);
+                        }
 					}
 				}
 			})
  		},
  		untouch: function(type){
 			return this.each(function(i,elem){
-				if(elem[type+"Touch"]){
+				if(elem && elem[type+"Touch"]){
 					for(var i in elem[type+"Touch"] ){
 						if(typeof elem[type+"Touch"][i] === 'function' ){
 							if((type === "pinch" || type === "pinchin" || type === "pinchout" || type === "pinchend" ) && item === "touchstart"  ){

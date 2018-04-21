@@ -445,14 +445,16 @@
 					
 				} else {
 					if(touchEvent[type]){
-						touchEvent[type](elem,type,fn1,fn2);
+                        if(elem){
+                            touchEvent[type](elem,type,fn1,fn2);
+                        }
 					}
 				}
 			})
  		},
  		untouch: function(type){
 			return this.each(function(i,elem){
-				if(elem[type+"Touch"]){
+				if(elem && elem[type+"Touch"]){
 					for(var i in elem[type+"Touch"] ){
 						if(typeof elem[type+"Touch"][i] === 'function' ){
 							if((type === "pinch" || type === "pinchin" || type === "pinchout" || type === "pinchend" ) && item === "touchstart"  ){

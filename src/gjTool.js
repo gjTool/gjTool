@@ -48,7 +48,13 @@
 					[].pop.apply(this)
 				}
 				this.length = 0;
-				[].push.apply(this, arr);
+				var arr2 = [];
+				for(var j = 0, len = arr.length; j < len; j++){
+					if(arr[j] != undefined && (arr[j] == window || arr[j] == document || arr[j].nodeName !== undefined)){
+						arr2.push(arr[j])
+					}
+				}
+				[].push.apply(this, arr2);
 				return this
 			},
 			//文档加载完成
@@ -149,7 +155,7 @@
 						}
 					}
 				}
-				console.log(elements)
+				
 				return elements
 			}
 		}
@@ -880,20 +886,24 @@
 	 		//添加class
 			addClass: function(name) {
 				return this.each(function(i, ele) {
-					if(!ele.className.length) {
-						ele.className += '' + name
-					} else if(!G.public.regName(name).test(ele.className)) {
-						ele.className += ' ' + name
+					if(ele){
+						if(!ele.className.length) {
+							ele.className += '' + name
+						} else if(!G.public.regName(name).test(ele.className)) {
+							ele.className += ' ' + name
+						}
 					}
 				})
 			},
 			//移除class
 			removeClass: function(name) {
 				return this.each(function(i, ele) {
-					if(!ele.className) {
-						return
-					} else if(G.public.regName(name).test(ele.className)) {
-						ele.className = ele.className.replace(G.public.regName(name), ' ').trim()
+					if(ele){
+						if(!ele.className) {
+							return
+						} else if(G.public.regName(name).test(ele.className)) {
+							ele.className = ele.className.replace(G.public.regName(name), ' ').trim()
+						}
 					}
 				})
 			},

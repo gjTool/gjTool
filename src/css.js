@@ -11,33 +11,41 @@
 		 *	@param value 样式值
 		 */
 		css: function(name, value) {
-			if(G.isString(name) && G.isString(value)) {
-				return this.each(function(i, ele) {
-					if(name == 'opacity') {
-						elem.style.opacity = value;
-						elem.style.filter = 'alpha(opacity:' + value * 100 + ')'
-					} else if(name == 'scrollTop' || name == 'scrollLeft') {
-						ele[name] = value
-					} else {
-						ele.style[name] = value
-					}
-				})
-			} else if(!value && G.isObject(name)) {
-				return this.each(function(i, ele) {
-					for(var i in name) {
-						if(i == 'opacity') {
-							ele.style.opacity = name[i];
-							ele.style.filter = 'alpha(opacity:' + name[i] * 100 + ')'
-						} else if(name == 'scrollTop' || name == 'scrollLeft') {
-							ele[i] = name[i]
-						} else {
-							ele.style[i] = name[i];
+
+			if(G.isHTMLElement(this[0])){
+				if(G.isString(name) && G.isString(value)) {
+					return this.each(function(i, ele) {
+						if(ele){
+							if(name == 'opacity') {
+								ele.style.opacity = value;
+								ele.style.filter = 'alpha(opacity:' + value * 100 + ')'
+							} else if(name == 'scrollTop' || name == 'scrollLeft') {
+								ele[name] = value
+							} else {
+								ele.style[name] = value
+							}
 						}
-					}
-				})
-			} else if(G.isString(name)) {
-				return G.public.getStyle(this[0], name)
+					})
+				} else if(!value && G.isObject(name)) {
+					return this.each(function(i, ele) {
+						if(ele){
+							for(var i in name) {
+								if(i == 'opacity') {
+									ele.style.opacity = name[i];
+									ele.style.filter = 'alpha(opacity:' + name[i] * 100 + ')'
+								} else if(name == 'scrollTop' || name == 'scrollLeft') {
+									ele[i] = name[i]
+								} else {
+									ele.style[i] = name[i];
+								}
+							}
+						}
+					})
+				} else if(G.isString(name)) {
+					return G.public.getStyle(this[0], name)
+				}
 			}
+			
 		},
 		width: function(value) {
 			if(value && G.isString(value)) {

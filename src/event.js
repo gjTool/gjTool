@@ -80,13 +80,15 @@
 						e = new n.Event(e, type);
 						G(ele).find(selector).each(function(i, el) {
 							if(el === e.target) {
-								fn.call(el, e)
+								fn && fn.call(el, e)
 							}
 						})
 					}
 				} else {
 					var fnc = function(e) {
-						fn.call(ele, new n.Event(e, type))
+						if(ele){
+							fn && fn.call(ele, new n.Event(e, type))
+						}
 					}
 				}
 				if(!ele[type+"Event"]){
@@ -101,7 +103,7 @@
 				return this.untouch(type);
 			}
 			return this.each(function(i, elem) {
-				if(elem[type+"Event"] && elem[type+"Event"].length){
+				if(elem && elem[type+"Event"] && elem[type+"Event"].length){
 					for(var i=0,len =elem[type+"Event"].length;i<len;i++ ){
 						if(typeof elem[type+"Event"][i] === 'function' ){
 							G.public.removeEvent(elem, type,elem[type+"Event"][i]);

@@ -19,11 +19,12 @@
   },
   "keywords": [
     "gjtool",
-    "gjTool",
-    "js",
+    "touch",
+    "gesture",
     "javascript",
     "plugin",
-    "library"
+    "library",
+    "mobile"
   ],
   "author": "Gao Jin",
   "license": "MIT",

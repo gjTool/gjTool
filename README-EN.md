@@ -23,20 +23,9 @@ Author: Gao Jin.[Mail: 861366490@qq.com](mailto:861366490@qq.com)
 
 ## Update information
 
-- v1.1.6
+- v1.1.8
 
-- Disuse method drag().
-
-- Add the touch module, the mobile end touch event:touch、untouch、touchstart、 touchmove、 touchend、 touchcancel、 press、 tap、 doubletap、 swipe、 swipeleft、 swiperigh、t swipeup、 swipedown. touch == on、untouch == off. Touch and untouch are only effective for touch events. Both on and off are available.  Add custom events and trigger.
-
-- Now you can use $.Disuse Gj and keep gjTool.
-
-- The new method, clone(), is used to clone elements.appendTo()，Insert element.
-
-- The new attributes of the $.browser object,$.browser.pc、$.browser.phone、$.browser.tablet, the new attributes to determine whether the computer, the phone, the tablet.
-
-- The method of optimizing and perfecting the DOM operation class，after、before、append、prepend. Repair the Css、Show、FadeIn method bug.
-
+- Disuse gesture pinch、 pinchin、 pinchout、 pinchstart、 pinchend
 
 ### How To Install
 ```
@@ -121,7 +110,7 @@ For example: blur focus input load resize scroll unload click dblclick …… an
 
 Touch:
 
-touch、untouch、touchstart、 touchmove、 touchend、 touchcancel、 press、 tap、 doubletap、 swipe、 swipeleft、 swiperigh、t swipeup、 swipedown
+touch、untouch、touchstart、 touchmove、 touchend、 touchcancel、 press、 tap、 doubletap、 swipe、 swipeleft、 swiperigh、t swipeup、 swipedown、pinch、 pinchin、 pinchout、 pinchstart、 pinchend
 
 
 Ajax asynchronous request: (gjTool.ajax)

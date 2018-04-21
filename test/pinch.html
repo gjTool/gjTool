@@ -4,17 +4,16 @@
 	<head>
 		<meta charset="UTF-8">
 		<meta name=viewport content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-		<title>doubletap事件测试</title>
+		<title>pinch事件测试</title>
 		<link rel="stylesheet" href="public.css" />
 	</head>
 
 	<body>
 
-		<h2>doubletap事件测试</h1>
+		<h2>pinch事件测试</h1>
 		
 <hr>
-
-<div  id="log"></div>
+<div id="log"></div>
 <button id="btn" class="btn">卸载事件</button>
 <div id="box" class="box">触发事件</div>
 
@@ -23,12 +22,12 @@ var $box = $( '#box' ),
 	$btn = $( '#btn' ),
 	log = $( '#log' )[0];
 
-$box.on( 'doubletap', function(e){
-	log.innerHTML +=   (e.type+"&lt;br/&gt;");
+$box.on( 'pinch', function(e){
+	log.innerHTML += (e.type+"&lt;br/&gt;");
 });
 
 $btn.on( 'click', function(){
-	$box.off( 'doubletap' );
+	$box.off( 'pinch' );
 });
 </pre>
 <p>请使用移动设备测试，或者用浏览器开发者手机模式测试</p>
@@ -41,12 +40,12 @@ $(function(){
 		$btn = $( '#btn' ),
 		log = $( '#log' )[0];
 	
-	$box.on( 'doubletap', function(e){
+	$box.on( 'pinch', function(e){
 		log.innerHTML += (e.type+"<br/>") ;
 	});
 	
 	$btn.on( 'click', function(){
-		$box.off( 'doubletap' );
+		$box.off( 'pinch' );
 	});
 
 });

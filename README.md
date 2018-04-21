@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/gjTool/gjTool.svg?branch=master)](https://travis-ci.org/gjTool/gjTool)
 [![npm version](https://img.shields.io/npm/v/gjtool.svg)](https://www.npmjs.com/package/gjtool)
-[![npm downloads](https://img.shields.io/npm/dm/gjtool.svg)](https://www.npmjs.com/package/gjtool)
+[![npm downloads](https://img.shields.io/npm/dt/gjtool.svg)](https://www.npmjs.com/package/gjtool)
 
 gjTool.js是一个js个人类库（PC端和移动端），支持移动端触摸滑动、捏合手势事件，模仿jQuery的链式调用，API用法和jQuery的差不多，相当于简版JQ。
 支持extend方法扩展，在gjTool上增加属性、方法。gjTool.fn.extend、gjTool.extend。

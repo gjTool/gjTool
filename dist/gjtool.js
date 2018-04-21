@@ -1,7 +1,7 @@
 /** 个人js类库gjTool.js（方法、插件集合）
- *  @version 1.1.8
+ *  @version 1.2.1
  *  @author Gao Jin
- *  @update 2018/04/20 22:53
+ *  @update 2018/04/21 22:53
  */
 (function(g, fn) {
 	if(typeof define === 'function' && define.amd) {
@@ -17,7 +17,7 @@
 	'use strict';
 	var gjTool = (function() {
 		if(g.console && g.console.info) {
-			console.info("gjTool.js v1.1.8 by Gao Jin. The latest version and API from: http://www.gjtool.cn/gjToolAPI")
+			console.info("gjTool.js v1.2.1 by Gao Jin. The latest version and API from: http://www.gjtool.cn/gjToolAPI")
 		}
 		//定义gjTool类
 		var G = function(selector, context) {
@@ -1668,22 +1668,7 @@
 						} else if(name == 'scrollTop' || name == 'scrollLeft') {
 							ele[i] = name[i]
 						} else {
-							var str = name[i].toString();
-							if(i.indexOf('transform') != -1 || i.indexOf('-webkit-') != -1 ){
-								ele.style[i] = name[i];
-							}else if(str.indexOf('%') == -1 && str.indexOf('px') == -1 && str.indexOf('em') == -1 && str.indexOf('rem') == -1 && str.indexOf('vw') == -1 && str.indexOf('vh') == -1&& str.indexOf('vmin') == -1 && str.indexOf('vmax') == -1) {
-								ele.style[i] = name[i] + "px";
-							}else {
-								ele.style[i] = name[i];
-							}
-							// if(i == 'width' && name[i].toString().indexOf('%') != -1) {
-							// 	ele.style[i] = ele.offsetWidth;
-							// } else if(i == 'height' && name[i].toString().indexOf('%') != -1) {
-							// 	ele.style[i] = ele.offsetHeight;
-							// } else {
-							// 	ele.style[i] = name[i]
-							// }
-
+							ele.style[i] = name[i];
 						}
 					}
 				})

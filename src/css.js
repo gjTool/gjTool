@@ -31,22 +31,7 @@
 						} else if(name == 'scrollTop' || name == 'scrollLeft') {
 							ele[i] = name[i]
 						} else {
-							var str = name[i].toString();
-							if(i.indexOf('transform') != -1 || i.indexOf('-webkit-') != -1 ){
-								ele.style[i] = name[i];
-							}else if(str.indexOf('%') == -1 && str.indexOf('px') == -1 && str.indexOf('em') == -1 && str.indexOf('rem') == -1 && str.indexOf('vw') == -1 && str.indexOf('vh') == -1&& str.indexOf('vmin') == -1 && str.indexOf('vmax') == -1) {
-								ele.style[i] = name[i] + "px";
-							}else {
-								ele.style[i] = name[i];
-							}
-							// if(i == 'width' && name[i].toString().indexOf('%') != -1) {
-							// 	ele.style[i] = ele.offsetWidth;
-							// } else if(i == 'height' && name[i].toString().indexOf('%') != -1) {
-							// 	ele.style[i] = ele.offsetHeight;
-							// } else {
-							// 	ele.style[i] = name[i]
-							// }
-
+							ele.style[i] = name[i];
 						}
 					}
 				})

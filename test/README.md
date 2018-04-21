@@ -4,8 +4,10 @@
 
 - [tap事件测试](https://gjtool.github.io/gjTool/test/tap.html)
 
-- [lognTap事件测试](https://gjtool.github.io/gjTool/test/longTap.html)
+- [press事件测试](https://gjtool.github.io/gjTool/test/press.html)
 
-- [doubleTap事件测试](https://gjtool.github.io/gjTool/test/doubleTap.html)
+- [doubletap事件测试](https://gjtool.github.io/gjTool/test/doubletap.html)
 
 - [swipe事件测试](https://gjtool.github.io/gjTool/test/swipe.html)
+
+- [pinch事件测试](https://gjtool.github.io/gjTool/test/pinch.html)

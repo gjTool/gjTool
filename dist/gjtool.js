@@ -1,5 +1,5 @@
 /** 个人js类库gjTool.js（方法、插件集合）
- *  @version 1.2.1
+ *  @version 1.2.2
  *  @author Gao Jin
  *  @update 2018/04/21 22:53
  */
@@ -17,7 +17,7 @@
 	'use strict';
 	var gjTool = (function() {
 		if(g.console && g.console.info) {
-			console.info("gjTool.js v1.2.1 by Gao Jin. The latest version and API from: http://www.gjtool.cn/gjToolAPI")
+			console.info("gjTool.js v1.2.2 by Gao Jin. The latest version and API from: http://www.gjtool.cn/gjToolAPI")
 		}
 		//定义gjTool类
 		var G = function(selector, context) {
@@ -61,38 +61,55 @@
 			},
 			//根据选择器寻找元素
 			find: function(selector) {
+				var _this = this;
 				if(!G.isString(selector)){
 					return
 				}
-				var node = this[0] || document;
-				//html字符串
-				if(/^</.test(selector)) {
-					return this.toArray(G.public.parseHtml(selector));
+				function select(item){
+					var node = item || document;
+					var arr = [];
+					//html字符串
+					if(/^</.test(selector)) {
+						arr = G.public.parseHtml(selector);
+					}
+					
+					 // div.test 、.div.abc
+					else if(/[A-Za-z0-9]+\./.test(selector.trim()) && !/\s/.test(selector.trim()) && !/,/.test(selector.trim())) {
+						arr = G.public.classSelector(selector)
+					} // input[type=button]
+					else if(/\w+\[\w+\=\w+\]/g.test(selector)) {
+						var aStr = selector.split(/\[|\=|\]/g);
+						var aRes = node.getElementsByTagName(aStr[0]);
+						var result = [];
+						G.each(aRes, function(i, ele) {
+							if(ele.getAttribute(aStr[1]) == aStr[2]) {
+								result.push(ele)
+							}
+						})
+						arr = G.unique(result)
+					} // .div:not() 
+					else if(!/\s/.test(selector.trim()) && !/,/.test(selector.trim()) && /:/.test(selector.trim())) {
+						arr = G.public.descendantSelector(node, selector);
+					}
+					
+					//群组选择器或包含选择器或基本选择器
+					else {
+
+						arr = G.public.groupSelector(node, selector)
+					}
+					return arr
 				}
-				
-				 // div.test 、.div.abc
-				else if(/[A-Za-z0-9]+\./.test(selector.trim()) && !/\s/.test(selector.trim()) && !/,/.test(selector.trim())) {
-					return this.toArray(G.public.classSelector(selector))
-				} // input[type=button]
-				else if(/\w+\[\w+\=\w+\]/g.test(selector)) {
-					var aStr = selector.split(/\[|\=|\]/g);
-					var aRes = node.getElementsByTagName(aStr[0]);
-					var result = [];
-					G.each(aRes, function(i, ele) {
-						if(ele.getAttribute(aStr[1]) == aStr[2]) {
-							result.push(ele)
+				if(!this[0]){
+					return this.toArray(select())
+				}else {
+					var arr = [];
+					this.each(function(i,item){
+						var arr2 = select(item);
+						for(var i=0,len=arr2.length;i<len;i++){
+							arr.push(arr2[i])
 						}
 					})
-					return this.toArray(G.unique(result))
-				} // .div:not() 
-				else if(!/\s/.test(selector.trim()) && !/,/.test(selector.trim()) && /:/.test(selector.trim())) {
-					return this.toArray(G.public.descendantSelector(node, selector));
-				}
-				
-				//群组选择器或包含选择器或基本选择器
-				else {
-
-					return this.toArray(G.public.groupSelector(node, selector))
+					return this.toArray(arr)
 				}
 			}
 		};
@@ -122,7 +139,6 @@
 		if(g.document && !g.document.getElementsByClassName) {
 			document.getElementsByClassName = function(className, element) {
 				var children = (element || document).getElementsByTagName('*');
-				console.log(element,className)
 				var elements = [];
 				for(var i = 0, len = children.length; i < len; i++) {
 					var classNames = children[i].className.split(' ');
@@ -855,8 +871,7 @@
 				return this
 			},
 			map: function(fn) {
-				G.map(this, fn)
-				return this
+				return G.map(this, fn)
 			}
 		}) 
 		

@@ -1,9 +1,10 @@
 /** 个人js类库gjTool.js（方法、插件集合）
- *  @version 1.2.3
+ *  @version 1.2.5
  *  @author Gao Jin
  *  @update 2018/04/21 22:53
  */
 (function(g, fn) {
+	g.gjTool = fn(g);
 	if(typeof define === 'function' && define.amd) {
 		define(function() {
 			return fn(g)
@@ -11,13 +12,13 @@
 	} else if(typeof module !== 'undefined' && module.exports) {
 		module.exports = fn(g)
 	} else {
-		fn(g)
+		g.$ === undefined && (g.$ = fn(g));
 	}
 })(typeof window !== 'undefined' ? window : this, function(g) {
 	'use strict';
 	var gjTool = (function() {
 		if(g.console && g.console.info) {
-			console.info("gjTool.js v1.2.3 by Gao Jin. The latest version and API from: http://www.gjtool.cn/gjToolAPI")
+			console.info("gjTool.js v1.2.5 by Gao Jin. The latest version and API from: http://www.gjtool.cn/gjToolAPI")
 		}
 		//定义gjTool类
 		var G = function(selector, context) {

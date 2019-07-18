@@ -7,7 +7,7 @@
 gjTool.js是一个js个人类库（PC端和移动端），支持移动端触摸滑动、捏合手势事件，模仿jQuery的链式调用，API用法和jQuery的差不多，相当于简版JQ。
 支持extend方法扩展，在gjTool上增加属性、方法。gjTool.fn.extend、gjTool.extend。
 
-作者：Gao Jin  [邮箱: 861366490@qq.com](mailto:861366490@qq.com)
+作者：G.J.  [邮箱: 861366490@qq.com](mailto:861366490@qq.com)
 
 ## 语言
 
